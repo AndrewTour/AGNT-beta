@@ -55,3 +55,10 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Handles unit, lot, shop, suite, apartment, villa, level and flat prefixes.
 - Handles slash addresses, number ranges, alphanumeric street numbers, commas, semicolons and postcode/state formatting.
 - Matches against all active callable Prospector contacts while continuing to exclude archived and Do Not Contact records.
+
+
+## v119.12 — Hot Spotting dropdown and Day Log cleanup
+- Collapsed Streets worth knocking into a compact expandable first card.
+- Applied one event-status colour palette across Hot Spotting cards and knocking recommendations.
+- Increased Day Log time-column spacing so time ranges and icons do not overlap.
+- No Firebase, data-model, session-logic or sync changes.

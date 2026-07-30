@@ -5108,3 +5108,37 @@ body.appointment-editing{overflow:hidden}
 .knocking-hotspot-recommendations{border-radius:26px;padding:16px;background:#fff;border:1px solid rgba(20,24,32,.08);box-shadow:0 12px 32px rgba(30,40,60,.08)}
 .knocking-hotspot-head span{display:block;font-size:.55rem;letter-spacing:.14em;font-weight:900;color:#0b63f3}.knocking-hotspot-head strong{display:block;margin-top:5px;font-size:1.05rem;line-height:1.2}.knocking-hotspot-head small{display:block;margin-top:4px;color:#7a8392;font-size:.67rem}
 .knocking-hotspot-list{display:grid;gap:9px;margin-top:13px}.knocking-hotspot-item{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:7px 10px;padding:12px;border-radius:17px;background:#f4f7fb}.knocking-hotspot-item>div:first-child strong{display:block;font-size:.84rem;line-height:1.2}.knocking-hotspot-item>div:first-child small{display:block;margin-top:3px;color:#7a8392;font-size:.61rem}.knocking-hotspot-reasons{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:5px}.knocking-hotspot-reasons span{padding:5px 7px;border-radius:999px;background:#fff;color:#0b63f3;font-size:.48rem;letter-spacing:.08em;font-weight:900}.knocking-hotspot-item p{grid-column:1/-1;margin:0;color:#697384;font-size:.6rem;line-height:1.35}
+
+
+/* v119.12 — compact Hot Spotting dropdown, shared event colours and Day Log spacing */
+.knocking-hotspot-recommendations{padding:0;overflow:hidden}
+.knocking-hotspot-toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;width:100%;padding:16px;border:0;background:transparent;color:inherit;text-align:left}
+.knocking-hotspot-toggle .knocking-hotspot-head{display:block;min-width:0}
+.knocking-hotspot-toggle-meta{display:flex;align-items:center;gap:9px;color:#7a8392}
+.knocking-hotspot-toggle-meta b{display:grid;place-items:center;min-width:28px;height:28px;padding:0 8px;border-radius:999px;background:#f1f4f9;color:#344054;font-size:.68rem}
+.knocking-hotspot-toggle-meta i{display:block;font-size:1.25rem;font-style:normal;line-height:1;transform:rotate(0deg);transition:transform .18s ease}
+.knocking-hotspot-toggle[aria-expanded="true"] .knocking-hotspot-toggle-meta i{transform:rotate(180deg)}
+.knocking-hotspot-list{margin:0;padding:0 16px 16px;border-top:1px solid rgba(20,24,32,.06)}
+.knocking-hotspot-list.hidden{display:none!important}
+.knocking-hotspot-item:first-child{margin-top:12px}
+.knocking-hotspot-reasons .market-event-tag{min-height:24px;padding:0 8px;font-size:.46rem}
+
+/* One shared status palette wherever Hot Spotting event labels appear. */
+.market-event-tag.event-withdrawn{background:#f2e8e8;color:#a34848}
+.market-event-tag.event-just-listed,.market-event-tag.event-listed{background:#e5f5e9;color:#22804a}
+.market-event-tag.event-sold,.market-event-tag.event-just-sold{background:#e6efff;color:#2567c5}
+.market-event-tag.event-price-update,.market-event-tag.event-price-changed,.market-event-tag.event-price-change{background:#fff1dc;color:#b26800}
+.market-event-tag.event-under-offer{background:#f1e9ff;color:#7246a8}
+.market-event-tag.event-auction-result{background:#e9f4f5;color:#28767c}
+
+/* Give full time ranges their own space so timeline icons never overlap them. */
+.smart-log-card header{grid-template-columns:108px 26px minmax(0,1fr);gap:8px}
+.smart-log-card time{overflow:visible;text-align:right;white-space:nowrap;font-size:.59rem;letter-spacing:-.015em}
+.smart-log-stats{margin-left:150px}
+@media(max-width:390px){
+  .smart-log-card{padding-inline:11px}
+  .smart-log-card header{grid-template-columns:96px 24px minmax(0,1fr);gap:6px}
+  .smart-log-card time{font-size:.55rem}
+  .smart-log-icon{width:22px;height:22px}
+  .smart-log-stats{margin-left:132px}
+}

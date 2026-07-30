@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=119.11-knocking-hotspots">
+<link rel="stylesheet" href="styles.css?v=119.12-hotspot-dropdown">
 <title>AGNT</title>
 </head>
 <body>
@@ -306,8 +306,11 @@
           <button id="endKnockingSession" type="button">End Session</button>
         </header>
         <section id="knockingHotSpottingRecommendations" class="knocking-hotspot-recommendations glass hidden" aria-label="Recommended streets to door knock">
-          <div class="knocking-hotspot-head"><span>HOT SPOTTING</span><strong>Streets worth knocking</strong><small>Based on your latest market activity.</small></div>
-          <div id="knockingHotSpottingList" class="knocking-hotspot-list"></div>
+          <button id="toggleKnockingHotSpotting" class="knocking-hotspot-toggle" type="button" aria-expanded="false" aria-controls="knockingHotSpottingList">
+            <span class="knocking-hotspot-head"><span>HOT SPOTTING</span><strong>Streets worth knocking</strong><small>Based on your latest market activity.</small></span>
+            <span class="knocking-hotspot-toggle-meta"><b id="knockingHotSpottingCount">0</b><i aria-hidden="true">⌄</i></span>
+          </button>
+          <div id="knockingHotSpottingList" class="knocking-hotspot-list hidden"></div>
         </section>
         <section class="knocking-session-card glass">
           <div class="knocking-session-grid" aria-label="Session tallies">
@@ -668,6 +671,6 @@
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=119.11-knocking-hotspots"></script>
+<script type="module" src="app.js?v=119.12-hotspot-dropdown"></script>
 </body>
 </html>
