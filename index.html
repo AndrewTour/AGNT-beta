@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=119.5-market-pulse-prototype">
+<link rel="stylesheet" href="styles.css?v=119.6-market-pulse-sessions">
 <title>AGNT</title>
 </head>
 <body>
@@ -429,7 +429,6 @@
         <button class="active" type="button" data-prospector-section="today" aria-current="page">Today</button>
         <button type="button" data-prospector-section="contacts">Contacts</button>
         <button type="button" data-prospector-section="pipeline">Pipeline</button>
-        <button type="button" data-prospector-section="market">Market Pulse</button>
         <button type="button" data-prospector-section="insights">Insights</button>
       </nav>
       <div class="prospecting-toolbar glass">
@@ -444,7 +443,7 @@
         <div id="prospectorTodayPanel" class="prospector-panel">
         <section class="prospecting-hero glass">
           <div><span>TODAY'S PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small></div>
-          <button id="startProspectingSession" class="primary" type="button">Start Session</button>
+          <div class="prospecting-hero-actions"><button id="startProspectingSession" class="primary" type="button">Start Session</button><button id="openMarketPulse" class="secondary market-pulse-shortcut" type="button">Market Pulse</button></div>
         </section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
           <button class="prospecting-stat glass" data-prospect-filter="overdue"><span>OVERDUE</span><strong id="prospectingOverdue">0</strong></button>
@@ -483,6 +482,7 @@
         </section>
 
         <section id="prospectorMarketPanel" class="prospector-market-panel hidden" aria-live="polite">
+          <button id="backFromMarketPulse" class="market-pulse-back text-btn" type="button">‹ Back to Sessions</button>
           <section class="market-pulse-hero glass">
             <div><span>MARKET PULSE</span><h3>Turn market activity into calls</h3><p>Paste the text from today’s Market Pulse email. AGNT will identify property events and match same-street contacts in the same suburb.</p></div>
             <strong id="marketPulseEventCount">0</strong>
@@ -660,6 +660,6 @@
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=119.5-market-pulse-prototype"></script>
+<script type="module" src="app.js?v=119.6-market-pulse-sessions"></script>
 </body>
 </html>
