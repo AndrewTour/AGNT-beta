@@ -5083,3 +5083,23 @@ body.appointment-editing{overflow:hidden}
 .market-session-context strong{display:block;margin-top:6px;color:#111318;font-size:16px;line-height:1.25}
 .market-session-context small{display:block;margin-top:5px;color:#5f718b;font-size:12px;font-weight:700;line-height:1.4}
 @media(max-width:390px){.prospecting-hero{align-items:center}.prospector-sections button{font-size:10.5px}}
+
+
+/* v119.9 — Hot Spotting card typography and summary-only sessions */
+.market-pulse-hero>div>span{
+  text-transform:uppercase!important;
+}
+.market-pulse-hero h3,
+.market-pulse-hero p{
+  text-transform:none!important;
+}
+.market-event-tag{
+  text-transform:uppercase!important;
+}
+.market-pulse-card h4,
+.market-pulse-match strong{
+  font-weight:800;
+}
+.market-pulse-match{
+  margin-bottom:14px;
+}
