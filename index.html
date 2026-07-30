@@ -446,7 +446,7 @@
           <button id="startProspectingSession" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
+          <div><span>Hot spotting</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
           <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
@@ -488,18 +488,18 @@
         <section id="prospectorMarketPanel" class="prospector-market-panel hidden" aria-live="polite">
           <button id="backFromMarketPulse" class="market-pulse-back text-btn" type="button">‹ Back to Sessions</button>
           <section class="market-pulse-hero glass">
-            <div><span>HOT SPOTTING</span><h3>Turn market activity into calls</h3><p>Paste the text from today’s Market Pulse email. AGNT will identify property events and match same-street contacts in the same suburb.</p></div>
+            <div><span>Hot spotting</span><h3>Turn market activity into calls</h3><p>Paste the text from today’s Market Pulse email. AGNT will identify property events and match same-street contacts in the same suburb.</p></div>
             <strong id="marketPulseEventCount">0</strong>
+          </section>
+          <section class="market-pulse-results glass">
+            <div class="prospecting-section-head"><div><span>TODAY’S OPPORTUNITIES</span><h3>Hot spotting sessions</h3><small id="marketPulseMatchSummary">Paste an email to find matching contacts.</small></div><button id="clearMarketPulseEvents" class="text-btn" type="button">Clear all</button></div>
+            <div id="marketPulseList" class="market-pulse-list"></div>
           </section>
           <section class="market-pulse-import glass">
             <div class="section-label"><span>IMPORT EMAIL</span><small>Manual prototype · no inbox access</small></div>
             <textarea id="marketPulseInput" rows="8" placeholder="Paste the Market Pulse email content here…"></textarea>
             <div class="market-pulse-import-actions"><button id="clearMarketPulseInput" class="secondary" type="button">Clear</button><button id="importMarketPulse" class="primary" type="button">Find Opportunities</button></div>
             <p id="marketPulseImportStatus" class="market-pulse-status">Nothing imported yet.</p>
-          </section>
-          <section class="market-pulse-results glass">
-            <div class="prospecting-section-head"><div><span>TODAY’S OPPORTUNITIES</span><h3>Hot Spotting sessions</h3><small id="marketPulseMatchSummary">Paste an email to find matching contacts.</small></div><button id="clearMarketPulseEvents" class="text-btn" type="button">Clear all</button></div>
-            <div id="marketPulseList" class="market-pulse-list"></div>
           </section>
         </section>
         <section id="prospectorInsightsPanel" class="prospector-insights-panel hidden" aria-live="polite">
