@@ -443,7 +443,11 @@
         <div id="prospectorTodayPanel" class="prospector-panel">
         <section class="prospecting-hero glass">
           <div><span>TODAY'S PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small></div>
-          <div class="prospecting-hero-actions"><button id="startProspectingSession" class="primary" type="button">Start Session</button><button id="openMarketPulse" class="secondary market-pulse-shortcut" type="button">Market Pulse</button></div>
+          <button id="startProspectingSession" class="primary" type="button">Start Session</button>
+        </section>
+        <section class="prospecting-hero glass">
+          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
+          <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
           <button class="prospecting-stat glass" data-prospect-filter="overdue"><span>OVERDUE</span><strong id="prospectingOverdue">0</strong></button>
@@ -484,7 +488,7 @@
         <section id="prospectorMarketPanel" class="prospector-market-panel hidden" aria-live="polite">
           <button id="backFromMarketPulse" class="market-pulse-back text-btn" type="button">‹ Back to Sessions</button>
           <section class="market-pulse-hero glass">
-            <div><span>MARKET PULSE</span><h3>Turn market activity into calls</h3><p>Paste the text from today’s Market Pulse email. AGNT will identify property events and match same-street contacts in the same suburb.</p></div>
+            <div><span>HOT SPOTTING</span><h3>Turn market activity into calls</h3><p>Paste the text from today’s Market Pulse email. AGNT will identify property events and match same-street contacts in the same suburb.</p></div>
             <strong id="marketPulseEventCount">0</strong>
           </section>
           <section class="market-pulse-import glass">
@@ -494,7 +498,7 @@
             <p id="marketPulseImportStatus" class="market-pulse-status">Nothing imported yet.</p>
           </section>
           <section class="market-pulse-results glass">
-            <div class="prospecting-section-head"><div><span>TODAY’S OPPORTUNITIES</span><h3>Market-triggered sessions</h3><small id="marketPulseMatchSummary">Paste an email to find matching contacts.</small></div><button id="clearMarketPulseEvents" class="text-btn" type="button">Clear all</button></div>
+            <div class="prospecting-section-head"><div><span>TODAY’S OPPORTUNITIES</span><h3>Hot Spotting sessions</h3><small id="marketPulseMatchSummary">Paste an email to find matching contacts.</small></div><button id="clearMarketPulseEvents" class="text-btn" type="button">Clear all</button></div>
             <div id="marketPulseList" class="market-pulse-list"></div>
           </section>
         </section>
