@@ -62,3 +62,11 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Applied one event-status colour palette across Hot Spotting cards and knocking recommendations.
 - Increased Day Log time-column spacing so time ranges and icons do not overlap.
 - No Firebase, data-model, session-logic or sync changes.
+
+
+## v119.13 — Hot Spotting cloud persistence
+- Added each user’s Hot Spotting events to their existing private Firestore prospecting state.
+- Retained the UID-specific local copy as the offline cache.
+- Existing local-only Hot Spotting imports migrate to Firestore after the user’s first confirmed cloud load.
+- Imports, individual removals and Clear All now sync across that user’s devices.
+- No UI, matching, session, Firebase path, rule or unrelated functionality changes.
