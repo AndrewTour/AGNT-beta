@@ -48,3 +48,10 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Creates calling queues through the existing Prospector session workflow.
 - Stores imported events per user in local storage with duplicate protection.
 - No Outlook access, Cloud Functions, Firestore path changes or Firebase configuration changes.
+
+## v119.10 — Hot Spotting address matching audit
+- Rebuilt same-street keys from the stored event address on load so previously imported opportunities use the improved matcher.
+- Normalises road type abbreviations and expanded common Australian street types.
+- Handles unit, lot, shop, suite, apartment, villa, level and flat prefixes.
+- Handles slash addresses, number ranges, alphanumeric street numbers, commas, semicolons and postcode/state formatting.
+- Matches against all active callable Prospector contacts while continuing to exclude archived and Do Not Contact records.

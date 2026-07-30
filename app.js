@@ -1745,22 +1745,50 @@ const MARKET_PULSE_TYPES={
   'WITHDRAWN':'Withdrawn','PRICE UPDATE':'Price Update','PRICE CHANGE':'Price Update','PRICE REDUCTION':'Price Update',
   'SOLD':'Sold','UNDER OFFER':'Under Offer','AUCTION RESULT':'Auction Result'
 };
-const STREET_TYPES={rd:'road',road:'road',st:'street',street:'street',ave:'avenue',avenue:'avenue',cres:'crescent',cr:'crescent',crescent:'crescent',pde:'parade',parade:'parade',cl:'close',close:'close',pl:'place',place:'place',dr:'drive',drive:'drive',ct:'court',court:'court',ln:'lane',lane:'lane',hwy:'highway',highway:'highway',tce:'terrace',terrace:'terrace',cct:'circuit',circuit:'circuit',way:'way'};
-function normaliseMarketPulseEvents(list){return(Array.isArray(list)?list:[]).filter(x=>x&&typeof x==='object').map(x=>({id:cleanText(x.id,160),eventType:cleanText(x.eventType,60),address:cleanText(x.address,240),suburb:cleanText(x.suburb,100),streetKey:cleanText(x.streetKey,180),receivedDate:validDateKey(x.receivedDate)?x.receivedDate:todayKey(),createdAt:Number(x.createdAt)||Date.now(),daysOnMarket:cleanText(x.daysOnMarket,80),price:cleanText(x.price,120),guide:cleanText(x.guide,120)})).filter(x=>x.id&&x.address&&x.streetKey).filter((x,i,a)=>a.findIndex(y=>y.id===x.id)===i).slice(-300)}
+const STREET_TYPES={rd:'road',road:'road',st:'street',street:'street',ave:'avenue',av:'avenue',avenue:'avenue',cres:'crescent',cr:'crescent',crescent:'crescent',pde:'parade',parade:'parade',cl:'close',close:'close',pl:'place',place:'place',dr:'drive',drive:'drive',ct:'court',court:'court',ln:'lane',lane:'lane',hwy:'highway',highway:'highway',tce:'terrace',terrace:'terrace',cct:'circuit',circuit:'circuit',way:'way',blvd:'boulevard',boulevard:'boulevard',gr:'grove',grv:'grove',grove:'grove',rde:'road',sq:'square',square:'square',mews:'mews',esp:'esplanade',esplanade:'esplanade',pkway:'parkway',pkwy:'parkway',parkway:'parkway',trl:'trail',trail:'trail',prom:'promenade',promenade:'promenade'};
 function cleanMarketLine(value=''){return cleanText(value,400).replace(/\u00a0/g,' ').replace(/[•·]/g,' · ').replace(/\s+/g,' ').trim()}
 function normalisePlace(value=''){return cleanMarketLine(value).toLowerCase().replace(/\b(?:nsw|act|vic|qld|sa|wa|tas|nt)\b/g,' ').replace(/\b\d{4}\b/g,' ').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
 function splitMarketAddress(value=''){
-  const clean=cleanMarketLine(value).replace(/\s*,\s*/g,', '),parts=clean.split(',').map(x=>x.trim()).filter(Boolean);
+  const clean=cleanMarketLine(value).replace(/\s*[;,|]\s*/g,', ').replace(/\s*,\s*/g,', '),parts=clean.split(',').map(x=>x.trim()).filter(Boolean);
+  if(parts.length<2)return{address:parts[0]||clean,suburb:''};
+  const streetPartIndex=parts.findIndex(part=>normalisePlace(part).split(' ').some(word=>Boolean(STREET_TYPES[word])));
+  if(streetPartIndex>=0){
+    return{address:parts.slice(0,streetPartIndex+1).join(' '),suburb:parts[streetPartIndex+1]||''};
+  }
   return{address:parts[0]||clean,suburb:parts[1]||''};
 }
-function marketStreetKey(address='',suburb=''){
-  let street=normalisePlace(address).replace(/^\s*(?:unit\s*)?[a-z0-9-]+\s*\/\s*/,'').replace(/^\s*[a-z0-9-]+\s+/,'').trim();
-  const words=street.split(' ').filter(Boolean);if(!words.length)return'';
-  const last=words.at(-1);if(STREET_TYPES[last])words[words.length-1]=STREET_TYPES[last];
-  return`${words.join(' ')}|${normalisePlace(suburb)}`;
+function marketStreetName(address=''){
+  const words=normalisePlace(address).split(' ').filter(Boolean);if(!words.length)return'';
+  let typeIndex=-1;
+  for(let i=words.length-1;i>=0;i--){if(STREET_TYPES[words[i]]){typeIndex=i;break}}
+  if(typeIndex<0)return'';
+  const streetWords=words.slice(0,typeIndex+1);
+  while(streetWords.length>1){
+    const token=streetWords[0];
+    if(/^(?:unit|u|lot|shop|suite|apt|apartment|villa|level|lvl|flat)$/.test(token)||/^\d+[a-z]?$/.test(token)){streetWords.shift();continue}
+    break;
+  }
+  if(streetWords.length<2)return'';
+  streetWords[streetWords.length-1]=STREET_TYPES[streetWords.at(-1)]||streetWords.at(-1);
+  return streetWords.join(' ');
 }
-function prospectMarketKey(p){const full=formatProspectAddress(p.address||p.company,p.suburb),parts=splitMarketAddress(full);return marketStreetKey(parts.address,parts.suburb||p.suburb)}
-function marketMatches(event){return activeProspects().filter(p=>primaryProspectPhone(p)&&prospectMarketKey(p)===event.streetKey&&!interactionsFor(p.id).some(x=>x.outcome==='Do not contact')).sort((a,b)=>prospectDueRank(a)-prospectDueRank(b)||(a.lastContact||'').localeCompare(b.lastContact||'')||a.name.localeCompare(b.name,'en-AU'))}
+function marketStreetKey(address='',suburb=''){
+  const street=marketStreetName(address),place=normalisePlace(suburb);
+  return street&&place?`${street}|${place}`:'';
+}
+function normaliseMarketPulseEvents(list){return(Array.isArray(list)?list:[]).filter(x=>x&&typeof x==='object').map(x=>{const address=cleanText(x.address,240),suburb=cleanText(x.suburb,100);return{id:cleanText(x.id,160),eventType:cleanText(x.eventType,60),address,suburb,streetKey:marketStreetKey(address,suburb)||cleanText(x.streetKey,180),receivedDate:validDateKey(x.receivedDate)?x.receivedDate:todayKey(),createdAt:Number(x.createdAt)||Date.now(),daysOnMarket:cleanText(x.daysOnMarket,80),price:cleanText(x.price,120),guide:cleanText(x.guide,120)}}).filter(x=>x.id&&x.address&&x.streetKey).filter((x,i,a)=>a.findIndex(y=>y.id===x.id)===i).slice(-300)}
+function prospectMarketKey(p){
+  const candidates=[p.address,p.company].map(value=>cleanText(value,300)).filter(Boolean);
+  for(const value of candidates){
+    const parts=splitMarketAddress(value),key=marketStreetKey(parts.address,parts.suburb||p.suburb);
+    if(key)return key;
+  }
+  return'';
+}
+function marketMatches(event){
+  const eventKey=marketStreetKey(event.address,event.suburb)||event.streetKey;
+  return activeProspects().filter(p=>primaryProspectPhone(p)&&prospectMarketKey(p)===eventKey&&!interactionsFor(p.id).some(x=>x.outcome==='Do not contact')).sort((a,b)=>prospectDueRank(a)-prospectDueRank(b)||(a.lastContact||'').localeCompare(b.lastContact||'')||a.name.localeCompare(b.name,'en-AU'))
+}
 function marketEventId(eventType,address,suburb){return`${todayKey()}|${normalisePlace(eventType)}|${normalisePlace(address)}|${normalisePlace(suburb)}`}
 function parseMarketPulse(text=''){
   const lines=String(text||'').split(/\r?\n/).map(cleanMarketLine).filter(Boolean),events=[];
