@@ -1998,10 +1998,28 @@ function dailyKnockingLog(key=todayKey()){const seen=new Set(),entries=[];for(co
 function findDailyKnockingLogEntry(id,key=todayKey()){const active=knockingSessionLog.find(entry=>entry.id===id);if(active)return{entry:active,session:null};for(const session of completedKnockingSessionsForDay(key)){const entry=(Array.isArray(session.log)?session.log:[]).find(item=>String(item.id)===String(id));if(entry)return{entry,session}}return null}
 function knockingLogMeta(entry){const appointment=entry.type==='MAP'||entry.type==='LAP';return [entry.address,entry.phone,appointment&&entry.date?`${fmtDate(entry.date)}${entry.time?` · ${timelineTimeLabel(timelineMinutes(entry.time))}`:''}`:''].filter(Boolean).join(' · ')}
 function renderKnockingSessionLog(){const host=$('#knockingSessionLog');if(!host)return;const log=dailyKnockingLog(todayKey());if(!log.length){host.innerHTML='<div class="knocking-log-empty">No data or appointments captured yet.</div>';return}host.innerHTML=[...log].reverse().map(entry=>`<article class="knocking-log-item"><div><span>${escapeHtml(entry.type)}</span><strong>${escapeHtml(entry.name||'Unnamed contact')}</strong><small>${escapeHtml(knockingLogMeta(entry)||'Details captured')}</small></div><div class="knocking-log-actions"><button type="button" data-edit-knock-log="${escapeHtml(entry.id)}">Edit</button><button type="button" data-delete-knock-log="${escapeHtml(entry.id)}">Delete</button></div></article>`).join('')}
+function titleCaseMarketStreet(value=''){return String(value||'').split(/\s+/).filter(Boolean).map(word=>word.charAt(0).toUpperCase()+word.slice(1)).join(' ')}
+function knockingHotSpottingRecommendations(){
+  const rank={withdrawn:6,'just listed':5,listed:5,sold:4,'price changed':3,'price change':3,'under offer':2};
+  const grouped=new Map();
+  for(const event of normaliseMarketPulseEvents(marketPulseEvents)){
+    const key=marketStreetKey(event.address,event.suburb)||event.streetKey;if(!key)continue;
+    const [street,suburb]=key.split('|'),type=cleanText(event.eventType,60),score=rank[normalisePlace(type)]||1;
+    const existing=grouped.get(key)||{key,street:titleCaseMarketStreet(street),suburb:titleCaseMarketStreet(suburb),score:0,events:[]};
+    existing.score=Math.max(existing.score,score);existing.events.push(event);grouped.set(key,existing);
+  }
+  return [...grouped.values()].sort((a,b)=>b.score-a.score||b.events.length-a.events.length||b.events.at(-1).createdAt-a.events.at(-1).createdAt).slice(0,5);
+}
+function renderKnockingHotSpotting(){
+  const section=$('#knockingHotSpottingRecommendations'),host=$('#knockingHotSpottingList');if(!section||!host)return;
+  const streets=knockingHotSpottingRecommendations();section.classList.toggle('hidden',!streets.length);
+  host.innerHTML=streets.map(item=>{const reasons=[...new Set(item.events.map(event=>cleanText(event.eventType,60).toUpperCase()).filter(Boolean))];const properties=item.events.map(event=>event.address).filter(Boolean);return `<article class="knocking-hotspot-item"><div><strong>${escapeHtml(item.street)}</strong><small>${escapeHtml(item.suburb)}</small></div><div class="knocking-hotspot-reasons">${reasons.map(reason=>`<span>${escapeHtml(reason)}</span>`).join('')}</div><p>${escapeHtml(properties.slice(0,2).join(' · '))}${properties.length>2?` · +${properties.length-2} more`:''}</p></article>`}).join('');
+}
 function renderKnockingSession(){
   const session=$('#knockingSession');if(!session)return;
   session.classList.toggle('hidden',!knockingSessionActive||!knockingSessionVisible);
   if(!knockingSessionActive||!knockingSessionVisible)return;
+  renderKnockingHotSpotting();
   const d=dayData(todayKey()),running=Boolean(d.timerStartedAt);
   $('#knockingSessionTimer').textContent=fmtTimer(liveKnockSeconds(d));
   $('#pauseKnockingSession').textContent=running?'Pause':'Resume';
@@ -2019,7 +2037,8 @@ function openKnockingSession(){if(!knockingSessionActive)knockingSessionStartSec
 async function startKnockingSession(){
   if(!canEditDate(selectedDate))return lockedToast();
   if(selectedDate!==todayKey())return toast('Doorknocking sessions are available for today only');
-  const d=dayData(selectedDate);if(!d.timerStartedAt)await toggleTimer();openKnockingSession();
+  openKnockingSession();
+  const d=dayData(selectedDate);if(!d.timerStartedAt)await toggleTimer();
 }
 function knockingCaptureMarkup(type,entry=null){
   const isAppointment=type==='MAP'||type==='LAP',title=isAppointment?`${entry?'Edit':'Book'} ${type}`:`${entry?'Edit':'Capture'} Data`;

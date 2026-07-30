@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=119.6-market-pulse-sessions">
+<link rel="stylesheet" href="styles.css?v=119.11-knocking-hotspots">
 <title>AGNT</title>
 </head>
 <body>
@@ -305,6 +305,10 @@
           <div><span>DOORKNOCKING SESSION</span><strong id="knockingSessionTimer">00:00</strong></div>
           <button id="endKnockingSession" type="button">End Session</button>
         </header>
+        <section id="knockingHotSpottingRecommendations" class="knocking-hotspot-recommendations glass hidden" aria-label="Recommended streets to door knock">
+          <div class="knocking-hotspot-head"><span>HOT SPOTTING</span><strong>Streets worth knocking</strong><small>Based on your latest market activity.</small></div>
+          <div id="knockingHotSpottingList" class="knocking-hotspot-list"></div>
+        </section>
         <section class="knocking-session-card glass">
           <div class="knocking-session-grid" aria-label="Session tallies">
             <div class="knocking-tally-card"><span>KNOCKS</span><strong id="knockSessionKnocks">0</strong><div class="knocking-tally-actions"><button type="button" data-knock-adjust="knocks" data-delta="-1" aria-label="Remove knock">−</button><button type="button" data-knock-adjust="knocks" data-delta="1">+ Add knock</button></div></div>
@@ -446,7 +450,7 @@
           <button id="startProspectingSession" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>Hot spotting</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
+          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
           <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
@@ -664,6 +668,6 @@
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=119.6-market-pulse-sessions"></script>
+<script type="module" src="app.js?v=119.11-knocking-hotspots"></script>
 </body>
 </html>
