@@ -11,7 +11,7 @@ const CALL_PLAN=[[9,'Active Buyer Calls','Hot buyers, offers, contracts and seco
 const DEFAULTS={calls:50,connects:25,data:10,weeklyKnock:240};
 const SELLING_TIMEFRAMES=['Now','1–3 months','6–12 months','12 months+'];
 const AGNT_BULK_SMS_SHORTCUT='AGNT Bulk SMS';
-let targets={...DEFAULTS}, days={}, prospects=[], prospectInteractions=[], marketPulseEvents=[], prospectFilter='priority', prospectSection='today', prospectContactsMode='active', pipelineTemperature='All', pipelineSort='followup', prospectBulkMode=false, selectedProspectIds=new Set(), activeProspectId=null, prospectSessionIds=[], prospectSessionIndex=0, prospectSessionActive=false, prospectSessionStats={calls:0,connects:0,temperate:0,appointments:0,sms:0}, prospectSessionContext=null, selectedDate=dateKey(new Date()), appointmentDate=selectedDate, appointmentHistoryMode=null, agentName='', calendarPreference='outlook', leaderboardEntries=[], leaderboardMode='day', leaderboardDayOffset=0, leaderboardWeekOffset=0, scorecardWeekOffset=0, prospectInsightPeriod='week', campaignHistory=[], bulkSmsTestLaunches=[];
+let targets={...DEFAULTS}, days={}, prospects=[], prospectInteractions=[], marketPulseEvents=[], prospectFilter='priority', prospectSection='today', prospectContactsMode='active', pipelineTemperature='All', pipelineSort='followup', prospectBulkMode=false, selectedProspectIds=new Set(), activeProspectId=null, prospectSessionIds=[], prospectSessionIndex=0, prospectSessionActive=false, prospectSessionStats={calls:0,connects:0,temperate:0,appointments:0,sms:0}, prospectSessionContext=null, selectedDate=dateKey(new Date()), appointmentDate=selectedDate, appointmentHistoryMode=null, agentName='', calendarPreference='outlook', leaderboardEntries=[], leaderboardMode='day', leaderboardDayOffset=0, leaderboardWeekOffset=0, scorecardWeekOffset=0, prospectInsightPeriod='week', campaignHistory=[], bulkSmsTestLaunches=[], selectedBroadcastType='';
 let knockingSessionActive=false,knockingSessionVisible=false,knockingSessionEnding=false,knockingSessionStats={knocks:0,clients:0,data:0,MAP:0,LAP:0},knockingSessionLog=[],knockingSessionStartSeconds=0,knockingCaptureType='',knockingEditingLogId='';
 let year=new Date().getFullYear(), monthCursor=new Date(), uid='local', currentUser=null, cloud=false, db=null, auth=null;
 let unsubDays=null, unsubProfile=null, unsubLeaderboard=null, unsubProspecting=null, timerTick=null, syncTimer=null, leaderboardPublishTimer=null, prospectingSaveTimer=null;
@@ -525,7 +525,7 @@ function pageHeaderState(id=activeViewId()){
     const overdue=activeProspects().filter(p=>p.nextFollowUp&&p.nextFollowUp<todayKey()).length,due=activeProspects().filter(p=>p.nextFollowUp===todayKey()).length,sellers=sellerPipelineProspects().length;
     if(prospectSection==='contacts'){const count=prospectContactsMode==='archived'?archivedProspects().length:activeProspects().length;return{title:prospectContactsMode==='archived'?'Archived':label,subtitle:count?`${count} contact${count===1?'':'s'} ${prospectContactsMode==='archived'?'archived.':'ready to work.'}`:prospectContactsMode==='archived'?'No archived contacts.':'Build the database one useful conversation at a time.'}};
     if(prospectSection==='pipeline')return{title:label,subtitle:sellers?`${sellers} active seller${sellers===1?'':'s'} across your pipeline.`:'Qualify the next opportunity into your pipeline.'};
-    if(prospectSection==='market')return{title:'Hot Spotting',subtitle:'Turn today’s property changes into focused calling sessions.'};if(prospectSection==='insights')return{title:label,subtitle:'See what is creating conversations and appointments.'};
+    if(prospectSection==='market')return{title:'Hot Spotting',subtitle:'Turn today’s property changes into focused calling sessions.'};if(prospectSection==='broadcast')return{title:'Broadcast',subtitle:'Build and review a personalised SMS campaign.'};if(prospectSection==='insights')return{title:label,subtitle:'See what is creating conversations and appointments.'};
     if(overdue)return{title:label,subtitle:`${overdue} overdue follow-up${overdue===1?'':'s'} need attention.`};
     if(due)return{title:label,subtitle:`${due} follow-up${due===1?'':'s'} due today.`};
     return{title:label,subtitle:'Your follow-up list is clear — create the next opportunity.'};
@@ -1871,23 +1871,86 @@ function prospectActivityClass(p){if(p.nextFollowUp&&p.nextFollowUp<todayKey())r
 function prospectCard(p,{contactsView=false}={}){const initials=p.name.split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();if(contactsView){const selected=selectedProspectIds.has(p.id),phone=primaryProspectPhone(p),address=formatProspectAddress(p.address||p.company,p.suburb)||'No property address';return`<button class="prospect-card contact-card-v156 ${prospectBulkMode?'bulk-mode':''} ${selected?'selected':''}" type="button" ${prospectBulkMode?`data-select-prospect="${p.id}" aria-pressed="${selected}"`:`data-open-prospect="${p.id}"`}>
   ${prospectBulkMode?`<span class="prospect-select-mark" aria-hidden="true">${selected?'✓':''}</span>`:''}<span class="prospect-avatar">${escapeHtml(initials||'P')}</span><span class="prospect-card-copy"><strong>${escapeHtml(p.name)}</strong><small>${escapeHtml(address)}</small><em>${escapeHtml(phone||'No mobile number')}</em></span><span class="prospect-temp temp-${p.temperature.toLowerCase()}">${p.temperature}</span>${prospectBulkMode?'':'<b aria-hidden="true">›</b>'}</button>`}const activity=prospectActivityClass(p),property=p.address||[p.suburb,primaryProspectPhone(p),p.email].filter(Boolean).join(' · ')||'Contact details not added';return`<button class="prospect-card contact-card-v156" type="button" data-open-prospect="${p.id}"><span class="prospect-activity activity-${activity}" aria-hidden="true"></span><span class="prospect-avatar">${escapeHtml(initials||'P')}</span><span class="prospect-card-copy"><strong>${escapeHtml(p.name)}</strong><small>${escapeHtml(property)}</small><em class="${p.nextFollowUp&&p.nextFollowUp<=todayKey()?'due':''}">${escapeHtml(dueText(p))}</em></span><span class="prospect-temp temp-${p.temperature.toLowerCase()}">${p.temperature}</span><b aria-hidden="true">›</b></button>`}
 function setProspectorSection(section='today'){
-  prospectSection=['today','contacts','pipeline','market','campaigns','insights'].includes(section)?section:'today';
+  prospectSection=['today','contacts','pipeline','market','broadcast','insights'].includes(section)?section:'today';
   $$('[data-prospector-section]').forEach(button=>{const active=button.dataset.prospectorSection===prospectSection;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current')});
   $('#prospectorTodayPanel')?.classList.toggle('hidden',prospectSection!=='today');
   $('#prospectorContactsPanel')?.classList.toggle('hidden',prospectSection!=='contacts');
   $('#prospectorPipelinePanel')?.classList.toggle('hidden',prospectSection!=='pipeline');
   $('#prospectorMarketPanel')?.classList.toggle('hidden',prospectSection!=='market');
   $('#prospectorInsightsPanel')?.classList.toggle('hidden',prospectSection!=='insights');
-  $('#prospectorCampaignsPanel')?.classList.toggle('hidden',prospectSection!=='campaigns');
+  $('#prospectorBroadcastPanel')?.classList.toggle('hidden',prospectSection!=='broadcast');
   if(document.querySelector('.view.active')?.id==='prospectingView')updateTopbar();
-  $('.prospecting-toolbar')?.classList.toggle('hidden',prospectSection==='insights'||prospectSection==='market'||prospectSection==='campaigns');
+  $('.prospecting-toolbar')?.classList.toggle('hidden',prospectSection==='insights'||prospectSection==='market'||prospectSection==='broadcast');
   const input=$('#prospectSearch');if(input)input.placeholder=prospectSection==='contacts'?'Search name, street, suburb, phone etc.':prospectSection==='pipeline'?'Search seller pipeline':'Search name, address or phone';
-  if(prospectSection==='market')renderMarketPulse();if(prospectSection==='campaigns')renderCampaignBroadcast();if(prospectSessionActive&&prospectSection==='today')return;
+  if(prospectSection==='market')renderMarketPulse();if(prospectSection==='broadcast')renderBroadcastScreen();if(prospectSessionActive&&prospectSection==='today')return;
   $('#prospectDetail')?.classList.add('hidden');
   $('#prospectingSession')?.classList.add('hidden');
   $('#prospectingDashboard')?.classList.remove('hidden');
 }
 
+const BROADCAST_TYPES={
+  'end-of-month':{label:'End of month',name:'End of month update',description:'Share a local market update with your database.',message:`Hi {{FirstName}},
+
+Andrew Tour from McGrath here with a quick end-of-month market update for {{Suburb}}.
+
+If you have any questions or would like to know what the latest activity means for your property, please don’t hesitate to let me know.
+
+Thanks,
+Andrew Tour | McGrath`},
+  'just-listed':{label:'Just listed',name:'Just listed',description:'Let nearby contacts know about a new listing.',message:`Hi {{FirstName}},
+
+Andrew Tour from McGrath here. We’ve just listed a property nearby that I thought may interest you.
+
+If you would like the details or would like to know what this means for your property, please let me know.
+
+Thanks,
+Andrew Tour | McGrath`},
+  'just-sold':{label:'Just sold',name:'Just sold',description:'Share a recent result and start property conversations.',message:`Hi {{FirstName}},
+
+Andrew Tour from McGrath here. We’ve recently sold a property nearby and I wanted to keep you updated on the result.
+
+If you would like to know what this means for your property, please let me know.
+
+Thanks,
+Andrew Tour | McGrath`},
+  'coming-soon':{label:'Coming soon',name:'Coming soon',description:'Give selected contacts an early property heads-up.',message:`Hi {{FirstName}},
+
+Andrew Tour from McGrath here. We have a property coming to market soon that I thought may interest you.
+
+Please let me know if you would like some early information before it launches.
+
+Thanks,
+Andrew Tour | McGrath`},
+  'auction-reminder':{label:'Auction reminder',name:'Auction reminder',description:'Remind interested contacts about an upcoming auction.',message:`Hi {{FirstName}},
+
+Andrew Tour from McGrath here with a quick reminder about the upcoming auction.
+
+Please let me know if you need any further information before auction day.
+
+Thanks,
+Andrew Tour | McGrath`}
+};
+function renderBroadcastScreen(){
+  const menu=$('#broadcastMenu'),builder=$('#broadcastBuilderFlow');
+  if(!menu||!builder)return;
+  const building=Boolean(selectedBroadcastType&&BROADCAST_TYPES[selectedBroadcastType]);
+  menu.classList.toggle('hidden',building);builder.classList.toggle('hidden',!building);
+  if(!building)return;
+  const type=BROADCAST_TYPES[selectedBroadcastType];
+  if($('#broadcastTypeEyebrow'))$('#broadcastTypeEyebrow').textContent=type.label;
+  if($('#broadcastTypeHeading'))$('#broadcastTypeHeading').textContent='Build your message';
+  if($('#broadcastTypeDescription'))$('#broadcastTypeDescription').textContent=type.description;
+  renderCampaignBroadcast();
+}
+function openBroadcastBuilder(typeKey){
+  const type=BROADCAST_TYPES[typeKey];if(!type)return;
+  selectedBroadcastType=typeKey;
+  const name=$('#campaignName'),message=$('#campaignMessage');
+  if(name)name.value=type.name;if(message)message.value=type.message;
+  renderBroadcastScreen();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function closeBroadcastBuilder(){selectedBroadcastType='';renderBroadcastScreen();window.scrollTo({top:0,behavior:'smooth'})}
 function campaignFirstName(p){const name=cleanText(p?.name,120);if(!name)return'there';if(/[&/]|\band\b/i.test(name))return name;return name.split(/\s+/)[0]||'there'}
 function campaignDaysSince(k){if(!validDateKey(k))return Infinity;return Math.floor((parseKey(todayKey())-parseKey(k))/86400000)}
 function campaignTagText(p){return `${p.stage||''} ${p.source||''} ${Array.isArray(p.tags)?p.tags.join(' '):p.tags||''}`.toLowerCase()}
@@ -1899,7 +1962,7 @@ function campaignEligibleContacts(){
 }
 function campaignMessageFor(p,template){return String(template||'').replace(/{{\s*FirstName\s*}}/gi,campaignFirstName(p)).replace(/{{\s*FullName\s*}}/gi,cleanText(p.name,120)||'there').replace(/{{\s*Suburb\s*}}/gi,cleanText(p.suburb,80)||'your area').replace(/{{\s*AgentName\s*}}/gi,displayAgentName())}
 function campaignPayload(){const {list,warnings}=campaignEligibleContacts(),template=$('#campaignMessage')?.value||'',name=cleanText($('#campaignName')?.value,120)||`AGNT Campaign ${todayKey()}`,delay=Math.max(1,Number($('#campaignDelay')?.value)||2);return{name,delay,users:list.map(p=>({identifier:p.id,name:p.name,number:primaryProspectPhone(p),message:campaignMessageFor(p,template)})),warnings,createdAt:Date.now(),source:'AGNT'}}
-function renderCampaignBroadcast(){const panel=$('#prospectorCampaignsPanel');if(!panel)return;const payload=campaignPayload(),total=payload.users.length,w=payload.warnings;$('#campaignEligibleCount').textContent=total;$('#campaignAudienceMeta').textContent=`${total} eligible contact${total===1?'':'s'}`;$('#campaignReviewMeta').textContent=total?`${total} personalised message${total===1?'':'s'} ready`:'No eligible recipients';$('#campaignWarnings').innerHTML=[w.invalid?`${w.invalid} invalid/no mobile`:null,w.duplicates?`${w.duplicates} duplicate mobile${w.duplicates===1?'':'s'}`:null,w.dnc?`${w.dnc} do-not-contact`:null,w.recent?`${w.recent} recent contact${w.recent===1?'':'s'}`:null].filter(Boolean).map(x=>`<span>${escapeHtml(x)} excluded</span>`).join('');$('#campaignPreview').innerHTML=total?payload.users.slice(0,5).map((u,i)=>`<article><span>${i+1}</span><div><strong>${escapeHtml(u.name)}</strong><small>${escapeHtml(u.number)}</small><p>${escapeHtml(u.message).replace(/\n/g,'<br>')}</p></div></article>`).join('')+(total>5?`<div class="campaign-more">+${total-5} more recipients</div>`:''):'<div class="empty">No eligible contacts match these filters.</div>';$('#launchCampaignShortcut').disabled=!total||!cleanText($('#campaignMessage')?.value,2000);renderCampaignHistory();renderBulkSmsTest()}
+function renderCampaignBroadcast(){const panel=$('#prospectorBroadcastPanel');if(!panel||!selectedBroadcastType)return;const payload=campaignPayload(),total=payload.users.length,w=payload.warnings;$('#campaignEligibleCount').textContent=total;$('#campaignAudienceMeta').textContent=`${total} eligible contact${total===1?'':'s'}`;$('#campaignReviewMeta').textContent=total?`${total} personalised message${total===1?'':'s'} ready`:'No eligible recipients';$('#campaignWarnings').innerHTML=[w.invalid?`${w.invalid} invalid/no mobile`:null,w.duplicates?`${w.duplicates} duplicate mobile${w.duplicates===1?'':'s'}`:null,w.dnc?`${w.dnc} do-not-contact`:null,w.recent?`${w.recent} recent contact${w.recent===1?'':'s'}`:null].filter(Boolean).map(x=>`<span>${escapeHtml(x)} excluded</span>`).join('');$('#campaignPreview').innerHTML=total?payload.users.slice(0,5).map((u,i)=>`<article><span>${i+1}</span><div><strong>${escapeHtml(u.name)}</strong><small>${escapeHtml(u.number)}</small><p>${escapeHtml(u.message).replace(/\n/g,'<br>')}</p></div></article>`).join('')+(total>5?`<div class="campaign-more">+${total-5} more recipients</div>`:''):'<div class="empty">No eligible contacts match these filters.</div>';$('#launchCampaignShortcut').disabled=!total||!cleanText($('#campaignMessage')?.value,2000);renderCampaignHistory();renderBulkSmsTest()}
 function renderCampaignHistory(){const host=$('#campaignHistory');if(!host)return;host.innerHTML=campaignHistory.length?campaignHistory.slice(0,8).map(c=>`<article><div><strong>${escapeHtml(c.name||'Campaign')}</strong><small>${new Date(c.createdAt).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}</small></div><span>${Number(c.count)||0} SMS</span></article>`).join(''):'<div class="empty">No campaigns launched from this device yet.</div>'}
 function agntBulkSmsShortcutUrl(payload){const input=encodeURIComponent(JSON.stringify(payload));return`shortcuts://run-shortcut?name=${encodeURIComponent(AGNT_BULK_SMS_SHORTCUT)}&input=text&text=${input}`}
 function launchCampaignShortcut(){const payload=campaignPayload();if(!payload.users.length)return toast('No eligible recipients');if(!confirm(`Open ${AGNT_BULK_SMS_SHORTCUT} with ${payload.users.length} personalised messages?`))return;campaignHistory.unshift({id:prospectId(),name:payload.name,count:payload.users.length,createdAt:Date.now()});saveLocal();renderCampaignHistory();window.location.href=agntBulkSmsShortcutUrl(payload)}
@@ -2341,6 +2404,7 @@ window.addEventListener('focus',()=>setTimeout(maybeShowManualCallOutcome,180));
 window.addEventListener('pageshow',()=>setTimeout(maybeShowManualCallOutcome,180));
 $('#startProspectingSession').onclick=startProspectingSession;
 $('#openHotSpotting')&&($('#openHotSpotting').onclick=()=>{setProspectorSection('market');renderProspecting()});
+$('#openBroadcast')&&($('#openBroadcast').onclick=()=>{selectedBroadcastType='';setProspectorSection('broadcast');renderProspecting()});
 $('#backFromMarketPulse')&&($('#backFromMarketPulse').onclick=()=>{setProspectorSection('today');renderProspecting()});
 $('#importMarketPulse')&&($('#importMarketPulse').onclick=importMarketPulse);
 $('#clearMarketPulseInput')&&($('#clearMarketPulseInput').onclick=()=>{const input=$('#marketPulseInput');if(input)input.value='';$('#marketPulseImportStatus').textContent='Nothing imported yet.'});
@@ -2353,6 +2417,9 @@ $('#prospectingView').onclick=async e=>{
   const removeMarket=e.target.closest('[data-remove-market-event]');if(removeMarket){marketPulseEvents=marketPulseEvents.filter(x=>x.id!==removeMarket.dataset.removeMarketEvent);saveLocal();renderMarketPulse();try{await queueProspectingSave()}catch(err){console.error('Hot Spotting removal sync failed',err)}return}
   const prospectCall=e.target.closest('[data-prospect-call]');if(prospectCall){rememberProspectCallReturn(prospectCall.dataset.prospectCall,prospectCall.dataset.callFromSession==='1');return}
   const section=e.target.closest('[data-prospector-section]');if(section){e.preventDefault();e.stopPropagation();setProspectorSection(section.dataset.prospectorSection);renderProspecting();return}
+  const broadcastTypeButton=e.target.closest('[data-broadcast-type]');if(broadcastTypeButton){openBroadcastBuilder(broadcastTypeButton.dataset.broadcastType);return}
+  if(e.target.closest('#backToBroadcastMenu')){closeBroadcastBuilder();return}
+  if(e.target.closest('#backFromBroadcast')){selectedBroadcastType='';setProspectorSection('today');renderProspecting();return}
   if(e.target.closest('#refreshCampaignPreview')){renderCampaignBroadcast();return}
   if(e.target.closest('#launchCampaignShortcut')){launchCampaignShortcut();return}
   if(e.target.closest('#launchBulkSmsTest')){launchBulkSmsTest();return}
@@ -2384,9 +2451,9 @@ $('#prospectingView').onclick=async e=>{
   if(e.target.closest('[data-sms-not-sent]')){saveHotSpotSmsPending(null);showProspectingSession();return}
   if(e.target.closest('[data-session-skip]')){const skippedId=prospectSessionIds[prospectSessionIndex],marketEventId=cleanText(prospectSessionContext?.eventId,160);if(skippedId&&marketEventId){marketPulseEvents=normaliseMarketPulseEvents(marketPulseEvents.map(event=>event.id===marketEventId?{...event,sessionStartedAt:event.sessionStartedAt||Date.now(),skippedProspectIds:[...(event.skippedProspectIds||[]),skippedId]}:event));saveLocal();queueProspectingSave().catch(err=>console.error('Hot Spotting skip sync failed',err))}prospectSessionIndex++;saveProspectingSessionState();showProspectingSession();return}
 };
-$('#prospectingView').addEventListener('input',e=>{if(e.target.closest('#prospectorCampaignsPanel'))renderCampaignBroadcast()});
+$('#prospectingView').addEventListener('input',e=>{if(e.target.closest('#prospectorBroadcastPanel'))renderCampaignBroadcast()});
 $('#prospectingView').addEventListener('change',e=>{
-  if(e.target.closest('#prospectorCampaignsPanel')){const wrap=$('#campaignSuburbWrap');if(wrap)wrap.classList.toggle('hidden',$('#campaignAudience')?.value!=='suburb');renderCampaignBroadcast();return}
+  if(e.target.closest('#prospectorBroadcastPanel')){const wrap=$('#campaignSuburbWrap');if(wrap)wrap.classList.toggle('hidden',$('#campaignAudience')?.value!=='suburb');renderCampaignBroadcast();return}
   const form=e.target.closest('#prospectEditor,#prospectLogForm');if(!form)return;
   if(e.target.matches('[data-pipeline-temperature-field]'))form.dataset.temperatureManual='1';
   if(e.target.matches('[data-pipeline-motivation-field]'))form.dataset.motivationManual='1';

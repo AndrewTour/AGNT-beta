@@ -5209,3 +5209,29 @@ body.manual-dialler-open,body.manual-call-outcome-open{overflow:hidden}
 .bulk-sms-json pre{max-height:280px;margin:0;padding:0 14px 14px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:10px;line-height:1.45;color:#d9e2f1}
 .bulk-sms-test-history{margin-top:18px;padding-top:15px;border-top:1px solid rgba(18,26,40,.08)}
 .bulk-sms-test-history>span{display:block;margin-bottom:9px;color:#7d8795;font-size:10px;font-weight:900;letter-spacing:.12em}
+
+/* v126.1 — Broadcast placement, menu and visual alignment */
+.broadcast-type-list{display:grid;gap:10px}
+.broadcast-type-card{display:grid;grid-template-columns:46px minmax(0,1fr) 18px;align-items:center;gap:12px;width:100%;min-height:76px;padding:13px 14px;border:0;border-radius:20px;text-align:left;color:#111318}
+.broadcast-type-card:active{transform:scale(.985)}
+.broadcast-type-card>span:nth-child(2){min-width:0}
+.broadcast-type-card strong,.broadcast-type-card small{display:block}
+.broadcast-type-card strong{font-size:15px;font-weight:750;letter-spacing:-.01em}
+.broadcast-type-card small{margin-top:3px;color:#7c8490;font-size:11px;font-weight:550;line-height:1.35}
+.broadcast-type-card>b{color:#a1a7b0;font-size:22px;font-weight:500;text-align:right}
+.broadcast-type-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#eef2f7;color:#273142;font-size:10px;font-weight:750;letter-spacing:.02em}
+#prospectorBroadcastPanel .campaign-hero span,
+#prospectorBroadcastPanel .campaign-builder .prospecting-section-head span,
+#prospectorBroadcastPanel .bulk-sms-test-history>span{font-weight:750;letter-spacing:.04em;text-transform:none}
+#prospectorBroadcastPanel .campaign-hero h3,
+#prospectorBroadcastPanel .campaign-builder h3{font-weight:750;letter-spacing:-.02em}
+#prospectorBroadcastPanel .campaign-filter-grid label,
+#prospectorBroadcastPanel .campaign-delay label,
+#prospectorBroadcastPanel .bulk-sms-test-field{font-weight:650}
+#prospectorBroadcastPanel .campaign-checks label{font-weight:650}
+#prospectorBroadcastPanel .campaign-warnings span,
+#prospectorBroadcastPanel .campaign-more{font-weight:700}
+#prospectorBroadcastPanel .campaign-preview article>span{font-weight:750}
+#prospectorBroadcastPanel .campaign-history>article>span{font-weight:750}
+#prospectorBroadcastPanel .bulk-sms-json summary{font-weight:700;letter-spacing:0}
+@media(max-width:390px){.broadcast-type-card{grid-template-columns:42px minmax(0,1fr) 16px;padding-inline:12px}.broadcast-type-icon{width:40px;height:40px}}

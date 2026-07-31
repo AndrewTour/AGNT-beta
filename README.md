@@ -158,3 +158,13 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Supports `{{FirstName}}` and `{{FullName}}` merge fields, configurable delay, message preview and JSON payload preview.
 - Test launches are stored locally and never modify live CRM contacts or Firebase data.
 - No Firebase configuration, Firestore path or security-rule changes are required.
+
+
+## V126.1 — Broadcast menu placement and UI alignment
+
+- Removed the standalone Campaigns tab from Prospector navigation.
+- Added Broadcast below Pipeline and Hot Spotting on the Prospector Today screen.
+- Added broadcast choices for End of month, Just listed, Just sold, Coming soon and Auction reminder.
+- Each choice opens the existing audience, message, review and AGNT Bulk SMS flow with an editable starter template.
+- Updated the new Broadcast interface to sentence case and aligned typography, weights, spacing and cards with the existing AGNT interface.
+- Firebase, authentication, Firestore paths/rules, UID separation, contact data, Pipeline, Hot Spotting, cache and synchronisation logic are unchanged.
