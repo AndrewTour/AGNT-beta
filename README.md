@@ -178,3 +178,10 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - End-of-month broadcasts now use a suburb-wide audience.
 - Other Broadcast types now use a suburb, street and individually selectable same-street contacts.
 - No Firebase, authentication, Firestore, UID, cache, sync or data-shape changes.
+
+## V126.3 — Broadcast UI alignment
+
+- Matched the spacing between the Pipeline, Hot Spotting and Broadcast cards.
+- Changed Broadcast supporting copy to sentence case while preserving uppercase section labels.
+- Matched the Broadcast button width to the session buttons above and renamed it `Broadcast`.
+- No Firebase, authentication, Firestore, contact-data, cache, sync or workflow changes.

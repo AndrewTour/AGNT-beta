@@ -5258,3 +5258,17 @@ body.manual-dialler-open,body.manual-call-outcome-open{overflow:hidden}
 .broadcast-recipient-list span,.broadcast-recipient-list strong,.broadcast-recipient-list small{display:block;min-width:0}
 .broadcast-recipient-list strong{font-size:13px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .broadcast-recipient-list small{margin-top:3px;color:#7c8490;font-size:10px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+
+/* v126.3 — Broadcast spacing, sentence-case supporting copy and button alignment */
+#prospectorTodayPanel{row-gap:14px!important}
+#prospectorTodayPanel>.prospecting-hero{margin:0!important}
+#openBroadcast{width:128px!important;min-width:128px!important}
+#prospectorBroadcastPanel .campaign-hero p,
+#prospectorBroadcastPanel .broadcast-type-card small,
+#prospectorBroadcastPanel .campaign-builder p,
+#prospectorBroadcastPanel .campaign-builder small,
+#prospectorBroadcastPanel .broadcast-audience-intro small,
+#prospectorBroadcastPanel .campaign-disclaimer{
+  text-transform:none!important;
+}
