@@ -160,7 +160,7 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - No Firebase configuration, Firestore path or security-rule changes are required.
 
 
-## V126.1 — Broadcast menu placement and UI alignment
+## V126.2 — Broadcast menu placement and UI alignment
 
 - Removed the standalone Campaigns tab from Prospector navigation.
 - Added Broadcast below Pipeline and Hot Spotting on the Prospector Today screen.
@@ -168,3 +168,13 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Each choice opens the existing audience, message, review and AGNT Bulk SMS flow with an editable starter template.
 - Updated the new Broadcast interface to sentence case and aligned typography, weights, spacing and cards with the existing AGNT interface.
 - Firebase, authentication, Firestore paths/rules, UID separation, contact data, Pipeline, Hot Spotting, cache and synchronisation logic are unchanged.
+
+
+## V126.2 — Broadcast audience refinement
+
+- Restored compact grey Broadcast labels to uppercase.
+- Consolidated Broadcast navigation to one back button that returns one screen.
+- Increased spacing between Broadcast type cards.
+- End-of-month broadcasts now use a suburb-wide audience.
+- Other Broadcast types now use a suburb, street and individually selectable same-street contacts.
+- No Firebase, authentication, Firestore, UID, cache, sync or data-shape changes.

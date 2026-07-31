@@ -5235,3 +5235,26 @@ body.manual-dialler-open,body.manual-call-outcome-open{overflow:hidden}
 #prospectorBroadcastPanel .campaign-history>article>span{font-weight:750}
 #prospectorBroadcastPanel .bulk-sms-json summary{font-weight:700;letter-spacing:0}
 @media(max-width:390px){.broadcast-type-card{grid-template-columns:42px minmax(0,1fr) 16px;padding-inline:12px}.broadcast-type-icon{width:40px;height:40px}}
+
+/* v126.2 Broadcast audience refinement */
+.broadcast-type-list{gap:16px}
+#prospectorBroadcastPanel .campaign-hero span,
+#prospectorBroadcastPanel .campaign-builder .prospecting-section-head span,
+#prospectorBroadcastPanel .bulk-sms-test-field,
+#prospectorBroadcastPanel .campaign-delay label,
+#prospectorBroadcastPanel .campaign-filter-grid label,
+#prospectorBroadcastPanel .broadcast-select-field,
+#prospectorBroadcastPanel .bulk-sms-test-history>span{text-transform:uppercase;letter-spacing:.12em}
+.broadcast-audience-mode{display:grid;gap:14px;margin-top:4px}
+.broadcast-audience-intro{display:grid;gap:3px;padding:14px;border-radius:17px;background:#f5f7fa}
+.broadcast-audience-intro strong{font-size:14px;font-weight:750;color:#111318}
+.broadcast-audience-intro small{font-size:11px;line-height:1.4;color:#7c8490}
+.broadcast-select-field{display:grid;gap:6px;color:#737c88;font-size:11px;font-weight:650}
+.broadcast-select-field select{width:100%;box-sizing:border-box;border:1px solid rgba(18,26,40,.09);border-radius:15px;background:#f5f7fa;padding:12px;font:inherit;color:#111318}
+.broadcast-filter-row{margin-top:14px;grid-template-columns:minmax(0,1fr)}
+.broadcast-recipient-list{display:grid;gap:8px;max-height:320px;overflow:auto;-webkit-overflow-scrolling:touch}
+.broadcast-recipient-list label{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:10px;padding:12px;border-radius:16px;background:#f5f7fa;color:#111318}
+.broadcast-recipient-list input{width:18px;height:18px;margin:0;accent-color:#0b63f3}
+.broadcast-recipient-list span,.broadcast-recipient-list strong,.broadcast-recipient-list small{display:block;min-width:0}
+.broadcast-recipient-list strong{font-size:13px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.broadcast-recipient-list small{margin-top:3px;color:#7c8490;font-size:10px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

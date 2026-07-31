@@ -11,7 +11,7 @@ const CALL_PLAN=[[9,'Active Buyer Calls','Hot buyers, offers, contracts and seco
 const DEFAULTS={calls:50,connects:25,data:10,weeklyKnock:240};
 const SELLING_TIMEFRAMES=['Now','1–3 months','6–12 months','12 months+'];
 const AGNT_BULK_SMS_SHORTCUT='AGNT Bulk SMS';
-let targets={...DEFAULTS}, days={}, prospects=[], prospectInteractions=[], marketPulseEvents=[], prospectFilter='priority', prospectSection='today', prospectContactsMode='active', pipelineTemperature='All', pipelineSort='followup', prospectBulkMode=false, selectedProspectIds=new Set(), activeProspectId=null, prospectSessionIds=[], prospectSessionIndex=0, prospectSessionActive=false, prospectSessionStats={calls:0,connects:0,temperate:0,appointments:0,sms:0}, prospectSessionContext=null, selectedDate=dateKey(new Date()), appointmentDate=selectedDate, appointmentHistoryMode=null, agentName='', calendarPreference='outlook', leaderboardEntries=[], leaderboardMode='day', leaderboardDayOffset=0, leaderboardWeekOffset=0, scorecardWeekOffset=0, prospectInsightPeriod='week', campaignHistory=[], bulkSmsTestLaunches=[], selectedBroadcastType='';
+let targets={...DEFAULTS}, days={}, prospects=[], prospectInteractions=[], marketPulseEvents=[], prospectFilter='priority', prospectSection='today', prospectContactsMode='active', pipelineTemperature='All', pipelineSort='followup', prospectBulkMode=false, selectedProspectIds=new Set(), activeProspectId=null, prospectSessionIds=[], prospectSessionIndex=0, prospectSessionActive=false, prospectSessionStats={calls:0,connects:0,temperate:0,appointments:0,sms:0}, prospectSessionContext=null, selectedDate=dateKey(new Date()), appointmentDate=selectedDate, appointmentHistoryMode=null, agentName='', calendarPreference='outlook', leaderboardEntries=[], leaderboardMode='day', leaderboardDayOffset=0, leaderboardWeekOffset=0, scorecardWeekOffset=0, prospectInsightPeriod='week', campaignHistory=[], bulkSmsTestLaunches=[], selectedBroadcastType='', selectedBroadcastSuburb='', selectedBroadcastStreet='', selectedBroadcastRecipientIds=new Set();
 let knockingSessionActive=false,knockingSessionVisible=false,knockingSessionEnding=false,knockingSessionStats={knocks:0,clients:0,data:0,MAP:0,LAP:0},knockingSessionLog=[],knockingSessionStartSeconds=0,knockingCaptureType='',knockingEditingLogId='';
 let year=new Date().getFullYear(), monthCursor=new Date(), uid='local', currentUser=null, cloud=false, db=null, auth=null;
 let unsubDays=null, unsubProfile=null, unsubLeaderboard=null, unsubProspecting=null, timerTick=null, syncTimer=null, leaderboardPublishTimer=null, prospectingSaveTimer=null;
@@ -1930,6 +1930,43 @@ Please let me know if you need any further information before auction day.
 Thanks,
 Andrew Tour | McGrath`}
 };
+function broadcastLocationFor(p){
+  const candidates=[p.address,p.company].map(value=>cleanText(value,300)).filter(Boolean);
+  for(const value of candidates){
+    const parts=splitMarketAddress(value),suburb=cleanText(parts.suburb||p.suburb,100),street=marketStreetName(parts.address);
+    if(street&&suburb)return{streetKey:`${street}|${normalisePlace(suburb)}`,street:titleCaseMarketStreet(street),suburb:titleCaseMarketStreet(suburb)};
+  }
+  const suburb=cleanText(p.suburb,100);return{streetKey:'',street:'',suburb:titleCaseMarketStreet(suburb)};
+}
+function broadcastSuburbs({streetOnly=false}={}){
+  const map=new Map();activeProspects().forEach(p=>{const location=broadcastLocationFor(p);if(!location.suburb||(streetOnly&&!location.streetKey))return;const key=normalisePlace(location.suburb);if(!map.has(key))map.set(key,location.suburb)});
+  return[...map.entries()].sort((a,b)=>a[1].localeCompare(b[1],'en-AU'));
+}
+function broadcastStreets(suburbKey){
+  const map=new Map();activeProspects().forEach(p=>{const location=broadcastLocationFor(p);if(!location.streetKey||normalisePlace(location.suburb)!==suburbKey)return;if(!map.has(location.streetKey))map.set(location.streetKey,location.street)});
+  return[...map.entries()].sort((a,b)=>a[1].localeCompare(b[1],'en-AU'));
+}
+function broadcastStreetContacts(streetKey){return activeProspects().filter(p=>broadcastLocationFor(p).streetKey===streetKey).sort((a,b)=>a.address.localeCompare(b.address,'en-AU')||a.name.localeCompare(b.name,'en-AU'))}
+function setSelectOptions(select,items,emptyLabel){
+  if(!select)return'';const previous=select.value;
+  select.innerHTML=items.length?items.map(([value,label])=>`<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`).join(''):`<option value="">${escapeHtml(emptyLabel)}</option>`;
+  if(items.some(([value])=>value===previous))select.value=previous;
+  return select.value||'';
+}
+function renderBroadcastAudienceControls(){
+  const isLarge=selectedBroadcastType==='end-of-month',large=$('#campaignLargeAudience'),street=$('#campaignStreetAudience');
+  large?.classList.toggle('hidden',!isLarge);street?.classList.toggle('hidden',isLarge);
+  if(isLarge){
+    const select=$('#campaignSuburbSelect'),items=broadcastSuburbs();selectedBroadcastSuburb=setSelectOptions(select,items,'No suburbs found');
+    return;
+  }
+  const suburbSelect=$('#campaignStreetSuburb'),suburbs=broadcastSuburbs({streetOnly:true});selectedBroadcastSuburb=setSelectOptions(suburbSelect,suburbs,'No suburbs found');
+  const streetSelect=$('#campaignStreetSelect'),streets=broadcastStreets(selectedBroadcastSuburb),priorStreet=selectedBroadcastStreet;
+  selectedBroadcastStreet=setSelectOptions(streetSelect,streets,'No streets found');
+  if(priorStreet!==selectedBroadcastStreet)selectedBroadcastRecipientIds=new Set(broadcastStreetContacts(selectedBroadcastStreet).map(p=>p.id));
+  const contacts=broadcastStreetContacts(selectedBroadcastStreet),host=$('#campaignStreetRecipients');
+  if(host)host.innerHTML=contacts.length?contacts.map(p=>`<label><input type="checkbox" data-broadcast-recipient="${escapeHtml(p.id)}" ${selectedBroadcastRecipientIds.has(p.id)?'checked':''}><span><strong>${escapeHtml(p.address||p.name)}</strong><small>${escapeHtml(p.name)}${primaryProspectPhone(p)?` · ${escapeHtml(primaryProspectPhone(p))}`:''}</small></span></label>`).join(''):'<div class="empty">No contacts found on this street.</div>';
+}
 function renderBroadcastScreen(){
   const menu=$('#broadcastMenu'),builder=$('#broadcastBuilderFlow');
   if(!menu||!builder)return;
@@ -1937,27 +1974,26 @@ function renderBroadcastScreen(){
   menu.classList.toggle('hidden',building);builder.classList.toggle('hidden',!building);
   if(!building)return;
   const type=BROADCAST_TYPES[selectedBroadcastType];
-  if($('#broadcastTypeEyebrow'))$('#broadcastTypeEyebrow').textContent=type.label;
+  if($('#broadcastTypeEyebrow'))$('#broadcastTypeEyebrow').textContent=type.label.toUpperCase();
   if($('#broadcastTypeHeading'))$('#broadcastTypeHeading').textContent='Build your message';
   if($('#broadcastTypeDescription'))$('#broadcastTypeDescription').textContent=type.description;
-  renderCampaignBroadcast();
+  renderBroadcastAudienceControls();renderCampaignBroadcast();
 }
 function openBroadcastBuilder(typeKey){
   const type=BROADCAST_TYPES[typeKey];if(!type)return;
-  selectedBroadcastType=typeKey;
+  selectedBroadcastType=typeKey;selectedBroadcastSuburb='';selectedBroadcastStreet='';selectedBroadcastRecipientIds=new Set();
   const name=$('#campaignName'),message=$('#campaignMessage');
   if(name)name.value=type.name;if(message)message.value=type.message;
-  renderBroadcastScreen();
-  window.scrollTo({top:0,behavior:'smooth'});
+  renderBroadcastScreen();window.scrollTo({top:0,behavior:'smooth'});
 }
-function closeBroadcastBuilder(){selectedBroadcastType='';renderBroadcastScreen();window.scrollTo({top:0,behavior:'smooth'})}
+function closeBroadcastBuilder(){selectedBroadcastType='';selectedBroadcastSuburb='';selectedBroadcastStreet='';selectedBroadcastRecipientIds=new Set();renderBroadcastScreen();window.scrollTo({top:0,behavior:'smooth'})}
 function campaignFirstName(p){const name=cleanText(p?.name,120);if(!name)return'there';if(/[&/]|\band\b/i.test(name))return name;return name.split(/\s+/)[0]||'there'}
 function campaignDaysSince(k){if(!validDateKey(k))return Infinity;return Math.floor((parseKey(todayKey())-parseKey(k))/86400000)}
-function campaignTagText(p){return `${p.stage||''} ${p.source||''} ${Array.isArray(p.tags)?p.tags.join(' '):p.tags||''}`.toLowerCase()}
 function campaignEligibleContacts(){
-  const audience=$('#campaignAudience')?.value||'all',suburb=cleanText($('#campaignSuburb')?.value,80).toLowerCase(),recency=Number($('#campaignRecency')?.value)||0,excludeDnc=$('#campaignExcludeDnc')?.checked!==false,excludeToday=$('#campaignExcludeRecent')?.checked!==false,seen=new Set(),warnings={invalid:0,duplicates:0,dnc:0,recent:0};
+  const recency=Number($('#campaignRecency')?.value)||0,excludeDnc=$('#campaignExcludeDnc')?.checked!==false,excludeToday=$('#campaignExcludeRecent')?.checked!==false,seen=new Set(),warnings={invalid:0,duplicates:0,dnc:0,recent:0},isLarge=selectedBroadcastType==='end-of-month';
+  const candidates=isLarge?activeProspects().filter(p=>normalisePlace(broadcastLocationFor(p).suburb)===selectedBroadcastSuburb):broadcastStreetContacts(selectedBroadcastStreet).filter(p=>selectedBroadcastRecipientIds.has(p.id));
   const list=[];
-  activeProspects().forEach(p=>{const phone=primaryProspectPhone(p),digits=String(phone||'').replace(/\D/g,'');if(digits.length<9){warnings.invalid++;return}if(seen.has(digits)){warnings.duplicates++;return}const interactions=interactionsFor(p.id);if(excludeDnc&&interactions.some(x=>x.outcome==='Do not contact')){warnings.dnc++;return}if(excludeToday&&interactions.some(x=>x.date===todayKey())){warnings.recent++;return}if(recency&&campaignDaysSince(p.lastContact)<recency){warnings.recent++;return}const text=campaignTagText(p);if(audience==='owners'&&!/(owner|seller|appraisal|vendor)/.test(text))return;if(audience==='buyers'&&!/(buyer|ofi|purchaser)/.test(text))return;if(audience==='investors'&&!/investor/.test(text))return;if(audience==='past'&&!/(past client|past vendor|past buyer)/.test(text))return;if(audience==='suburb'&&(!suburb||cleanText(p.suburb,80).toLowerCase()!==suburb))return;seen.add(digits);list.push(p)});
+  candidates.forEach(p=>{const phone=primaryProspectPhone(p),digits=String(phone||'').replace(/\D/g,'');if(digits.length<9){warnings.invalid++;return}if(seen.has(digits)){warnings.duplicates++;return}const interactions=interactionsFor(p.id);if(excludeDnc&&interactions.some(x=>x.outcome==='Do not contact')){warnings.dnc++;return}if(excludeToday&&interactions.some(x=>x.date===todayKey())){warnings.recent++;return}if(recency&&campaignDaysSince(p.lastContact)<recency){warnings.recent++;return}seen.add(digits);list.push(p)});
   return{list,warnings};
 }
 function campaignMessageFor(p,template){return String(template||'').replace(/{{\s*FirstName\s*}}/gi,campaignFirstName(p)).replace(/{{\s*FullName\s*}}/gi,cleanText(p.name,120)||'there').replace(/{{\s*Suburb\s*}}/gi,cleanText(p.suburb,80)||'your area').replace(/{{\s*AgentName\s*}}/gi,displayAgentName())}
@@ -2418,8 +2454,7 @@ $('#prospectingView').onclick=async e=>{
   const prospectCall=e.target.closest('[data-prospect-call]');if(prospectCall){rememberProspectCallReturn(prospectCall.dataset.prospectCall,prospectCall.dataset.callFromSession==='1');return}
   const section=e.target.closest('[data-prospector-section]');if(section){e.preventDefault();e.stopPropagation();setProspectorSection(section.dataset.prospectorSection);renderProspecting();return}
   const broadcastTypeButton=e.target.closest('[data-broadcast-type]');if(broadcastTypeButton){openBroadcastBuilder(broadcastTypeButton.dataset.broadcastType);return}
-  if(e.target.closest('#backToBroadcastMenu')){closeBroadcastBuilder();return}
-  if(e.target.closest('#backFromBroadcast')){selectedBroadcastType='';setProspectorSection('today');renderProspecting();return}
+  if(e.target.closest('#broadcastBack')){if(selectedBroadcastType)closeBroadcastBuilder();else{setProspectorSection('today');renderProspecting()}return}
   if(e.target.closest('#refreshCampaignPreview')){renderCampaignBroadcast();return}
   if(e.target.closest('#launchCampaignShortcut')){launchCampaignShortcut();return}
   if(e.target.closest('#launchBulkSmsTest')){launchBulkSmsTest();return}
@@ -2453,7 +2488,12 @@ $('#prospectingView').onclick=async e=>{
 };
 $('#prospectingView').addEventListener('input',e=>{if(e.target.closest('#prospectorBroadcastPanel'))renderCampaignBroadcast()});
 $('#prospectingView').addEventListener('change',e=>{
-  if(e.target.closest('#prospectorBroadcastPanel')){const wrap=$('#campaignSuburbWrap');if(wrap)wrap.classList.toggle('hidden',$('#campaignAudience')?.value!=='suburb');renderCampaignBroadcast();return}
+  if(e.target.closest('#prospectorBroadcastPanel')){
+    if(e.target.id==='campaignSuburbSelect')selectedBroadcastSuburb=e.target.value;
+    if(e.target.id==='campaignStreetSuburb'){selectedBroadcastSuburb=e.target.value;selectedBroadcastStreet='';selectedBroadcastRecipientIds=new Set();renderBroadcastAudienceControls()}
+    if(e.target.id==='campaignStreetSelect'){selectedBroadcastStreet=e.target.value;selectedBroadcastRecipientIds=new Set(broadcastStreetContacts(selectedBroadcastStreet).map(p=>p.id));renderBroadcastAudienceControls()}
+    if(e.target.matches('[data-broadcast-recipient]')){e.target.checked?selectedBroadcastRecipientIds.add(e.target.dataset.broadcastRecipient):selectedBroadcastRecipientIds.delete(e.target.dataset.broadcastRecipient)}
+    renderCampaignBroadcast();return}
   const form=e.target.closest('#prospectEditor,#prospectLogForm');if(!form)return;
   if(e.target.matches('[data-pipeline-temperature-field]'))form.dataset.temperatureManual='1';
   if(e.target.matches('[data-pipeline-motivation-field]'))form.dataset.motivationManual='1';
