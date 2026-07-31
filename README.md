@@ -150,3 +150,11 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 ## V125.9 Campaign Broadcast Beta
 - Added audience filters, personalised merge fields, recipient preview, SendHype Shortcut payload launch and local campaign history.
 - Existing Firebase paths and rules are unchanged.
+
+## V126.0 — AGNT Bulk SMS test environment
+
+- Campaign Broadcast now launches the iOS Shortcut named `AGNT Bulk SMS`.
+- Added an isolated test environment inside Campaigns for manually entered names and Australian mobile numbers.
+- Supports `{{FirstName}}` and `{{FullName}}` merge fields, configurable delay, message preview and JSON payload preview.
+- Test launches are stored locally and never modify live CRM contacts or Firebase data.
+- No Firebase configuration, Firestore path or security-rule changes are required.
