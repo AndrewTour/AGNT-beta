@@ -1,5 +1,5 @@
-const CACHE='agnt-v119-13-hotspot-sync';
-const ASSETS=['./','./index.html','./styles.css?v=119.13-hotspot-sync','./app.js?v=119.13-hotspot-sync','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='agnt-v125-8-hotspot-sms';
+const ASSETS=['./','./index.html','./styles.css?v=125.8-hotspot-sms','./app.js?v=125.8-hotspot-sms','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

@@ -70,3 +70,78 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Existing local-only Hot Spotting imports migrate to Firestore after the user’s first confirmed cloud load.
 - Imports, individual removals and Clear All now sync across that user’s devices.
 - No UI, matching, session, Firebase path, rule or unrelated functionality changes.
+
+
+## v119.14 — Day Log session cleanup
+
+- Day Log remains scoped to the signed-in user's UID-backed day and prospecting data.
+- Completed knocking sessions under 60 seconds with no knocks, connects, data, MAP or LAP activity are excluded from the Day Log and its session total.
+- No Firebase paths, rules, metrics, session storage, Hot Spotting, Pipeline or UI behaviour changed.
+
+
+## v125.1 — Quick Call keypad
+
+- Added a compact phone button to the Prospector toolbar.
+- Added an in-app keypad for manually entered, unsaved numbers.
+- Calls hand off to the native iPhone dialler through `tel:`.
+- Returning to AGNT opens an outcome sheet.
+- Connected adds one call and one connect. Voicemail, no answer and wrong/disconnected add one call only. Cancelled adds no metrics.
+- The post-call screen can prefill a new contact or appointment with the dialled number.
+- Firebase configuration, paths, rules, UID separation, existing prospecting data and all unrelated features are unchanged.
+
+
+## v125.2 — Quick Call presentation refinement
+- Formats Australian mobile numbers as 4-3-3 while dialling.
+- Enlarges the centred keypad and call control by approximately 10%.
+- Removes metric explanations from the outcome choices while retaining the result summary after selection.
+- No other application behaviour changed.
+
+
+## v125.3 — Hot Spotting street session progress
+- Hot Spotting street tiles now show called, connects and follow-up progress.
+- Session buttons progress from Start Session to Active Session to Session Complete.
+- Completed Hot Spotting session buttons display in green while preserving the existing summary.
+- No Firebase configuration or rules changes are required.
+
+## v125.4 — Hot Spotting session state correction
+
+- Starting a Hot Spotting street session immediately persists the Active Session state.
+- Renamed the matching-contact label to Neighbours Found.
+- Skipped contacts count toward street-session progress without adding call or connect metrics.
+- Session Complete is now applied only when Review & End Session is selected.
+- Early session exit leaves the street in Active Session so it can be resumed.
+
+
+## v125.5 — Hot Spotting call summary and button colours
+
+- Skipped contacts continue to count as processed for session completion, but are excluded from the visible called total.
+- A session with 14 logged calls and 3 skipped contacts across 17 neighbours displays 14/17 called.
+- Restored Hot Spotting session button colours: black for Start Session, blue for Active Session and green for Session Complete.
+- No other application behaviour changed.
+
+
+## V125.6 — Prospector Today session states
+- Keeps Today’s Pipeline independent from Hot Spotting totals.
+- A Hot Spotting interaction only affects Today’s Pipeline when it belongs to the same contact already in that pipeline, through the existing contacted-today rules.
+- Prospector Today buttons now mirror Smart Hot Spotting states: black Start Session, blue Active Session and green Session Complete.
+
+
+## V125.7 — Session-state colour specificity fix
+
+- Corrected CSS specificity so session state colours display over the global primary-button style.
+- Start Session remains black.
+- Active Session displays blue.
+- Session Complete displays green, including disabled completed buttons.
+- No session logic, metrics, Firebase or pipeline behaviour changed.
+
+
+## v125.8 — Hot Spotting SMS beta
+
+- Added contextual SMS alongside Call inside Hot Spotting sessions.
+- Message preview uses the contact name and triggering market event address, action and valid price.
+- Opens the native iPhone Messages composer with recipient and body prefilled.
+- Requires explicit SMS Sent confirmation on return.
+- Confirmed SMS messages are recorded as SMS interactions and count as processed session contacts without adding Calls or Connects.
+- Added separate SMS totals to Hot Spotting cards and session review.
+- Today’s Pipeline remains separate except where the exact same contact is updated through existing contact-recency behaviour.
+- No Firebase configuration, authentication, Firestore path or rules changes.
