@@ -436,6 +436,7 @@
         <button class="active" type="button" data-prospector-section="today" aria-current="page">Today</button>
         <button type="button" data-prospector-section="contacts">Contacts</button>
         <button type="button" data-prospector-section="pipeline">Pipeline</button>
+        <button type="button" data-prospector-section="campaigns">Campaigns</button>
         <button type="button" data-prospector-section="insights">Insights</button>
       </nav>
       <div class="prospecting-toolbar glass">
@@ -510,6 +511,45 @@
             <textarea id="marketPulseInput" rows="8" placeholder="Paste the Market Pulse email content here…"></textarea>
             <div class="market-pulse-import-actions"><button id="clearMarketPulseInput" class="secondary" type="button">Clear</button><button id="importMarketPulse" class="primary" type="button">Find Opportunities</button></div>
             <p id="marketPulseImportStatus" class="market-pulse-status">Nothing imported yet.</p>
+          </section>
+        </section>
+        <section id="prospectorCampaignsPanel" class="prospector-campaigns-panel hidden" aria-live="polite">
+          <section class="campaign-hero glass">
+            <div><span>CAMPAIGN BROADCAST</span><h3>Personalised SMS, ready for Shortcut</h3><p>Build, review and send an end-of-month campaign from your existing contacts.</p></div>
+            <strong id="campaignEligibleCount">0</strong>
+          </section>
+          <section class="campaign-builder glass">
+            <div class="prospecting-section-head"><div><span>1 · AUDIENCE</span><h3>Choose recipients</h3><small id="campaignAudienceMeta">0 eligible contacts</small></div></div>
+            <div class="campaign-filter-grid">
+              <label>Audience<select id="campaignAudience"><option value="all">All active contacts</option><option value="owners">Owners / sellers</option><option value="buyers">Buyers</option><option value="investors">Investors</option><option value="past">Past clients</option><option value="suburb">Specific suburb</option></select></label>
+              <label id="campaignSuburbWrap" class="hidden">Suburb<input id="campaignSuburb" type="text" placeholder="e.g. Toongabbie"></label>
+              <label>Not contacted for<select id="campaignRecency"><option value="0">Any time</option><option value="7">7+ days</option><option value="30">30+ days</option><option value="60">60+ days</option><option value="90">90+ days</option></select></label>
+            </div>
+            <div class="campaign-checks"><label><input id="campaignExcludeDnc" type="checkbox" checked> Exclude do-not-contact</label><label><input id="campaignExcludeRecent" type="checkbox" checked> Exclude anyone contacted today</label></div>
+          </section>
+          <section class="campaign-builder glass">
+            <div class="prospecting-section-head"><div><span>2 · MESSAGE</span><h3>Write once, personalise every SMS</h3><small>Available: {{FirstName}}, {{FullName}}, {{Suburb}}, {{AgentName}}</small></div></div>
+            <input id="campaignName" type="text" placeholder="Campaign name · e.g. July 2146 Update">
+            <textarea id="campaignMessage" rows="9">Hi {{FirstName}},
+
+Andrew Tour from McGrath here with a quick end-of-month market update for {{Suburb}}.
+
+If you have any questions or would like to know what the latest activity means for your property, please don’t hesitate to let me know.
+
+Thanks,
+Andrew Tour | McGrath</textarea>
+            <div class="campaign-delay"><label>Delay between messages<select id="campaignDelay"><option value="1">1 second</option><option value="2" selected>2 seconds</option><option value="3">3 seconds</option><option value="5">5 seconds</option></select></label></div>
+          </section>
+          <section class="campaign-builder glass">
+            <div class="prospecting-section-head"><div><span>3 · REVIEW</span><h3>Check before sending</h3><small id="campaignReviewMeta">No audience selected</small></div><button id="refreshCampaignPreview" class="text-btn" type="button">Refresh</button></div>
+            <div id="campaignWarnings" class="campaign-warnings"></div>
+            <div id="campaignPreview" class="campaign-preview"><div class="empty">Choose an audience and write a message to preview recipients.</div></div>
+            <button id="launchCampaignShortcut" class="primary campaign-launch" type="button">Open SendHype Shortcut</button>
+            <p class="campaign-disclaimer">AGNT prepares the personalised payload. iOS Shortcuts performs the sending. Review the recipient count and samples before continuing.</p>
+          </section>
+          <section class="campaign-builder glass">
+            <div class="prospecting-section-head"><div><span>HISTORY</span><h3>Recent campaigns</h3><small>Stored on this device for beta testing</small></div></div>
+            <div id="campaignHistory" class="campaign-history"></div>
           </section>
         </section>
         <section id="prospectorInsightsPanel" class="prospector-insights-panel hidden" aria-live="polite">

@@ -145,3 +145,8 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Added separate SMS totals to Hot Spotting cards and session review.
 - Today’s Pipeline remains separate except where the exact same contact is updated through existing contact-recency behaviour.
 - No Firebase configuration, authentication, Firestore path or rules changes.
+
+
+## V125.9 Campaign Broadcast Beta
+- Added audience filters, personalised merge fields, recipient preview, SendHype Shortcut payload launch and local campaign history.
+- Existing Firebase paths and rules are unchanged.
