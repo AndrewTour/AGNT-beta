@@ -6019,3 +6019,64 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
   #broadcastMenu .broadcast-type-card{grid-template-columns:42px minmax(0,1fr) 16px;padding-inline:13px}
   #broadcastMenu .broadcast-type-icon{width:40px;height:40px}
 }
+
+
+/* =====================================================================
+   AGNT v126.7 — scoped calendar, completed-ring, session-header and OFI fixes
+   ===================================================================== */
+
+/* Calendar preference rows: clear service marks, body-weight copy and no overlap. */
+.calendar-preference-options label{min-width:0}
+.calendar-preference-options .calendar-option-content{
+  min-width:0;
+  padding-left:48px;
+  padding-right:16px;
+  font-weight:400;
+  overflow:hidden;
+}
+.calendar-preference-options .calendar-option-content::before{left:14px}
+.calendar-preference-options .calendar-service-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  fill:#8f96a1;
+  margin-left:0;
+}
+.calendar-preference-options .calendar-service-icon.outlook{width:19px;height:19px;flex-basis:19px}
+.calendar-preference-options .calendar-option-label{
+  display:block;
+  min-height:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  font-size:inherit;
+  font-weight:400;
+  color:inherit;
+  overflow:visible;
+  white-space:nowrap;
+}
+.calendar-preference-options .calendar-option-label::before{display:none}
+
+/* Completed rings use the same green as the completion message. */
+.metric.complete .metric-percent.metric-ring,
+.metric-percent.metric-ring.complete,
+.dashboard .knock.complete .metric-percent.metric-ring{
+  --ring-color:var(--green)!important;
+  color:var(--green)!important;
+}
+.metric.complete .metric-percent.metric-ring::after,
+.metric-percent.metric-ring.complete::after,
+.dashboard .knock.complete .metric-percent.metric-ring::after{background:var(--green)!important}
+
+/* Pipeline session navigation: back, centred progress and end action. */
+.prospect-session-head{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+}
+.prospect-session-head button{font:inherit;font-size:13px;font-weight:500;padding:8px 0}
+.prospect-session-head [data-session-back]{justify-self:start;color:var(--blue);text-align:left}
+.prospect-session-head span{justify-self:center;text-align:center;white-space:nowrap}
+.prospect-session-head [data-end-session]{justify-self:end;color:#d33a32;text-align:right}

@@ -210,3 +210,12 @@ Visual-only beta refinement.
 - Removed the standalone card treatment around the Broadcast menu heading.
 - Grouped Broadcast selections into one shared metric-style surface with dividers.
 - No application logic, Firebase, data, viewport or navigation behaviour changed.
+
+
+## v126.7 — Calendar, session and OFI corrections
+
+- Repaired Apple and Outlook calendar preference rows with grey service icons, fully visible labels and body-weight text.
+- Changed completed activity rings to the existing completion green.
+- Updated pipeline session navigation to Back / centred progress / End Session.
+- Changed the daily welcome title for OFI bookings from Appointment to OFI.
+- No other visual, functional, Firebase, Firestore, sync, cache-data or viewport changes.
