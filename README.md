@@ -186,17 +186,53 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Matched the Broadcast button width to the session buttons above and renamed it `Broadcast`.
 - No Firebase, authentication, Firestore, contact-data, cache, sync or workflow changes.
 
-## V126.4 – Prospecting intelligence and workflow polish
+## V126.4 — Native Task UI visual refinement
 
-Built from AGNT V126.3 with no Firebase, authentication, Firestore-path, rules, UID-separation, cache-key or deployment changes.
+- Built from the supplied `AGNT BIphoneSave.zip` baseline.
+- Visual-only refinement inspired by the approved native iPhone task interface.
+- Introduces flatter white surfaces, soft grey controls, black selected states, quieter borders, restrained typography and consistent section-label casing.
+- Existing component sizing, viewport behaviour, navigation, Firebase, authentication, Firestore paths, UID separation, local cache, sync and application logic remain unchanged.
 
-Changes are limited to:
-- live mission-control summaries on Prospector Today
-- Hot Spotting priority sorting, recency, remaining workload and time estimate
-- contact-quality cues within Hot Spotting sessions
-- Broadcast readiness checks and estimated duration
-- current call streak and a data-derived AGNT insight
-- Today’s wins summary
-- richer street-knocking recommendations
-- expanded Hot Spotting completion review
-- visual hierarchy additions for the new information only
+
+## v126.5 — Best-of-both UI refinement
+- Retains the native visual direction introduced in v126.4.
+- Restores clear accountability-day and calendar-preference controls from the earlier UI.
+- Removes legacy background collisions behind selected Settings controls.
+- Harmonises card, field, tab, appointment and navigation styling across views.
+- Visual-only release; no Firebase, authentication, data-path or application-logic changes.
+
+## v126.6 — Navigation and Broadcast cleanup
+
+Visual-only beta refinement.
+
+- Restored the lighter selected state in the bottom navigation.
+- Fixed selected-label clipping for Prospector and Appointments.
+- Removed the standalone card treatment around the Broadcast menu heading.
+- Grouped Broadcast selections into one shared metric-style surface with dividers.
+- No application logic, Firebase, data, viewport or navigation behaviour changed.
+
+
+## v126.7 — Calendar, session and OFI corrections
+
+- Repaired Apple and Outlook calendar preference rows with grey service icons, fully visible labels and body-weight text.
+- Changed completed activity rings to the existing completion green.
+- Updated pipeline session navigation to Back / centred progress / End Session.
+- Changed the daily welcome title for OFI bookings from Appointment to OFI.
+- No other visual, functional, Firebase, Firestore, sync, cache-data or viewport changes.
+
+
+## v126.8 Broadcast Step Flow Beta
+- Broadcast builder split into Recipients, Message, Review & Send, and Success screens.
+- Added step-aware back navigation.
+- Integrated the existing isolated test environment into Review & Send.
+- Added success summary and previous campaign information.
+- No changes outside the Broadcast workflow.
+
+## v126.9 — Broadcast Full-Viewport Header
+- Broadcast now uses the available viewport without the Prospector section tabs or toolbar.
+- Broadcast step title is shown in the top-left application header.
+- Step progress is shown in the top-right beside the retained live sync indicator.
+- The Today control is hidden only while Broadcast is open.
+- Message editor and review preview use matching body-text weight.
+- Review previews preserve the exact typed casing, punctuation and line breaks.
+- No changes outside the Broadcast workflow.

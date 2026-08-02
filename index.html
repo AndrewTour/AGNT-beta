@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=126.4-prospecting-intelligence">
+<link rel="stylesheet" href="styles.css?v=126.9-broadcast-fullscreen">
 <title>AGNT</title>
 </head>
 <body>
@@ -291,7 +291,6 @@
           <div><strong id="dayLogContactTotal">0</strong><span>Contacts</span></div>
           <div><strong id="dayLogAppointmentTotal">0</strong><span>Appointments</span></div>
         </section>
-        <section id="todayWinsCard" class="today-wins-card glass hidden"><div class="day-log-head"><div><span>TODAY’S WINS</span><strong>Momentum built</strong></div></div><div id="todayWinsList" class="today-wins-list"></div></section>
         <section class="day-log-card glass">
           <div class="day-log-head"><div><span>DAY LOG</span><strong id="dayLogTitle">Today’s story</strong></div><small id="dayLogMeta">Meaningful activity only</small></div>
           <div id="dayLogTimeline" class="day-log-timeline" aria-live="polite"></div>
@@ -453,25 +452,21 @@
       <div id="prospectingDashboard" class="prospecting-dashboard">
         <div id="prospectorTodayPanel" class="prospector-panel">
         <section class="prospecting-hero glass">
-          <div><span>PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small><em id="pipelineMissionMeta" class="mission-meta">Ready to work</em></div>
+          <div><span>PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small></div>
           <button id="startProspectingSession" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small><em id="hotSpottingMissionMeta" class="mission-meta">No active streets</em></div>
+          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
           <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>BROADCAST</span><strong aria-hidden="true">SMS</strong><small>Build and send a campaign</small><em id="broadcastMissionMeta" class="mission-meta">No draft selected</em></div>
+          <div><span>BROADCAST</span><strong aria-hidden="true">SMS</strong><small>Build and send a campaign</small></div>
           <button id="openBroadcast" class="primary" type="button">Broadcast</button>
         </section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
           <button class="prospecting-stat glass" data-prospect-filter="overdue"><span>OVERDUE</span><strong id="prospectingOverdue">0</strong></button>
           <button class="prospecting-stat glass" data-prospect-filter="today"><span>DUE TODAY</span><strong id="prospectingToday">0</strong></button>
           <button class="prospecting-stat glass" data-prospect-filter="hot"><span>HOT</span><strong id="prospectingHot">0</strong></button>
-        </section>
-        <section class="prospector-intelligence-grid" aria-label="Prospecting momentum">
-          <article class="prospector-intelligence-card glass"><span>CALL STREAK</span><strong id="prospectorCallStreak">0</strong><small id="prospectorCallStreakMeta">Start the next call</small></article>
-          <article class="prospector-intelligence-card glass"><span>AGNT INSIGHT</span><strong id="prospectorInsightTitle">Build momentum</strong><small id="prospectorInsightMeta">Your activity will reveal the best opportunities.</small></article>
         </section>
         <section class="prospecting-section glass">
           <div class="prospecting-section-head"><div><span>PRIORITY QUEUE</span><h3>Who needs you next</h3></div><button id="clearProspectFilter" class="text-btn" type="button">View all</button></div>
@@ -537,65 +532,108 @@
             </section>
           </div>
 
-          <div id="broadcastBuilderFlow" class="hidden">
-            <section class="campaign-hero glass">
-              <div><span id="broadcastTypeEyebrow">Broadcast</span><h3 id="broadcastTypeHeading">Build your message</h3><p id="broadcastTypeDescription">Choose your audience, personalise the message and review it before sending.</p></div>
-              <strong id="campaignEligibleCount">0</strong>
-            </section>
-            <section class="campaign-builder glass">
-              <div class="prospecting-section-head"><div><span>1 · AUDIENCE</span><h3>Choose recipients</h3><small id="campaignAudienceMeta">Select an audience</small></div></div>
-              <div id="campaignLargeAudience" class="broadcast-audience-mode hidden">
-                <div class="broadcast-audience-intro"><strong>Suburb-wide audience</strong><small>End-of-month updates include all eligible contacts in the selected suburb.</small></div>
-                <label class="broadcast-select-field">SUBURB<select id="campaignSuburbSelect"></select></label>
-              </div>
-              <div id="campaignStreetAudience" class="broadcast-audience-mode hidden">
-                <div class="broadcast-audience-intro"><strong>Street audience</strong><small>Select a street, then choose the neighbours who should receive this update.</small></div>
-                <div class="campaign-filter-grid">
-                  <label>SUBURB<select id="campaignStreetSuburb"></select></label>
-                  <label>STREET<select id="campaignStreetSelect"></select></label>
+          <div id="broadcastBuilderFlow" class="hidden broadcast-step-flow">
+            <div class="broadcast-step-progress" aria-label="Broadcast progress">
+              <span data-broadcast-progress="1">1</span><i></i><span data-broadcast-progress="2">2</span><i></i><span data-broadcast-progress="3">3</span>
+            </div>
+
+            <section id="broadcastStepRecipients" class="broadcast-step-page" data-broadcast-step="1">
+              <header class="broadcast-step-heading">
+                <span id="broadcastTypeEyebrow">BROADCAST</span>
+                <h3>Choose recipients</h3>
+                <p id="broadcastTypeDescription">Select the people who should receive this update.</p>
+                <strong id="campaignEligibleCount">0</strong>
+              </header>
+              <div class="broadcast-step-surface">
+                <div class="broadcast-step-section-head"><div><span>1 · AUDIENCE</span><h4>Who should receive this?</h4></div><small id="campaignAudienceMeta">Select an audience</small></div>
+                <div id="campaignLargeAudience" class="broadcast-audience-mode hidden">
+                  <div class="broadcast-audience-intro"><strong>Suburb-wide audience</strong><small>End-of-month updates include all eligible contacts in the selected suburb.</small></div>
+                  <label class="broadcast-select-field">SUBURB<select id="campaignSuburbSelect"></select></label>
                 </div>
-                <div id="campaignStreetRecipients" class="broadcast-recipient-list"></div>
+                <div id="campaignStreetAudience" class="broadcast-audience-mode hidden">
+                  <div class="broadcast-audience-intro"><strong>Street audience</strong><small>Select a street, then choose the neighbours who should receive this update.</small></div>
+                  <div class="campaign-filter-grid">
+                    <label>SUBURB<select id="campaignStreetSuburb"></select></label>
+                    <label>STREET<select id="campaignStreetSelect"></select></label>
+                  </div>
+                  <div id="campaignStreetRecipients" class="broadcast-recipient-list"></div>
+                </div>
+                <div class="campaign-filter-grid broadcast-filter-row">
+                  <label>NOT CONTACTED FOR<select id="campaignRecency"><option value="0">Any time</option><option value="7">7+ days</option><option value="30">30+ days</option><option value="60">60+ days</option><option value="90">90+ days</option></select></label>
+                </div>
+                <div class="campaign-checks"><label><input id="campaignExcludeDnc" type="checkbox" checked> Exclude do-not-contact</label><label><input id="campaignExcludeRecent" type="checkbox" checked> Exclude anyone contacted today</label></div>
               </div>
-              <div class="campaign-filter-grid broadcast-filter-row">
-                <label>NOT CONTACTED FOR<select id="campaignRecency"><option value="0">Any time</option><option value="7">7+ days</option><option value="30">30+ days</option><option value="60">60+ days</option><option value="90">90+ days</option></select></label>
+              <div class="broadcast-step-actions"><button id="broadcastNextToMessage" class="primary" type="button">Continue to message</button></div>
+            </section>
+
+            <section id="broadcastStepMessage" class="broadcast-step-page hidden" data-broadcast-step="2">
+              <header class="broadcast-step-heading">
+                <span>2 · MESSAGE</span>
+                <h3>Write your message</h3>
+                <p>Write once. AGNT personalises each SMS before it reaches the recipient.</p>
+              </header>
+              <div class="broadcast-step-surface">
+                <label class="broadcast-field-label">CAMPAIGN NAME<input id="campaignName" type="text" placeholder="Campaign name"></label>
+                <label class="broadcast-field-label">MESSAGE BODY<textarea id="campaignMessage" rows="10"></textarea></label>
+                <div class="broadcast-token-row" aria-label="Available personalisation fields"><span>{{FirstName}}</span><span>{{FullName}}</span><span>{{Suburb}}</span><span>{{AgentName}}</span></div>
+                <div class="campaign-delay"><label>DELAY BETWEEN MESSAGES<select id="campaignDelay"><option value="1">1 second</option><option value="2" selected>2 seconds</option><option value="3">3 seconds</option><option value="5">5 seconds</option></select></label></div>
               </div>
-              <div class="campaign-checks"><label><input id="campaignExcludeDnc" type="checkbox" checked> Exclude do-not-contact</label><label><input id="campaignExcludeRecent" type="checkbox" checked> Exclude anyone contacted today</label></div>
+              <div class="broadcast-step-actions"><button id="broadcastNextToReview" class="primary" type="button">Review campaign</button></div>
             </section>
-            <section class="campaign-builder glass">
-              <div class="prospecting-section-head"><div><span>2 · MESSAGE</span><h3>Write once, personalise every SMS</h3><small>Available: {{FirstName}}, {{FullName}}, {{Suburb}}, {{AgentName}}</small></div></div>
-              <input id="campaignName" type="text" placeholder="Campaign name">
-              <textarea id="campaignMessage" rows="9"></textarea>
-              <div class="campaign-delay"><label>DELAY BETWEEN MESSAGES<select id="campaignDelay"><option value="1">1 second</option><option value="2" selected>2 seconds</option><option value="3">3 seconds</option><option value="5">5 seconds</option></select></label></div>
-            </section>
-            <section class="campaign-builder glass">
-              <div class="prospecting-section-head"><div><span>3 · REVIEW</span><h3>Check before sending</h3><small id="campaignReviewMeta">No audience selected</small></div><button id="refreshCampaignPreview" class="text-btn" type="button">Refresh</button></div>
-              <div id="campaignWarnings" class="campaign-warnings"></div>
-              <section id="campaignReadiness" class="campaign-readiness glass"><span>READY TO BROADCAST</span><strong id="campaignReadinessTitle">Choose an audience</strong><div id="campaignReadinessChecks"></div><small id="campaignReadinessTime"></small></section>
-              <div id="campaignPreview" class="campaign-preview"><div class="empty">Choose an audience and write a message to preview recipients.</div></div>
-              <button id="launchCampaignShortcut" class="primary campaign-launch" type="button">Open AGNT Bulk SMS</button>
-              <p class="campaign-disclaimer">AGNT prepares the personalised payload. iOS Shortcuts performs the sending. Review the recipient count and samples before continuing.</p>
-            </section>
-            <section class="campaign-builder glass bulk-sms-test-lab">
-              <div class="prospecting-section-head"><div><span>TEST ENVIRONMENT</span><h3>Test AGNT Bulk SMS</h3><small id="bulkSmsTestMeta">Enter test recipients</small></div></div>
-              <p class="bulk-sms-test-intro">This isolated test does not use or update live CRM contacts. Enter one recipient per line using <strong>Name, mobile</strong> or just a mobile number.</p>
-              <label class="bulk-sms-test-field">TEST RECIPIENTS<textarea id="bulkSmsTestRecipients" rows="4" placeholder="Andrew, 0412 345 678&#10;Clare, 0498 765 432"></textarea></label>
-              <label class="bulk-sms-test-field">TEST MESSAGE<textarea id="bulkSmsTestMessage" rows="7">Hi {{FirstName}},
+
+            <section id="broadcastStepReview" class="broadcast-step-page hidden" data-broadcast-step="3">
+              <header class="broadcast-step-heading">
+                <span>3 · REVIEW &amp; SEND</span>
+                <h3>Check before sending</h3>
+                <p id="campaignReviewMeta">No audience selected</p>
+              </header>
+              <div class="broadcast-review-switch" role="tablist" aria-label="Broadcast environment">
+                <button id="broadcastReviewLive" class="active" type="button">Campaign</button>
+                <button id="broadcastReviewTest" type="button">Test environment</button>
+              </div>
+              <div id="broadcastLiveReview" class="broadcast-step-surface">
+                <div id="campaignWarnings" class="campaign-warnings"></div>
+                <div id="campaignPreview" class="campaign-preview"><div class="empty">Choose an audience and write a message to preview recipients.</div></div>
+                <button id="launchCampaignShortcut" class="primary campaign-launch" type="button">Open AGNT Bulk SMS</button>
+                <p class="campaign-disclaimer">AGNT prepares the personalised payload. iOS Shortcuts performs the sending. Review the recipient count and samples before continuing.</p>
+              </div>
+              <div id="broadcastTestReview" class="broadcast-step-surface bulk-sms-test-lab hidden">
+                <div class="broadcast-step-section-head"><div><span>TEST ENVIRONMENT</span><h4>Send without live CRM contacts</h4></div><small id="bulkSmsTestMeta">Enter test recipients</small></div>
+                <p class="bulk-sms-test-intro">This isolated test does not use or update live CRM contacts. Enter one recipient per line using <strong>Name, mobile</strong> or just a mobile number.</p>
+                <label class="bulk-sms-test-field">TEST RECIPIENTS<textarea id="bulkSmsTestRecipients" rows="4" placeholder="Andrew, 0412 345 678&#10;Clare, 0498 765 432"></textarea></label>
+                <label class="bulk-sms-test-field">TEST MESSAGE<textarea id="bulkSmsTestMessage" rows="7">Hi {{FirstName}},
 
 This is a test message from AGNT Bulk SMS.
 
 Thanks,
 Andrew Tour | McGrath</textarea></label>
-              <div class="campaign-delay"><label>DELAY BETWEEN MESSAGES<select id="bulkSmsTestDelay"><option value="0">No delay</option><option value="2">2 seconds</option><option value="3">3 seconds</option><option value="5" selected>5 seconds</option><option value="8">8 seconds</option><option value="10">10 seconds</option></select></label></div>
-              <div id="bulkSmsTestWarnings" class="campaign-warnings"></div>
-              <div id="bulkSmsTestPreview" class="campaign-preview"><div class="empty">Add test recipients to preview the payload.</div></div>
-              <details class="bulk-sms-json"><summary>View JSON payload</summary><pre id="bulkSmsTestJson"></pre></details>
-              <button id="launchBulkSmsTest" class="primary campaign-launch" type="button" disabled>Open AGNT Bulk SMS test</button>
-              <p class="campaign-disclaimer">Only the numbers entered above are included. AGNT records the shortcut launch, not carrier delivery.</p>
-              <div class="bulk-sms-test-history"><span>LATEST TEST LAUNCHES</span><div id="bulkSmsTestHistory" class="campaign-history"></div></div>
+                <div class="campaign-delay"><label>DELAY BETWEEN MESSAGES<select id="bulkSmsTestDelay"><option value="0">No delay</option><option value="2">2 seconds</option><option value="3">3 seconds</option><option value="5" selected>5 seconds</option><option value="8">8 seconds</option><option value="10">10 seconds</option></select></label></div>
+                <div id="bulkSmsTestWarnings" class="campaign-warnings"></div>
+                <div id="bulkSmsTestPreview" class="campaign-preview"><div class="empty">Add test recipients to preview the payload.</div></div>
+                <details class="bulk-sms-json"><summary>View JSON payload</summary><pre id="bulkSmsTestJson"></pre></details>
+                <button id="launchBulkSmsTest" class="primary campaign-launch" type="button" disabled>Open AGNT Bulk SMS test</button>
+                <p class="campaign-disclaimer">Only the numbers entered above are included. AGNT records the shortcut launch, not carrier delivery.</p>
+                <div class="bulk-sms-test-history"><span>LATEST TEST LAUNCHES</span><div id="bulkSmsTestHistory" class="campaign-history"></div></div>
+              </div>
             </section>
-            <section class="campaign-builder glass">
-              <div class="prospecting-section-head"><div><span>HISTORY</span><h3>Recent campaigns</h3><small>Stored on this device for beta testing</small></div></div>
-              <div id="campaignHistory" class="campaign-history"></div>
+
+            <section id="broadcastStepSuccess" class="broadcast-step-page hidden" data-broadcast-step="4">
+              <div class="broadcast-success-mark" aria-hidden="true">✓</div>
+              <header class="broadcast-step-heading broadcast-success-heading">
+                <span>CAMPAIGN READY</span>
+                <h3>Sent to AGNT Bulk SMS</h3>
+                <p>Your personalised campaign has been handed to the test sending environment.</p>
+              </header>
+              <div class="broadcast-step-surface broadcast-success-summary">
+                <div><span>CAMPAIGN</span><strong id="broadcastSuccessName">Campaign</strong></div>
+                <div><span>RECIPIENTS</span><strong id="broadcastSuccessCount">0 SMS</strong></div>
+                <div><span>LAUNCHED</span><strong id="broadcastSuccessTime">Just now</strong></div>
+              </div>
+              <div class="broadcast-previous-campaign">
+                <span>PREVIOUS CAMPAIGN</span>
+                <div id="campaignHistory" class="campaign-history"></div>
+              </div>
+              <div class="broadcast-step-actions"><button id="broadcastStartAnother" class="primary" type="button">Create another broadcast</button><button id="broadcastReturnProspector" class="secondary" type="button">Return to Prospector</button></div>
             </section>
           </div>
         </section>
@@ -681,8 +719,14 @@ Andrew Tour | McGrath</textarea></label>
           <legend>Calendar Preference</legend>
           <p>Calendar</p>
           <div class="calendar-preference-options">
-            <label><input type="radio" name="calendarPreference" value="apple"><span>Apple Calendar</span></label>
-            <label><input type="radio" name="calendarPreference" value="outlook"><span>Outlook Calendar</span></label>
+            <label>
+              <input type="radio" name="calendarPreference" value="apple">
+              <span class="calendar-option-content"><svg class="calendar-service-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.8c0-2.7 2.2-4 2.3-4.1-1.3-1.9-3.3-2.1-4-2.1-1.7-.2-3.3 1-4.2 1-.9 0-2.3-1-3.8-.9-2 .1-3.8 1.2-4.8 3-2.1 3.6-.5 8.9 1.5 11.8 1 1.4 2.1 3 3.7 2.9 1.5-.1 2.1-1 3.9-1 1.8 0 2.3 1 3.9 1 1.6 0 2.6-1.4 3.6-2.9 1.1-1.7 1.6-3.3 1.6-3.4-.1 0-3.7-1.4-3.7-5.3ZM13.9 4.8c.8-1 1.4-2.5 1.2-3.9-1.2.1-2.7.8-3.6 1.8-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.7Z"/></svg><span class="calendar-option-label">Apple Calendar</span></span>
+            </label>
+            <label>
+              <input type="radio" name="calendarPreference" value="outlook">
+              <span class="calendar-option-content"><svg class="calendar-service-icon outlook" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.5 4v16L3 18.5v-13Zm9 1.2h8.2c.4 0 .8.4.8.8v9c0 .4-.4.8-.8.8H12V6.7Zm1.5 2.1v6.4h5.8V8.8h-5.8Z"/><path d="m12 9 4.3 3 4.3-3v1.8l-4.3 3-4.3-3V9Z"/></svg><span class="calendar-option-label">Outlook Calendar</span></span>
+            </label>
           </div>
         </fieldset>
         <button id="saveSettings" class="primary">Save settings</button>
@@ -804,6 +848,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=126.4-prospecting-intelligence"></script>
+<script type="module" src="app.js?v=126.9-broadcast-fullscreen"></script>
 </body>
 </html>

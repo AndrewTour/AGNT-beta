@@ -5273,33 +5273,893 @@ body.manual-dialler-open,body.manual-call-outcome-open{overflow:hidden}
   text-transform:none!important;
 }
 
-/* V126.4 focused UX intelligence additions */
-.mission-meta{display:block;margin-top:8px;font-style:normal;font-size:12px;font-weight:700;color:var(--muted,#8a919d);letter-spacing:.01em}
-.prospector-intelligence-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.prospector-intelligence-card{padding:18px 20px;min-width:0}
-.prospector-intelligence-card>span,.campaign-readiness>span,.prospect-quality-strip>span{display:block;font-size:11px;font-weight:800;letter-spacing:.18em;color:#8b93a1}
-.prospector-intelligence-card>strong{display:block;margin-top:9px;font-size:21px;line-height:1.1;color:#111319}
-.prospector-intelligence-card>small{display:block;margin-top:7px;font-size:13px;line-height:1.35;color:#8a919d}
-.market-priority-line{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:12px 0 4px}
-.market-priority-line strong{font-size:13px;color:#1472df}
-.market-priority-line span{font-size:12px;color:#8a919d}
-.market-session-progress-copy{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:14px 0 8px}
-.market-session-progress-copy strong{font-size:14px;color:#12141a}
-.market-session-progress-copy span{font-size:12px;color:#8a919d}
-.prospect-quality-strip{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;margin:18px 0;padding:14px 16px;border-radius:18px;background:#f3f6fb}
-.prospect-quality-strip strong{font-size:17px;letter-spacing:.05em;color:#1472df}
-.prospect-quality-strip small{grid-column:1/-1;color:#7f8794;font-size:13px}
-.today-wins-card{margin-bottom:16px;padding:20px}
-.today-wins-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
-.today-wins-list span{padding:9px 12px;border-radius:999px;background:#e7f8ef;color:#15804c;font-size:13px;font-weight:750}
-.campaign-readiness{padding:18px 20px;margin:18px 0;background:linear-gradient(145deg,#f8fbff,#f2f7ff)}
-.campaign-readiness>strong{display:block;margin-top:8px;font-size:22px;color:#111319}
-.campaign-readiness>div{display:grid;gap:7px;margin-top:14px}
-.campaign-readiness>div span{font-size:13px;color:#667181}
-.campaign-readiness>small{display:block;margin-top:12px;font-size:13px;font-weight:700;color:#1472df}
-.knocking-hotspot-item ul{display:grid;gap:5px;margin:12px 0 0;padding:0;list-style:none}
-.knocking-hotspot-item li{font-size:12px;color:#747d8b;padding-left:15px;position:relative}
-.knocking-hotspot-item li:before{content:'•';position:absolute;left:2px;color:#1472df;font-weight:900}
-/* Preserve black only for primary launch actions; new informational controls remain visually secondary. */
-.campaign-readiness+.campaign-preview{margin-top:12px}
-@media(max-width:480px){.prospector-intelligence-grid{grid-template-columns:1fr}.market-priority-line,.market-session-progress-copy{align-items:flex-start}.today-wins-list{display:grid}}
+/* V126.4 — Native Task UI visual refinement.
+   Visual-only overrides based on the approved iPhone reference.
+   Existing component dimensions, layout geometry, viewport behaviour,
+   navigation, application logic, Firebase and data structures remain unchanged. */
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --line:#e3e4e8;
+  --ink:#0b0b0d;
+  --muted:#8c8c93;
+  --cyan:#286cff;
+  --blue:#286cff;
+  --green:#178a55;
+  --amber:#a96f00;
+  --red:#ef3f3f;
+  --shadow:none;
+  --surface-soft:#f6f6f8;
+  --surface-selected:#050505;
+  --label:#8e8e95;
+  --hairline:#ededf0;
+}
+
+html,body{
+  color-scheme:light;
+  background:#ffffff;
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body::before,
+body::after{display:none!important}
+
+.app{background:#ffffff}
+
+/* Remove the glassy visual language while retaining every existing box size. */
+.glass{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+/* Calm, native section-label hierarchy. */
+.metric span,
+.score span,
+.week-head span,
+.view-head>span,
+.insight span,
+.section-label>span,
+.timeline-overview-label,
+.leaderboard-hero-copy>span,
+.leaderboard-kpis span,
+.leaderboard-head span,
+.appointment-form legend,
+.appointment-form>label>span,
+.settings label,
+.settings legend,
+.action-sheet-head small,
+.day-review-head span,
+.day-review-coach span,
+.prospecting-section-head>span,
+.campaign-hero>span,
+.campaign-builder>span{
+  color:var(--label);
+  font-weight:650;
+  letter-spacing:.105em;
+  text-transform:uppercase;
+}
+
+#viewTitle,
+.view-head h2,
+.settings h2,
+.action-sheet-head h2,
+.modal-head h2,
+.day-review-card h2{
+  color:#08080a;
+  font-weight:700;
+  letter-spacing:-.025em;
+}
+
+#viewSubtitle,
+.date,
+.date-line,
+.metric-copy>small,
+.metric strong small,
+.leaderboard-note,
+.appointment-card small,
+.empty,
+.settings label,
+.action-sheet-head p{
+  color:var(--muted);
+}
+
+/* Shared soft-control treatment. Dimensions are deliberately inherited. */
+.icon-btn,
+.back-today,
+.actions button,
+.metric-percent,
+.year-head button,
+.modal-head button,
+.action-sheet-close,
+.insights-switch button,
+.leaderboard-period button,
+.prospect-tabs button,
+.prospector-sections button,
+.pipeline-controls button,
+.file-btn,
+.secondary{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#111114;
+  box-shadow:none;
+}
+
+/* Black active capsules mirror the supplied reference. */
+.tabbar button.active::before,
+.insights-switch button.active,
+.leaderboard-period button.active,
+.prospect-tabs button.active,
+.prospector-sections button.active,
+.pipeline-controls button.active,
+.filter-chip.active,
+.segmented button.active,
+[aria-pressed="true"].chip{
+  background:var(--surface-selected);
+  border-color:var(--surface-selected);
+  color:#ffffff;
+  box-shadow:none;
+}
+
+.tabbar button.active{color:#ffffff}
+.tabbar button.active::before{background:#050505}
+.tabbar button:not(.active){color:#85858c}
+.tabbar{background:#ffffff;border-color:var(--line);box-shadow:none}
+
+/* Cards become flat white surfaces with quiet dividers. */
+.score-week,
+.metrics,
+.timeline-overview,
+.daily-timeline,
+.scorecard-hero,
+.scorecard-metrics,
+.scorecard-focus,
+.scorecard-trends,
+.scorecard-productivity,
+.scorecard-momentum,
+.scorecard-personal-bests,
+.scorecard-recommendations,
+.scorecard-achievements,
+.day-log-summary,
+.day-log-card,
+.knocking-session-card,
+.knocking-history-summary,
+.knocking-history-list-wrap,
+.appointment-form,
+.leaderboard-dashboard,
+.leaderboard-unified-card,
+.prospecting-toolbar,
+.prospecting-hero,
+.prospecting-section,
+.pipeline-overview,
+.pipeline-controls,
+.pipeline-timeframe,
+.market-pulse-hero,
+.market-pulse-results,
+.market-pulse-import,
+.campaign-hero,
+.campaign-builder,
+.prospect-intelligence-hero,
+.prospect-intelligence-card,
+.prospect-weekly-focus,
+.settings{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:none;
+}
+
+.metric,
+.timeline-item,
+.appointment-card,
+.leaderboard-performance-row,
+.scorecard-metric,
+.prospecting-stat,
+.broadcast-type-card,
+.pipeline-seller-card,
+.contact-card{
+  background:#ffffff;
+  border-color:var(--hairline);
+  box-shadow:none;
+}
+
+/* Inputs use the light inset field from the reference. */
+input,
+textarea,
+select,
+.settings input,
+.settings select,
+.appointment-form input[type=text],
+.view-head input,
+.campaign-builder input,
+.campaign-builder textarea,
+.prospecting-toolbar input,
+.pipeline-controls input{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#111114;
+  box-shadow:none;
+}
+
+input::placeholder,
+textarea::placeholder{color:#9a9aa1;opacity:1}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#b8bac1;
+  outline:none;
+  box-shadow:0 0 0 3px rgba(0,0,0,.045);
+}
+
+/* Primary controls are confident black, without gradients or glow. */
+.primary,
+.welcome-start,
+.actions button:last-child,
+.timer,
+.manual-dialler-call,
+.day-review-close{
+  background:#050505!important;
+  border-color:#050505!important;
+  color:#ffffff!important;
+  box-shadow:none!important;
+}
+
+.primary:disabled,
+.welcome-start:disabled,
+.manual-dialler-call:disabled{
+  background:#f3f3f5!important;
+  border-color:#f3f3f5!important;
+  color:#99999f!important;
+  opacity:1;
+}
+
+/* Keep blue only for guidance and progress, rather than control chrome. */
+.metric em,
+.account-email,
+.back-today,
+.text-btn,
+.now-card-meta,
+.scorecard-focus p,
+.day-review-coach p{color:var(--blue)}
+
+.bar{background:#eeeef1;border-color:#eeeef1}
+.bar i{background:var(--blue)}
+
+.metric-percent.metric-ring{
+  background:
+    radial-gradient(circle at center,#ffffff 57%,transparent 58%),
+    conic-gradient(var(--blue) calc(var(--actual,0) * 1%),#e9e9ed 0)!important;
+  color:#111114;
+  box-shadow:none;
+}
+
+.metric.complete::before{background:var(--green)}
+.metric.complete strong{color:#111114}
+
+/* Selected day and status chips use restrained native states. */
+.week-day,
+.appointment-types label,
+.workday-settings label,
+.calendar-preference-settings label,
+.outcome-option,
+.manual-call-outcome-options button{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#3a3a3f;
+  box-shadow:none;
+}
+
+.week-day.selected,
+.appointment-types label:has(input:checked),
+.workday-settings label:has(input:checked),
+.calendar-preference-settings label:has(input:checked),
+.outcome-option.selected{
+  background:#050505;
+  border-color:#050505;
+  color:#ffffff;
+  box-shadow:none;
+}
+
+.week-day.complete{border-color:#bcd9ca;color:var(--green);background:#f5faf7}
+
+/* Modal and sheet presentation follows the clean white iOS panel. */
+.modal{background:rgba(0,0,0,.42)}
+.action-sheet,
+.day-review-card,
+.calendar-shell,
+.manual-dialler{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:0 -10px 38px rgba(0,0,0,.10);
+}
+.action-sheet-handle{background:#d6d6da}
+
+.toast{
+  background:#111114;
+  color:#ffffff;
+  border-color:#111114;
+  box-shadow:0 12px 28px rgba(0,0,0,.14);
+}
+
+/* Reference-style red remains reserved for urgent/destructive actions. */
+.danger,
+.destructive,
+.appointment-card button,
+.delete-button,
+.manual-call-cancelled{color:var(--red)}
+
+/* Welcome and review screens share the same restrained system. */
+.welcome-screen,
+.offday-review-screen{background:#ffffff;color:#111114}
+.welcome-brand,
+.welcome-heading h1,
+.welcome-appointments h2,
+.welcome-simple-section h2,
+.offday-review-heading h1{color:#111114}
+.welcome-date,
+.welcome-heading p,
+.welcome-simple-section p,
+.offday-review-heading p{color:var(--muted)}
+.welcome-simple-section>span,
+.offday-review-heading>span,
+.offday-review-section-head span{color:var(--label)}
+
+/* Ensure SVG icon strokes follow the native monochrome control colour. */
+.icon-btn svg,
+.tabbar svg,
+.action-sheet-close svg,
+.welcome-start svg{stroke:currentColor}
+
+@media (prefers-color-scheme:dark){
+  html,body,.app,.glass,.welcome-screen,.offday-review-screen{color-scheme:light;background:#ffffff;color:#111114}
+}
+
+/* =====================================================================
+   AGNT v126.5 — Best-of-both UI refinement
+   Visual-only pass. Restores the strongest practical controls from the
+   prior UI while retaining the cleaner native task-system direction.
+   ===================================================================== */
+
+:root{
+  --agnt-page:#f7f8fa;
+  --agnt-card:#ffffff;
+  --agnt-field:#f4f5f7;
+  --agnt-border:#e1e3e8;
+  --agnt-divider:#eceef1;
+  --agnt-ink:#111318;
+  --agnt-muted:#8b909a;
+  --agnt-label:#858b98;
+  --agnt-blue:#2f6df6;
+  --agnt-black:#050505;
+}
+
+/* Keep the app calm and consistent without changing layout geometry. */
+body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
+.glass{backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* One typography system across every view. */
+.topbar h1,.view-head h2,.settings h2,.prospecting-heading h2{
+  color:var(--agnt-ink);
+  letter-spacing:-.035em;
+  font-weight:800;
+}
+.section-label>span,.workday-settings legend,.calendar-preference-settings legend,
+.metric-copy>span,.prospecting-section-label,.pipeline-label{
+  color:var(--agnt-label);
+  letter-spacing:.16em;
+  font-weight:800;
+}
+
+/* Common surface treatment. */
+.score-week,.metrics,.appointment-form,.settings,.leaderboard-dashboard,
+.prospecting-toolbar,.prospecting-hero,.prospecting-section,.pipeline-overview,
+.pipeline-controls,.market-pulse-hero,.campaign-hero,.campaign-builder,
+.prospect-intelligence-hero,.prospect-intelligence-card{
+  background:var(--agnt-card);
+  border:1px solid var(--agnt-border);
+  box-shadow:0 10px 28px rgba(20,25,35,.045);
+}
+
+/* Inputs: light, practical and easy to scan. */
+.settings input,.settings select,.appointment-form input,
+.appointment-form select,.appointment-form textarea,.prospecting-toolbar input,
+.pipeline-controls input,.campaign-builder input,.campaign-builder textarea{
+  background:var(--agnt-field)!important;
+  border:1px solid var(--agnt-border)!important;
+  color:var(--agnt-ink)!important;
+  box-shadow:none!important;
+}
+
+/* SETTINGS — retain the new profile header, restore the old control clarity. */
+.settings{
+  padding:16px;
+  overflow:hidden;
+}
+.settings>label{
+  margin:14px 0 0;
+  gap:7px;
+  color:var(--agnt-muted);
+  font-size:.72rem;
+  letter-spacing:.01em;
+}
+.settings>label>input{
+  min-height:52px;
+  border-radius:16px;
+  padding:0 16px;
+  font-size:.96rem;
+  font-weight:650;
+}
+.profile-hero{margin-bottom:14px}
+.profile-kpis{margin-bottom:18px}
+
+.workday-settings{
+  margin:18px 0 8px;
+  padding:0;
+  border:0;
+}
+.workday-settings legend,
+.calendar-preference-settings legend{
+  margin:0 0 7px;
+  color:var(--agnt-label);
+  font-size:.73rem;
+}
+.workday-settings>p,
+.calendar-preference-settings>p{
+  margin:0 0 11px;
+  color:var(--agnt-muted);
+  font-size:.72rem;
+  line-height:1.42;
+}
+.workday-options{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+.workday-options label{
+  position:relative;
+  margin:0!important;
+  min-width:0;
+  background:transparent!important;
+  border:0!important;
+}
+.workday-options input{
+  position:absolute!important;
+  opacity:0!important;
+  pointer-events:none;
+  width:1px!important;
+  height:1px!important;
+}
+.workday-options span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  width:100%;
+  border:1px solid var(--agnt-border);
+  border-radius:15px;
+  background:var(--agnt-field);
+  color:#747b88;
+  font-size:.78rem;
+  font-weight:800;
+  box-shadow:none;
+}
+.workday-options input:checked+span{
+  background:var(--agnt-blue);
+  border-color:var(--agnt-blue);
+  color:#fff;
+  box-shadow:none;
+}
+.workday-options input:focus-visible+span{outline:3px solid rgba(47,109,246,.18)}
+
+.calendar-preference-settings{
+  margin:20px 0 10px;
+  padding:0;
+  border:0;
+}
+.calendar-preference-options{
+  display:grid;
+  gap:8px;
+}
+.calendar-preference-options label{
+  position:relative;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+}
+.calendar-preference-options input{
+  position:absolute!important;
+  opacity:0!important;
+  pointer-events:none;
+  width:1px!important;
+  height:1px!important;
+}
+.calendar-preference-options span{
+  min-height:50px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 15px;
+  border:1px solid var(--agnt-border);
+  border-radius:16px;
+  background:var(--agnt-field);
+  color:var(--agnt-ink);
+  font-size:.82rem;
+  font-weight:750;
+}
+.calendar-preference-options span::before{
+  content:"";
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  border-radius:50%;
+  border:2px solid #9ba0aa;
+  background:#fff;
+  box-sizing:border-box;
+}
+.calendar-preference-options input:checked+span{
+  border-color:var(--agnt-blue);
+  background:#f2f6ff;
+  color:var(--agnt-ink);
+}
+.calendar-preference-options input:checked+span::before{
+  border:5px solid var(--agnt-blue);
+}
+
+#saveSettings{
+  min-height:50px;
+  border-radius:16px;
+  margin-top:14px;
+  background:var(--agnt-black)!important;
+  color:#fff!important;
+}
+
+/* HOME — keep strong hierarchy, remove unnecessary visual weight. */
+.score-week,.metrics{box-shadow:0 8px 24px rgba(20,25,35,.04)}
+.metric{background:#fff;border-color:var(--agnt-divider)}
+.actions button,.metric-percent{box-shadow:none!important}
+.actions button:not(:last-child){background:var(--agnt-field);border-color:var(--agnt-border)}
+.actions button:last-child,.timer{background:var(--agnt-black)!important}
+
+/* PROSPECTOR — selected tab is unmistakable; cards stay clean and dense. */
+.prospect-tabs,.prospector-sections{
+  background:#fff;
+  border-color:var(--agnt-border);
+  box-shadow:none;
+}
+.prospect-tabs button,.prospector-sections button{
+  background:var(--agnt-field);
+  color:#24272d;
+  border-color:transparent;
+  font-weight:750;
+}
+.prospect-tabs button.active,.prospector-sections button.active{
+  background:var(--agnt-black);
+  color:#fff;
+}
+.prospecting-hero,.prospecting-section{box-shadow:0 8px 22px rgba(20,25,35,.035)}
+.prospecting-stat{background:#fff;border-color:var(--agnt-divider)}
+
+/* APPOINTMENTS — preserve native form usability and clear selection. */
+.appointment-form{box-shadow:0 8px 24px rgba(20,25,35,.04)}
+.appointment-types{gap:8px}
+.appointment-types label{
+  background:var(--agnt-field);
+  border-color:var(--agnt-border);
+  color:#737986;
+  font-weight:800;
+  box-shadow:none;
+}
+.appointment-types label:has(input:checked){
+  background:var(--agnt-black);
+  border-color:var(--agnt-black);
+  color:#fff;
+}
+
+/* Bottom navigation stays compact, readable and consistent. */
+.tabbar{
+  background:rgba(255,255,255,.97);
+  border-color:var(--agnt-border);
+  box-shadow:0 10px 28px rgba(20,25,35,.07);
+}
+.tabbar button{color:#a0a4ac}
+.tabbar button.active::before{
+  background:var(--agnt-black);
+  box-shadow:none;
+}
+.tabbar button.active{color:#fff}
+.tabbar button span{font-weight:600;letter-spacing:-.01em}
+
+/* Prevent inherited legacy fills from appearing behind pill controls. */
+.workday-options label:has(input:checked),
+.calendar-preference-options label:has(input:checked){
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+
+@media(max-width:380px){
+  .workday-options{gap:6px}
+  .workday-options span{min-height:40px;font-size:.72rem;border-radius:13px}
+  .calendar-preference-options span{min-height:46px}
+}
+
+/* =====================================================================
+   AGNT v126.6 — Navigation and Broadcast cleanup
+   Requested visual-only changes: lighter active navigation, clipping fix,
+   and a flatter metric-style Broadcast menu. No functional changes.
+   ===================================================================== */
+
+/* Restore the lighter selected navigation tile and keep long labels clear. */
+.tabbar button{
+  min-width:0;
+  overflow:hidden;
+  color:#a0a4ac;
+}
+.tabbar button::before{
+  inset:3px;
+  background:#f1f3f6;
+  border-radius:17px;
+  box-shadow:none;
+}
+.tabbar button.active{
+  background:transparent;
+  color:#111318;
+  box-shadow:none;
+}
+.tabbar button.active::before{
+  background:#f1f3f6;
+  opacity:1;
+  transform:scale(1);
+}
+.tabbar button span{
+  display:block;
+  width:100%;
+  min-width:0;
+  padding:0 1px;
+  overflow:visible;
+  white-space:nowrap;
+  text-overflow:clip;
+  font-size:8.5px;
+  line-height:1.05;
+  letter-spacing:-.025em;
+  box-sizing:border-box;
+}
+.tabbar button.active span{color:#111318}
+.tabbar button.active .tab-icon{color:#111318}
+
+/* Broadcast menu: heading sits naturally on the page, not in a pill/card. */
+#broadcastMenu{
+  display:grid;
+  gap:14px;
+}
+#broadcastMenu>.campaign-hero{
+  display:block;
+  margin:0;
+  padding:4px 4px 2px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+#broadcastMenu>.campaign-hero span{
+  display:block;
+  color:var(--agnt-label);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+#broadcastMenu>.campaign-hero h3{
+  margin:5px 0 5px;
+  color:var(--agnt-ink);
+  font-size:22px;
+  line-height:1.15;
+  font-weight:800;
+  letter-spacing:-.03em;
+  text-transform:none;
+}
+#broadcastMenu>.campaign-hero p{
+  margin:0;
+  color:var(--agnt-muted);
+  font-size:13px;
+  line-height:1.42;
+}
+
+/* Broadcast choices now share one structured surface, like Home metrics. */
+#broadcastMenu .broadcast-type-list{
+  display:grid;
+  gap:0;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--agnt-border);
+  border-radius:24px;
+  box-shadow:0 8px 24px rgba(20,25,35,.04);
+}
+#broadcastMenu .broadcast-type-card{
+  grid-template-columns:46px minmax(0,1fr) 18px;
+  min-height:76px;
+  margin:0;
+  padding:13px 16px;
+  background:transparent;
+  border:0;
+  border-top:1px solid var(--agnt-divider);
+  border-radius:0;
+  box-shadow:none;
+}
+#broadcastMenu .broadcast-type-card:first-child{border-top:0}
+#broadcastMenu .broadcast-type-card:active{
+  background:var(--agnt-field);
+  transform:none;
+}
+#broadcastMenu .broadcast-type-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:var(--agnt-field);
+  color:#384150;
+}
+#broadcastMenu .broadcast-type-card strong{
+  color:var(--agnt-ink);
+  font-size:15px;
+  font-weight:750;
+}
+#broadcastMenu .broadcast-type-card small{
+  color:var(--agnt-muted);
+  font-size:11px;
+  line-height:1.35;
+}
+
+@media(max-width:390px){
+  .tabbar button span{font-size:8px;letter-spacing:-.035em}
+  #broadcastMenu .broadcast-type-card{grid-template-columns:42px minmax(0,1fr) 16px;padding-inline:13px}
+  #broadcastMenu .broadcast-type-icon{width:40px;height:40px}
+}
+
+
+/* =====================================================================
+   AGNT v126.7 — scoped calendar, completed-ring, session-header and OFI fixes
+   ===================================================================== */
+
+/* Calendar preference rows: clear service marks, body-weight copy and no overlap. */
+.calendar-preference-options label{min-width:0}
+.calendar-preference-options .calendar-option-content{
+  min-width:0;
+  padding-left:48px;
+  padding-right:16px;
+  font-weight:400;
+  overflow:hidden;
+}
+.calendar-preference-options .calendar-option-content::before{left:14px}
+.calendar-preference-options .calendar-service-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  fill:#8f96a1;
+  margin-left:0;
+}
+.calendar-preference-options .calendar-service-icon.outlook{width:19px;height:19px;flex-basis:19px}
+.calendar-preference-options .calendar-option-label{
+  display:block;
+  min-height:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  font-size:inherit;
+  font-weight:400;
+  color:inherit;
+  overflow:visible;
+  white-space:nowrap;
+}
+.calendar-preference-options .calendar-option-label::before{display:none}
+
+/* Completed rings use the same green as the completion message. */
+.metric.complete .metric-percent.metric-ring,
+.metric-percent.metric-ring.complete,
+.dashboard .knock.complete .metric-percent.metric-ring{
+  --ring-color:var(--green)!important;
+  color:var(--green)!important;
+}
+.metric.complete .metric-percent.metric-ring::after,
+.metric-percent.metric-ring.complete::after,
+.dashboard .knock.complete .metric-percent.metric-ring::after{background:var(--green)!important}
+
+/* Pipeline session navigation: back, centred progress and end action. */
+.prospect-session-head{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+}
+.prospect-session-head button{font:inherit;font-size:13px;font-weight:500;padding:8px 0}
+.prospect-session-head [data-session-back]{justify-self:start;color:var(--blue);text-align:left}
+.prospect-session-head span{justify-self:center;text-align:center;white-space:nowrap}
+.prospect-session-head [data-end-session]{justify-self:end;color:#d33a32;text-align:right}
+
+
+/* =====================================================================
+   AGNT v126.8 — Broadcast step flow only
+   ===================================================================== */
+.broadcast-step-flow{display:grid;gap:14px;min-height:calc(100dvh - 235px)}
+.broadcast-step-progress{display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 0 4px}
+.broadcast-step-progress span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#eef1f5;color:#8d95a1;font-size:11px;font-weight:700}
+.broadcast-step-progress span.active{background:#111318;color:#fff}
+.broadcast-step-progress span.complete{background:#e7f7ef;color:#15965f}
+.broadcast-step-progress i{width:34px;height:1px;background:#dfe3e9}
+.broadcast-step-page{display:grid;align-content:start;gap:14px;min-height:calc(100dvh - 285px);padding-bottom:12px}
+.broadcast-step-heading{position:relative;padding:4px 6px 2px}
+.broadcast-step-heading>span{display:block;color:var(--agnt-label);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.broadcast-step-heading h3{margin:6px 0 5px;color:var(--agnt-ink);font-size:25px;line-height:1.08;font-weight:800;letter-spacing:-.04em}
+.broadcast-step-heading p{margin:0;max-width:90%;color:var(--agnt-muted);font-size:13px;line-height:1.45}
+.broadcast-step-heading>strong{position:absolute;right:6px;top:10px;color:var(--agnt-ink);font-size:34px;line-height:1;font-weight:800}
+.broadcast-step-surface{display:grid;gap:15px;padding:18px;background:#fff;border:1px solid var(--agnt-border);border-radius:24px;box-shadow:0 8px 24px rgba(20,25,35,.04)}
+.broadcast-step-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.broadcast-step-section-head span{display:block;color:var(--agnt-label);font-size:10px;font-weight:800;letter-spacing:.15em}
+.broadcast-step-section-head h4{margin:4px 0 0;font-size:18px;line-height:1.15;color:var(--agnt-ink)}
+.broadcast-step-section-head small{color:var(--agnt-muted);font-size:11px;text-align:right}
+.broadcast-step-actions{display:grid;gap:9px;margin-top:auto;padding-top:4px}
+.broadcast-step-actions .primary,.broadcast-step-actions .secondary{min-height:52px;border-radius:18px;font-size:14px}
+.broadcast-field-label{display:grid;gap:7px;color:var(--agnt-label);font-size:10px;font-weight:800;letter-spacing:.14em}
+.broadcast-field-label input,.broadcast-field-label textarea{width:100%;box-sizing:border-box;border:1px solid var(--agnt-border);border-radius:17px;background:var(--agnt-field);padding:14px;color:var(--agnt-ink);font:500 14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;letter-spacing:normal;resize:none}
+.broadcast-token-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.broadcast-token-row span{flex:0 0 auto;padding:7px 9px;border-radius:10px;background:#eef3fb;color:#2866c9;font-size:10px;font-weight:650}
+.broadcast-review-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--agnt-border);border-radius:17px;background:#f1f3f6}
+.broadcast-review-switch button{min-height:42px;border:0;border-radius:13px;background:transparent;color:#7f8792;font-size:12px;font-weight:650}
+.broadcast-review-switch button.active{background:#fff;color:#111318;box-shadow:0 2px 8px rgba(20,25,35,.06)}
+.broadcast-success-mark{display:grid;place-items:center;width:64px;height:64px;margin:18px auto 0;border-radius:50%;background:#e7f7ef;color:#15965f;font-size:30px;font-weight:800}
+.broadcast-success-heading{text-align:center}
+.broadcast-success-heading p{max-width:100%}
+.broadcast-success-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:0;overflow:hidden}
+.broadcast-success-summary>div{display:grid;gap:5px;padding:16px 12px;text-align:center;border-left:1px solid var(--agnt-divider)}
+.broadcast-success-summary>div:first-child{border-left:0}
+.broadcast-success-summary span,.broadcast-previous-campaign>span{color:var(--agnt-label);font-size:9px;font-weight:800;letter-spacing:.13em}
+.broadcast-success-summary strong{font-size:12px;line-height:1.3;color:var(--agnt-ink)}
+.broadcast-previous-campaign{display:grid;gap:8px}
+#broadcastStepSuccess .campaign-history{padding:0;background:#fff;border:1px solid var(--agnt-border);border-radius:20px;overflow:hidden}
+#broadcastStepSuccess .campaign-history article{padding:14px}
+#broadcastStepReview .campaign-preview{max-height:43dvh;overflow:auto;-webkit-overflow-scrolling:touch}
+#broadcastTestReview{margin-bottom:4px}
+@media(max-width:390px){
+  .broadcast-step-surface{padding:15px;border-radius:21px}
+  .broadcast-step-heading h3{font-size:23px}
+  .broadcast-step-heading>strong{font-size:30px}
+  .broadcast-success-summary>div{padding-inline:8px}
+  .broadcast-success-summary strong{font-size:11px}
+}
+
+/* =====================================================================
+   AGNT v126.9 — Broadcast full-viewport header refinement only
+   ===================================================================== */
+#app.broadcast-fullscreen #prospectingView>.prospector-sections,
+#app.broadcast-fullscreen #prospectingView>.prospecting-toolbar{display:none!important}
+#app.broadcast-fullscreen #backToday{display:none!important}
+#app.broadcast-fullscreen .topbar{align-items:flex-start}
+#app.broadcast-fullscreen .top-actions{align-items:center}
+#app.broadcast-building .top-actions{gap:10px}
+#app.broadcast-building .broadcast-step-progress{display:flex;justify-content:flex-end;gap:6px;padding:0;margin:2px 0 0}
+#app.broadcast-building .broadcast-step-progress span{width:26px;height:26px;font-size:10px}
+#app.broadcast-building .broadcast-step-progress i{width:18px}
+#app.broadcast-building #prospectorBroadcastPanel{padding-top:0}
+#app.broadcast-building #broadcastBuilderFlow{min-height:calc(100dvh - 170px);gap:10px}
+#app.broadcast-building .broadcast-step-page{min-height:calc(100dvh - 205px)}
+#app.broadcast-building .broadcast-step-heading{display:none!important}
+#app.broadcast-fullscreen #prospectingDashboard{margin-top:0}
+#app.broadcast-fullscreen #prospectorBroadcastPanel>.market-pulse-back{margin-top:2px}
+#app.broadcast-fullscreen .view-subtitle{max-width:30ch}
+#campaignMessage{font-weight:400!important;text-transform:none!important}
+#broadcastStepReview .campaign-preview p,
+#broadcastTestReview .campaign-preview p{font-weight:400!important;text-transform:none!important;white-space:normal}
+#broadcastStepReview .campaign-preview p *,
+#broadcastTestReview .campaign-preview p *{text-transform:none!important}
+@media(max-width:390px){
+  #app.broadcast-building .broadcast-step-progress i{width:12px}
+  #app.broadcast-building .broadcast-step-progress span{width:24px;height:24px}
+  #app.broadcast-fullscreen .topbar>div:first-child{min-width:0}
+  #app.broadcast-fullscreen #viewTitle{font-size:1.55rem}
+  #app.broadcast-fullscreen .view-subtitle{font-size:.72rem;max-width:25ch}
+}
