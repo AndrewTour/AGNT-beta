@@ -1,5 +1,5 @@
-const CACHE='agnt-v127-0-live-intelligence';
-const ASSETS=['./','./index.html','./styles.css?v=127.0-live-intelligence','./app.js?v=127.0-live-intelligence','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='agnt-v127-1-session-performance';
+const ASSETS=['./','./index.html','./styles.css?v=127.1-session-performance','./app.js?v=127.1-session-performance','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

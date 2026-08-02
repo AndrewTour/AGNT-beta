@@ -6175,3 +6175,12 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
 .today-wins{padding:15px 16px}.today-wins-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.today-wins-grid>div{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center;padding:10px;border-radius:14px;background:#f1f8f5}.today-wins-grid span{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#d7f1e5;color:#087a55;font-weight:900}.today-wins-grid strong{font-size:10px;line-height:1.3}
 .knocking-recommendation-context{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap}.knocking-recommendation-context span{padding:5px 8px;border-radius:999px;background:#fff;color:#596273;font-size:9px;font-weight:800}.knocking-hotspot-item p strong{color:#354052;font-size:10px}.prospect-session-review-grid.expanded{grid-template-columns:repeat(3,1fr)}
 @media(max-width:390px){.prospector-live-intelligence{grid-template-columns:104px 1fr;padding-inline:13px}.broadcast-readiness,.today-wins-grid{grid-template-columns:1fr}.hotspot-opportunity-summary{grid-template-columns:1fr 1fr}}
+
+
+/* v127.1 — completed KPI rings use the established positive-state green. */
+.dashboard .metric.complete .metric-percent.metric-ring,
+.dashboard .metric .metric-percent.metric-ring.complete{
+  --ring-color:var(--green)!important;
+  color:var(--green)!important;
+  border-color:#b8e6d4;
+}
