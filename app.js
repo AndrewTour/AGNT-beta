@@ -575,10 +575,10 @@ function updateTopbar(id=activeViewId()){
   const subtitleText=headerState.subtitle||'';
   if(subtitle){subtitle.textContent=subtitleText;subtitle.classList.toggle('hidden',!subtitleText)}
   $('#dateLabel').textContent=fmtDate(selectedDate);
-  const hideCompactDate=id==='prospectingView'||id==='scheduleView'||id==='appointmentsView'||id==='insightsView'||id==='settingsView';
+  const hideCompactDate=id==='prospectingView'||id==='scheduleView'||id==='listingsView'||id==='appointmentsView'||id==='insightsView'||id==='settingsView';
   $('#dateLabel').classList.toggle('hidden',hideCompactDate);
   dateLine?.classList.toggle('today-sync-only',hideCompactDate);
-  const syncInTopActions=isToday||id==='prospectingView'||id==='scheduleView'||id==='appointmentsView'||id==='insightsView'||id==='settingsView';
+  const syncInTopActions=isToday||id==='prospectingView'||id==='scheduleView'||id==='listingsView'||id==='appointmentsView'||id==='insightsView'||id==='settingsView';
   if(syncInTopActions&&todaySlot){
     if(syncBadge&&syncBadge.parentElement!==todaySlot)todaySlot.append(syncBadge);
   }else if(dateLine){
@@ -2395,7 +2395,7 @@ function bindViewport(){
 }
 async function init(){bindViewport();loadLocal('local');await finaliseExpiredTimers();if(!configured()){showAuthMessage('Firebase is not configured. You can still use device-only mode.');return}try{const fb=initializeApp(firebaseConfig);auth=getAuth(fb);await setPersistence(auth,browserLocalPersistence);db=initializeFirestore(fb,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});onAuthStateChanged(auth,u=>{if(u){startCloud(u)}else{clearActiveSession();$('#app').classList.add('hidden');$('#authGate').classList.remove('hidden')}})}catch(err){console.error(err);showAuthMessage(err.message)}}
 function showAuthMessage(msg){$('#authMessage').textContent=msg}
-function switchView(id){if(id!=='appointmentsView'&&appointmentHistoryMode)setAppointmentHistoryScreen(null);$$('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));updateTopbar(id);if(id==='scheduleView'){renderTimeline();setTodayPage(todayPage);}if(id==='appointmentsView')renderAppointments();if(id==='prospectingView')renderProspecting();if(id==='insightsView')renderInsights()}
+function switchView(id){if(id!=='appointmentsView'&&appointmentHistoryMode)setAppointmentHistoryScreen(null);$$('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));updateTopbar(id);if(id==='scheduleView'){renderTimeline();setTodayPage(todayPage);}if(id==='appointmentsView')renderAppointments();if(id==='prospectingView')renderProspecting();if(id==='insightsView')renderInsights();if(id==='listingsView')window.AGNTListings?.render()}
 
 function shiftHeaderDate(delta){
   const id=activeViewId();
@@ -2625,3 +2625,111 @@ renderProspecting();
 if('serviceWorker'in navigator)window.addEventListener('load',async()=>{const reg=await navigator.serviceWorker.register('./service-worker.js');reg.update()});
 setInterval(()=>{finaliseExpiredTimers().then(()=>{if(selectedDate<todayKey())renderAll()});maybeShowDayReview();updateAppViewport();if(cloud)scheduleLeaderboardPublish()},30000);
 init();
+
+/* Listings campaign operating system — isolated B19 addition */
+const AGNTListings=(()=>{
+  const STAGES=[
+    ['pre-market','Pre-market','Prepare the campaign and vendor expectations.'],
+    ['live','Campaign live','Launch, confirm presentation and activate buyers.'],
+    ['first-open','First open','Create urgency and capture clear buyer positions.'],
+    ['follow-up','Buyer follow-up','Call every inspecting buyer and push for a position.'],
+    ['vendor-update','Vendor update','Present facts, feedback and the next recommendation.'],
+    ['second-inspection','Second inspections','Convert interest into commitment.'],
+    ['offer','Offer presentation','Present every offer clearly and build competition.'],
+    ['price-review','Strategy review','Review price, positioning and campaign momentum.'],
+    ['auction','Auction preparation','Confirm buyers, reserve strategy and vendor readiness.'],
+    ['negotiation','Negotiation','Create urgency, improve terms and close the gap.'],
+    ['exchange','Exchange','Secure signatures, deposit and conditions.']
+  ];
+  const DEFAULT_TASKS=[
+    {id:'vendor-update',title:'Send vendor update',detail:'Keep the owner informed with facts and the next step.',prompt:'vendor'},
+    {id:'buyer-callbacks',title:'Complete buyer callbacks',detail:'Every inspection needs a clear position or next action.',prompt:'callbacks'},
+    {id:'push-offers',title:'Push for offers',detail:'Ask engaged buyers for a written position.',prompt:'offers'}
+  ];
+  let activeId='';
+  const key=()=>`${storagePrefix(uid)}listings-v1`;
+  const read=()=>{try{const v=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
+  const write=list=>{try{localStorage.setItem(key(),JSON.stringify(list));return true}catch{return false}};
+  const esc=value=>escapeHtml(String(value??''));
+  const clean=value=>String(value??'').trim();
+  const daysBetween=(from,to=todayKey())=>{if(!validDateKey(from))return 0;return Math.max(0,Math.floor((parseKey(to)-parseKey(from))/86400000)+1)};
+  const money=value=>{const n=Number(String(value||'').replace(/[^0-9.]/g,''));return n?new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(n):'—'};
+  const currentStage=l=>STAGES.find(x=>x[0]===l.stage)||STAGES[0];
+  const outstandingTasks=l=>(l.tasks||[]).filter(t=>!t.done);
+  const health=l=>{
+    let score=100;
+    const age=daysBetween(l.startDate);
+    const lastVendor=l.lastVendorUpdate&&validDateKey(l.lastVendorUpdate)?daysBetween(l.lastVendorUpdate)-1:age;
+    if(lastVendor>3)score-=Math.min(25,(lastVendor-3)*5);
+    if(outstandingTasks(l).length)score-=Math.min(24,outstandingTasks(l).length*8);
+    if(age>10&&Number(l.offers||0)===0)score-=12;
+    if(age>17&&Number(l.secondInspections||0)===0)score-=10;
+    if(Number(l.inspections||0)>8&&Number(l.offers||0)===0)score-=8;
+    return Math.max(25,Math.min(100,score));
+  };
+  const healthCopy=l=>{const h=health(l);if(h>=90)return['On track','The campaign has clear activity and no major gaps.'];if(h>=75)return['Needs attention','Momentum is healthy, but one or two actions need closing out.'];if(h>=55)return['Action required','The campaign is losing pace. Complete the priority actions today.'];return['Momentum at risk','Vendor communication, buyer leverage or campaign strategy needs immediate action.']};
+  const hydrate=raw=>({
+    id:raw.id||uuid(),address:clean(raw.address),vendorName:clean(raw.vendorName),vendorPhone:clean(raw.vendorPhone),startDate:validDateKey(raw.startDate)?raw.startDate:todayKey(),method:raw.method||'Auction',guide:clean(raw.guide),auctionDate:validDateKey(raw.auctionDate)?raw.auctionDate:'',stage:raw.stage||'live',enquiries:Number(raw.enquiries)||0,inspections:Number(raw.inspections)||0,secondInspections:Number(raw.secondInspections)||0,offers:Number(raw.offers)||0,lastVendorUpdate:validDateKey(raw.lastVendorUpdate)?raw.lastVendorUpdate:'',tasks:Array.isArray(raw.tasks)?raw.tasks:DEFAULT_TASKS.map(x=>({...x,done:false})),timeline:raw.timeline||{},offerLog:Array.isArray(raw.offerLog)?raw.offerLog:[],notes:clean(raw.notes),createdAt:Number(raw.createdAt)||Date.now(),updatedAt:Number(raw.updatedAt)||Date.now()
+  });
+  const all=()=>read().map(hydrate).sort((a,b)=>b.updatedAt-a.updatedAt);
+  const saveListing=l=>{const list=all(),i=list.findIndex(x=>x.id===l.id),next=hydrate({...l,updatedAt:Date.now()});if(i>=0)list[i]=next;else list.unshift(next);write(list);return next};
+  const find=id=>all().find(x=>x.id===id);
+  const totalDue=list=>list.reduce((n,l)=>n+outstandingTasks(l).length,0);
+  const nextAction=l=>outstandingTasks(l)[0]?.title||'Campaign on track';
+  const vendorFirst=l=>(l.vendorName||'there').split(/\s+/)[0];
+  const promptText=(l,type)=>{
+    const first=vendorFirst(l),age=daysBetween(l.startDate),enquiries=Number(l.enquiries)||0,inspections=Number(l.inspections)||0,offers=Number(l.offers)||0;
+    const intro=`Hi ${first}, just a quick update on ${l.address}.`;
+    if(type==='callbacks')return `${intro}\n\nWe are working through the buyer follow-up from the latest inspections. Our focus is getting a clear position from each buyer, identifying who is prepared to inspect again and pushing the strongest interest toward an offer.\n\nI’ll keep you updated as those conversations progress.`;
+    if(type==='offers')return `${intro}\n\nBased on what we’ve seen, the next priority is converting the strongest buyer interest into a written position. We are pushing the engaged buyers for offers so we can create competition and give you something clear to respond to.\n\nI’ll update you as soon as we have a firm position to present.`;
+    if(type==='strategy')return `${intro}\n\nThe campaign is now on day ${age}. We’ve recorded ${enquiries} enquiries and ${inspections} inspections${offers?`, with ${offers} offer${offers===1?'':'s'} received`:', but no formal offers yet'}.\n\nHere’s what that means: we need to keep pressure on the active buyers while reviewing whether the current price and positioning are creating enough competition. My recommendation is to complete the current follow-up, then make a clear strategy decision based on the buyer evidence.\n\nI’ll talk you through the options before anything changes.`;
+    if(type==='offer-present')return `${intro}\n\nWe’ve received an offer that I need to present and work through with you. I’ll take you through the buyer’s price, terms, level of commitment and where I believe we can apply pressure.\n\nThe goal is not simply to accept or reject the first position. It’s to use the offer to improve the buyer and create competition where possible. I’ll call you shortly to discuss.`;
+    return `${intro}\n\nThe campaign is now on day ${age}. We’ve had ${enquiries} enquiries, ${inspections} inspections${offers?` and ${offers} offer${offers===1?'':'s'}`:''}.\n\nBased on what we’ve seen, our focus is ${offers?'using the current interest to strengthen the offers and terms':'following up every buyer, creating second inspections and pushing for a written position'}. The goal is to create competition and keep the campaign moving.\n\nI’ll keep you posted as the next conversations unfold.`;
+  };
+  function render(){
+    const overview=$('#listingsOverview'),detail=$('#listingDetail');if(!overview||!detail)return;
+    if(activeId&&find(activeId)){overview.classList.add('hidden');detail.classList.remove('hidden');renderDetail(find(activeId));return}
+    activeId='';overview.classList.remove('hidden');detail.classList.add('hidden');renderOverview();
+  }
+  function renderOverview(){
+    const list=all(),avg=list.length?Math.round(list.reduce((n,l)=>n+health(l),0)/list.length):0,due=totalDue(list),offers=list.reduce((n,l)=>n+Number(l.offers||0),0);
+    $('#listingsPortfolioSummary').innerHTML=`<article><span>ACTIVE</span><strong>${list.length}</strong><small>campaign${list.length===1?'':'s'}</small></article><article><span>HEALTH</span><strong>${avg||'—'}${avg?'%':''}</strong><small>portfolio average</small></article><article><span>PRIORITIES</span><strong>${due}</strong><small>actions due</small></article>`;
+    $('#listingsGrid').innerHTML=list.length?list.map(l=>{const h=health(l),stage=currentStage(l),age=daysBetween(l.startDate);return `<button class="listing-card" type="button" data-open-listing="${esc(l.id)}"><div class="listing-card-top"><div class="listing-card-address"><span class="listing-card-status">${esc(stage[1])}</span><strong>${esc(l.address)}</strong><small>${esc(l.vendorName||'Vendor not added')} · Day ${age}</small></div><div class="listing-health" style="--health:${h}"><strong>${h}%</strong></div></div><div class="listing-card-meta"><div><span>ENQUIRIES</span><strong>${l.enquiries}</strong></div><div><span>INSPECTIONS</span><strong>${l.inspections}</strong></div><div><span>OFFERS</span><strong>${l.offers}</strong></div></div><div class="listing-next-action"><div><span>NEXT ACTION</span><strong>${esc(nextAction(l))}</strong></div><i>›</i></div></button>`}).join(''):`<section class="listings-empty"><strong>No active listings yet</strong><span>Add a campaign to track momentum, buyer leverage and vendor communication.</span><button type="button" data-add-listing>Add your first listing</button></section>`;
+  }
+  function focusItems(l){
+    const items=[];const age=daysBetween(l.startDate),last=l.lastVendorUpdate?daysBetween(l.lastVendorUpdate)-1:age;
+    if(last>=3)items.push({id:'vendor-update',title:'Vendor update due',detail:last?`No update recorded for ${last} days.`:'No vendor update recorded.',prompt:'vendor'});
+    if(Number(l.inspections)>0&&Number(l.offers)===0)items.push({id:'push-offers',title:'Push for a written position',detail:`${l.inspections} inspections recorded with no offer yet.`,prompt:'offers'});
+    if(age>=10&&Number(l.secondInspections)===0)items.push({id:'second-inspection',title:'Create second inspections',detail:'Re-engage the strongest buyers and confirm commitment.',prompt:'callbacks'});
+    outstandingTasks(l).forEach(t=>{if(!items.some(x=>x.id===t.id))items.push(t)});
+    return items.slice(0,4);
+  }
+  function renderDetail(l){
+    const h=health(l),copy=healthCopy(l),stage=currentStage(l),focus=focusItems(l),age=daysBetween(l.startDate);
+    $('#listingDetail').innerHTML=`
+      <header class="listing-detail-head"><button class="listing-back" type="button" data-listing-back aria-label="Back to listings">‹</button><div class="listing-detail-head-copy"><span class="listing-kicker">${esc(stage[1])} · DAY ${age}</span><h2>${esc(l.address)}</h2></div><button class="listing-menu-button" type="button" data-edit-listing aria-label="Edit listing">•••</button></header>
+      <section class="listing-health-hero glass"><div class="listing-health listing-health-large" style="--health:${h}"><strong>${h}%</strong></div><div class="listing-health-copy"><span>CAMPAIGN HEALTH</span><h3>${copy[0]}</h3><p>${copy[1]}</p></div></section>
+      <section class="listing-stats-row"><article><strong>${l.enquiries}</strong><span>ENQUIRIES</span></article><article><strong>${l.inspections}</strong><span>INSPECTIONS</span></article><article><strong>${l.secondInspections}</strong><span>2ND INSPECTIONS</span></article><article><strong>${l.offers}</strong><span>OFFERS</span></article></section>
+      <section class="listing-panel glass"><div class="listing-panel-head"><div><span>TODAY'S FOCUS</span><h3>${focus.length?'Keep momentum moving':'Campaign is on track'}</h3></div></div><div class="listing-focus-list">${focus.length?focus.map((x,i)=>`<article class="listing-focus-item"><div class="listing-focus-icon">${i+1}</div><div><strong>${esc(x.title)}</strong><small>${esc(x.detail||'Complete this action to protect campaign momentum.')}</small></div><button type="button" data-complete-focus="${esc(x.id)}">Done</button></article>`).join(''):`<div class="listings-empty"><strong>No urgent actions</strong><span>Continue following buyers and keep the vendor informed.</span></div>`}</div></section>
+      <section class="listing-panel glass"><div class="listing-panel-head"><div><span>QUICK ACTIONS</span><h3>Ready vendor messages</h3></div></div><div class="listing-actions-grid"><button class="listing-action-button" data-listing-prompt="vendor"><b>↗</b><strong>Vendor update</strong><small>Campaign facts + next step</small></button><button class="listing-action-button" data-listing-prompt="offers"><b>◎</b><strong>Push for offers</strong><small>Explain the leverage plan</small></button><button class="listing-action-button" data-listing-prompt="offer-present"><b>$</b><strong>Present offer</strong><small>Set up the conversation</small></button><button class="listing-action-button" data-listing-prompt="strategy"><b>⌁</b><strong>Strategy review</strong><small>Price + positioning</small></button></div></section>
+      <section class="listing-panel glass"><div class="listing-panel-head"><div><span>CAMPAIGN ACTIVITY</span><h3>Update the numbers</h3></div></div><form id="listingActivityForm" class="listing-log-form"><label>Enquiries<input name="enquiries" type="number" min="0" value="${l.enquiries}"></label><label>Inspections<input name="inspections" type="number" min="0" value="${l.inspections}"></label><label>Second inspections<input name="secondInspections" type="number" min="0" value="${l.secondInspections}"></label><label>Offers<input name="offers" type="number" min="0" value="${l.offers}"></label><button type="submit">Save campaign activity</button></form></section>
+      <section class="listing-panel glass"><div class="listing-panel-head"><div><span>CAMPAIGN TIMELINE</span><h3>What happens next</h3></div></div><div class="listing-timeline">${STAGES.map((s,i)=>{const current=STAGES.findIndex(x=>x[0]===l.stage),complete=i<current||l.timeline?.[s[0]],active=i===current;return `<article class="listing-timeline-item ${complete?'complete':''}"><div class="listing-timeline-dot">${complete?'✓':active?'•':''}</div><div class="listing-timeline-stage"><span>${active?'CURRENT STAGE':complete?'COMPLETE':'UPCOMING'}</span><strong>${esc(s[1])}</strong><small>${esc(s[2])}</small></div>${!complete&&!active?`<button type="button" data-set-stage="${esc(s[0])}">Set</button>`:active?`<button type="button" data-complete-stage="${esc(s[0])}">Done</button>`:''}</article>`}).join('')}</div></section>
+      <section class="listing-panel glass"><div class="listing-panel-head"><div><span>OFFERS</span><h3>Offer leverage</h3></div><button type="button" data-add-offer>Add offer</button></div><div class="listing-offer-list">${l.offerLog.length?l.offerLog.slice().reverse().map(o=>`<article class="listing-offer"><div><strong>${esc(o.buyer||'Buyer')}</strong><small>${esc(o.terms||'Terms not recorded')}</small></div><em>${esc(money(o.amount))}</em></article>`).join(''):`<div class="listings-empty"><strong>No offers recorded</strong><span>Record positions here to keep leverage visible.</span></div>`}</div></section>`;
+  }
+  function openListingForm(existing){
+    const l=existing||hydrate({});const overlay=document.createElement('div');overlay.className='listing-sheet-backdrop';overlay.innerHTML=`<section class="listing-sheet" role="dialog" aria-modal="true"><div class="listing-sheet-handle"></div><div class="listing-sheet-head"><div><span>${existing?'EDIT CAMPAIGN':'NEW CAMPAIGN'}</span><h2>${existing?'Listing details':'Add a listing'}</h2></div><button class="listing-sheet-close" type="button" data-sheet-close>×</button></div><form class="listing-form" id="listingEditorForm"><label>Property address<input name="address" required placeholder="23 Valencia Street, Toongabbie" value="${esc(l.address)}"></label><div class="listing-form-row"><label>Vendor name<input name="vendorName" placeholder="John & Mary" value="${esc(l.vendorName)}"></label><label>WhatsApp number<input name="vendorPhone" inputmode="tel" placeholder="04xx xxx xxx" value="${esc(l.vendorPhone)}"></label></div><div class="listing-form-row"><label>Campaign start<input name="startDate" type="date" required value="${esc(l.startDate)}"></label><label>Method<select name="method"><option ${l.method==='Auction'?'selected':''}>Auction</option><option ${l.method==='Private Treaty'?'selected':''}>Private Treaty</option><option ${l.method==='Expressions of Interest'?'selected':''}>Expressions of Interest</option><option ${l.method==='Off Market'?'selected':''}>Off Market</option></select></label></div><div class="listing-form-row"><label>Guide<input name="guide" placeholder="$1,050,000" value="${esc(l.guide)}"></label><label>Auction date<input name="auctionDate" type="date" value="${esc(l.auctionDate)}"></label></div><label>Current stage<select name="stage">${STAGES.map(s=>`<option value="${s[0]}" ${l.stage===s[0]?'selected':''}>${esc(s[1])}</option>`).join('')}</select></label><label>Campaign notes<textarea name="notes" placeholder="Key vendor drivers, buyer position or campaign context">${esc(l.notes)}</textarea></label><button class="primary" type="submit">${existing?'Save changes':'Create listing'}</button>${existing?'<button class="danger-link" type="button" data-delete-listing>Archive listing</button>':''}</form></section>`;
+    document.body.append(overlay);const close=()=>overlay.remove();overlay.onclick=e=>{if(e.target===overlay||e.target.closest('[data-sheet-close]'))close();if(e.target.closest('[data-delete-listing]')){if(confirm('Archive this listing from AGNT?')){write(all().filter(x=>x.id!==l.id));activeId='';close();render();toast('Listing archived')}}};overlay.querySelector('form').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);const saved=saveListing({...l,address:f.get('address'),vendorName:f.get('vendorName'),vendorPhone:f.get('vendorPhone'),startDate:f.get('startDate'),method:f.get('method'),guide:f.get('guide'),auctionDate:f.get('auctionDate'),stage:f.get('stage'),notes:f.get('notes')});activeId=saved.id;close();render();toast(existing?'Listing updated':'Listing added')};
+  }
+  function openPrompt(l,type){
+    const text=promptText(l,type),titles={vendor:'Vendor update',offers:'Push for offers','offer-present':'Present offer',strategy:'Strategy review',callbacks:'Buyer callback update'};const overlay=document.createElement('div');overlay.className='listing-sheet-backdrop';overlay.innerHTML=`<section class="listing-sheet"><div class="listing-sheet-handle"></div><div class="listing-sheet-head"><div><span>READY MESSAGE</span><h2>${esc(titles[type]||'Vendor message')}</h2></div><button class="listing-sheet-close" type="button" data-sheet-close>×</button></div><div class="listing-prompt-preview" contenteditable="true" id="listingPromptText">${esc(text)}</div><div class="listing-prompt-actions" style="margin-top:12px"><button class="copy" type="button" data-copy-prompt>Copy</button><button class="whatsapp" type="button" data-whatsapp-prompt>Open WhatsApp</button></div></section>`;document.body.append(overlay);const close=()=>overlay.remove();overlay.onclick=async e=>{if(e.target===overlay||e.target.closest('[data-sheet-close]'))close();if(e.target.closest('[data-copy-prompt]')){await navigator.clipboard?.writeText(overlay.querySelector('#listingPromptText').innerText);toast('Message copied')}if(e.target.closest('[data-whatsapp-prompt]')){const msg=overlay.querySelector('#listingPromptText').innerText,phone=l.vendorPhone.replace(/\D/g,'').replace(/^0/,'61');l.lastVendorUpdate=todayKey();saveListing(l);const url=phone?`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;window.open(url,'_blank');close();render()}};
+  }
+  function openOfferForm(l){const overlay=document.createElement('div');overlay.className='listing-sheet-backdrop';overlay.innerHTML=`<section class="listing-sheet"><div class="listing-sheet-handle"></div><div class="listing-sheet-head"><div><span>OFFER LEVERAGE</span><h2>Record an offer</h2></div><button class="listing-sheet-close" type="button" data-sheet-close>×</button></div><form class="listing-form"><label>Buyer<input name="buyer" required placeholder="Buyer name"></label><label>Offer amount<input name="amount" required inputmode="numeric" placeholder="$1,050,000"></label><label>Terms / position<textarea name="terms" placeholder="Finance, settlement, conditions, buyer motivation"></textarea></label><button class="primary" type="submit">Record offer</button></form></section>`;document.body.append(overlay);const close=()=>overlay.remove();overlay.onclick=e=>{if(e.target===overlay||e.target.closest('[data-sheet-close]'))close()};overlay.querySelector('form').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);l.offerLog.push({id:uuid(),buyer:clean(f.get('buyer')),amount:clean(f.get('amount')),terms:clean(f.get('terms')),date:todayKey(),at:Date.now()});l.offers=Math.max(Number(l.offers)||0,l.offerLog.length);saveListing(l);close();render();toast('Offer recorded')};}
+  function completeFocus(l,id){let matched=false;l.tasks=(l.tasks||[]).map(t=>{if(t.id===id){matched=true;return{...t,done:true,doneAt:Date.now()}}return t});if(id==='vendor-update')l.lastVendorUpdate=todayKey();if(!matched)l.tasks.push({id,title:id.replace(/-/g,' '),done:true,doneAt:Date.now()});saveListing(l);render();toast('Action completed')}
+  function bind(){
+    $('#addListingButton')?.addEventListener('click',()=>openListingForm());$('#addListingTextButton')?.addEventListener('click',()=>openListingForm());
+    $('#listingsView')?.addEventListener('click',e=>{const add=e.target.closest('[data-add-listing]');if(add)return openListingForm();const open=e.target.closest('[data-open-listing]');if(open){activeId=open.dataset.openListing;render();return}if(e.target.closest('[data-listing-back]')){activeId='';render();return}const l=activeId&&find(activeId);if(!l)return;if(e.target.closest('[data-edit-listing]'))return openListingForm(l);const prompt=e.target.closest('[data-listing-prompt]');if(prompt)return openPrompt(l,prompt.dataset.listingPrompt);const focus=e.target.closest('[data-complete-focus]');if(focus)return completeFocus(l,focus.dataset.completeFocus);const stage=e.target.closest('[data-set-stage]');if(stage){l.stage=stage.dataset.setStage;saveListing(l);render();toast('Campaign stage updated');return}const complete=e.target.closest('[data-complete-stage]');if(complete){l.timeline[complete.dataset.completeStage]=Date.now();const i=STAGES.findIndex(x=>x[0]===complete.dataset.completeStage);if(STAGES[i+1])l.stage=STAGES[i+1][0];saveListing(l);render();toast('Milestone completed');return}if(e.target.closest('[data-add-offer]'))return openOfferForm(l)});
+    $('#listingsView')?.addEventListener('submit',e=>{if(e.target.id!=='listingActivityForm')return;e.preventDefault();const l=find(activeId);if(!l)return;const f=new FormData(e.target);['enquiries','inspections','secondInspections','offers'].forEach(k=>l[k]=Math.max(0,Number(f.get(k))||0));saveListing(l);render();toast('Campaign activity saved')});
+  }
+  bind();return{render,reset(){activeId='';render()}};
+})();
+window.AGNTListings=AGNTListings;
