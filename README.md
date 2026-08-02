@@ -219,3 +219,11 @@ Visual-only beta refinement.
 - Updated pipeline session navigation to Back / centred progress / End Session.
 - Changed the daily welcome title for OFI bookings from Appointment to OFI.
 - No other visual, functional, Firebase, Firestore, sync, cache-data or viewport changes.
+
+
+## v126.8 Broadcast Step Flow Beta
+- Broadcast builder split into Recipients, Message, Review & Send, and Success screens.
+- Added step-aware back navigation.
+- Integrated the existing isolated test environment into Review & Send.
+- Added success summary and previous campaign information.
+- No changes outside the Broadcast workflow.
