@@ -6184,3 +6184,21 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
   color:var(--green)!important;
   border-color:#b8e6d4;
 }
+
+/* v127.2 — agreed session and settings corrections only. */
+.dashboard .metric.complete .metric-percent.metric-ring,
+.dashboard .metric .metric-percent.metric-ring.complete,
+.dashboard .knock.complete .metric-percent.metric-ring{
+  --ring-color:#178a55!important;
+  color:#178a55!important;
+  background:
+    conic-gradient(#178a55 calc(var(--actual) * 1%),transparent 0),
+    conic-gradient(var(--agnt-ring-pace) calc(var(--pace) * 1%),transparent 0),
+    var(--agnt-ring-track)!important;
+}
+.dashboard .metric.complete .metric-percent.metric-ring::after,
+.dashboard .metric .metric-percent.metric-ring.complete::after,
+.dashboard .knock.complete .metric-percent.metric-ring::after{background:#178a55!important}
+.prospect-session-head-status{display:flex;justify-content:center;gap:6px;white-space:nowrap}
+.prospect-session-head-status span{padding:6px 9px;border-radius:999px;background:#eef4ff;color:#0b63f3;font-size:10px;font-weight:750}
+.settings>#saveSettings,.settings>#exportData,.settings>#signOut,.settings>.file-btn{font-size:14px;line-height:1.2}
