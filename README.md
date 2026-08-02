@@ -227,3 +227,12 @@ Visual-only beta refinement.
 - Integrated the existing isolated test environment into Review & Send.
 - Added success summary and previous campaign information.
 - No changes outside the Broadcast workflow.
+
+## v126.9 — Broadcast Full-Viewport Header
+- Broadcast now uses the available viewport without the Prospector section tabs or toolbar.
+- Broadcast step title is shown in the top-left application header.
+- Step progress is shown in the top-right beside the retained live sync indicator.
+- The Today control is hidden only while Broadcast is open.
+- Message editor and review preview use matching body-text weight.
+- Review previews preserve the exact typed casing, punctuation and line breaks.
+- No changes outside the Broadcast workflow.

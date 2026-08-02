@@ -6131,3 +6131,35 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
   .broadcast-success-summary>div{padding-inline:8px}
   .broadcast-success-summary strong{font-size:11px}
 }
+
+/* =====================================================================
+   AGNT v126.9 — Broadcast full-viewport header refinement only
+   ===================================================================== */
+#app.broadcast-fullscreen #prospectingView>.prospector-sections,
+#app.broadcast-fullscreen #prospectingView>.prospecting-toolbar{display:none!important}
+#app.broadcast-fullscreen #backToday{display:none!important}
+#app.broadcast-fullscreen .topbar{align-items:flex-start}
+#app.broadcast-fullscreen .top-actions{align-items:center}
+#app.broadcast-building .top-actions{gap:10px}
+#app.broadcast-building .broadcast-step-progress{display:flex;justify-content:flex-end;gap:6px;padding:0;margin:2px 0 0}
+#app.broadcast-building .broadcast-step-progress span{width:26px;height:26px;font-size:10px}
+#app.broadcast-building .broadcast-step-progress i{width:18px}
+#app.broadcast-building #prospectorBroadcastPanel{padding-top:0}
+#app.broadcast-building #broadcastBuilderFlow{min-height:calc(100dvh - 170px);gap:10px}
+#app.broadcast-building .broadcast-step-page{min-height:calc(100dvh - 205px)}
+#app.broadcast-building .broadcast-step-heading{display:none!important}
+#app.broadcast-fullscreen #prospectingDashboard{margin-top:0}
+#app.broadcast-fullscreen #prospectorBroadcastPanel>.market-pulse-back{margin-top:2px}
+#app.broadcast-fullscreen .view-subtitle{max-width:30ch}
+#campaignMessage{font-weight:400!important;text-transform:none!important}
+#broadcastStepReview .campaign-preview p,
+#broadcastTestReview .campaign-preview p{font-weight:400!important;text-transform:none!important;white-space:normal}
+#broadcastStepReview .campaign-preview p *,
+#broadcastTestReview .campaign-preview p *{text-transform:none!important}
+@media(max-width:390px){
+  #app.broadcast-building .broadcast-step-progress i{width:12px}
+  #app.broadcast-building .broadcast-step-progress span{width:24px;height:24px}
+  #app.broadcast-fullscreen .topbar>div:first-child{min-width:0}
+  #app.broadcast-fullscreen #viewTitle{font-size:1.55rem}
+  #app.broadcast-fullscreen .view-subtitle{font-size:.72rem;max-width:25ch}
+}

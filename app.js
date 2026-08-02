@@ -553,12 +553,21 @@ function getEmptyState(type,context={}){
 function emptyStateMarkup(state){return `<div class="empty-state" role="status"><strong>${escapeHtml(state.title||'')}</strong>${state.message?`<p>${escapeHtml(state.message)}</p>`:''}</div>`}
 function updateTopbar(id=activeViewId()){
   const isToday=id==='todayView';
+  const app=$('#app'),progress=$('.broadcast-step-progress'),builder=$('#broadcastBuilderFlow'),topActions=$('.top-actions');
+  const inBroadcast=id==='prospectingView'&&prospectSection==='broadcast';
+  const building=inBroadcast&&Boolean(selectedBroadcastType&&BROADCAST_TYPES[selectedBroadcastType]);
+  app?.classList.toggle('broadcast-fullscreen',inBroadcast);
+  app?.classList.toggle('broadcast-building',building);
+  if(progress&&builder&&topActions){
+    if(building&&progress.parentElement!==topActions)topActions.insertBefore(progress,topActions.firstChild);
+    if(!building&&progress.parentElement!==builder)builder.insertBefore(progress,builder.firstChild);
+  }
   const label=document.querySelector(`.tabbar button[data-view="${id}"] span`)?.textContent||'AGNT';
   const dateLine=document.querySelector('.date-line');
   const todaySlot=$('#todaySyncSlot');
   const syncBadge=$('#syncBadge');
   const syncPopover=$('#syncPopover');
-  const headerState=pageHeaderState(id);
+  const headerState=broadcastHeaderState()||pageHeaderState(id);
   $('#viewTitle').textContent=headerState.title;
   const subtitle=$('#viewSubtitle');
   const subtitleText=headerState.subtitle||'';
@@ -1967,11 +1976,35 @@ function renderBroadcastAudienceControls(){
   const contacts=broadcastStreetContacts(selectedBroadcastStreet),host=$('#campaignStreetRecipients');
   if(host)host.innerHTML=contacts.length?contacts.map(p=>`<label><input type="checkbox" data-broadcast-recipient="${escapeHtml(p.id)}" ${selectedBroadcastRecipientIds.has(p.id)?'checked':''}><span><strong>${escapeHtml(p.address||p.name)}</strong><small>${escapeHtml(p.name)}${primaryProspectPhone(p)?` · ${escapeHtml(primaryProspectPhone(p))}`:''}</small></span></label>`).join(''):'<div class="empty">No contacts found on this street.</div>';
 }
+function broadcastHeaderState(){
+  if(prospectSection!=='broadcast')return null;
+  if(!selectedBroadcastType)return{title:'Broadcast',subtitle:'Build and review a personalised SMS campaign.'};
+  const states={
+    1:{title:'Choose Recipients',subtitle:'Select the people who should receive this update.'},
+    2:{title:'Write Your Message',subtitle:'Write once. AGNT personalises each SMS before it reaches the recipient.'},
+    3:{title:'Review & Send',subtitle:'Check every detail before opening AGNT Bulk SMS.'},
+    4:{title:'Campaign Sent',subtitle:'Your broadcast details are saved below.'}
+  };
+  return states[broadcastStep]||states[1];
+}
+function syncBroadcastShell(){
+  const app=$('#app'),progress=$('.broadcast-step-progress'),builder=$('#broadcastBuilderFlow'),topActions=$('.top-actions');
+  const inBroadcast=prospectSection==='broadcast';
+  const building=inBroadcast&&Boolean(selectedBroadcastType&&BROADCAST_TYPES[selectedBroadcastType]);
+  app?.classList.toggle('broadcast-fullscreen',inBroadcast);
+  app?.classList.toggle('broadcast-building',building);
+  if(progress&&builder&&topActions){
+    if(building&&progress.parentElement!==topActions)topActions.insertBefore(progress,topActions.firstChild);
+    if(!building&&progress.parentElement!==builder)builder.insertBefore(progress,builder.firstChild);
+  }
+  updateTopbar(activeViewId());
+}
 function setBroadcastStep(step){
   broadcastStep=Math.max(1,Math.min(4,Number(step)||1));
   $$('.broadcast-step-page').forEach(page=>page.classList.toggle('hidden',Number(page.dataset.broadcastStep)!==broadcastStep));
   $$('[data-broadcast-progress]').forEach(dot=>{const n=Number(dot.dataset.broadcastProgress);dot.classList.toggle('active',n===Math.min(broadcastStep,3));dot.classList.toggle('complete',n<Math.min(broadcastStep,4))});
   const back=$('#broadcastBack');if(back)back.textContent=broadcastStep===1?'‹ Back to broadcasts':'‹ Back';
+  syncBroadcastShell();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function setBroadcastReviewMode(mode='live'){
@@ -1986,6 +2019,7 @@ function renderBroadcastScreen(){
   if(!menu||!builder)return;
   const building=Boolean(selectedBroadcastType&&BROADCAST_TYPES[selectedBroadcastType]);
   menu.classList.toggle('hidden',building);builder.classList.toggle('hidden',!building);
+  syncBroadcastShell();
   if(!building)return;
   const type=BROADCAST_TYPES[selectedBroadcastType];
   if($('#broadcastTypeEyebrow'))$('#broadcastTypeEyebrow').textContent=type.label.toUpperCase();
