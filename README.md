@@ -192,3 +192,21 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Visual-only refinement inspired by the approved native iPhone task interface.
 - Introduces flatter white surfaces, soft grey controls, black selected states, quieter borders, restrained typography and consistent section-label casing.
 - Existing component sizing, viewport behaviour, navigation, Firebase, authentication, Firestore paths, UID separation, local cache, sync and application logic remain unchanged.
+
+
+## v126.5 — Best-of-both UI refinement
+- Retains the native visual direction introduced in v126.4.
+- Restores clear accountability-day and calendar-preference controls from the earlier UI.
+- Removes legacy background collisions behind selected Settings controls.
+- Harmonises card, field, tab, appointment and navigation styling across views.
+- Visual-only release; no Firebase, authentication, data-path or application-logic changes.
+
+## v126.6 — Navigation and Broadcast cleanup
+
+Visual-only beta refinement.
+
+- Restored the lighter selected state in the bottom navigation.
+- Fixed selected-label clipping for Prospector and Appointments.
+- Removed the standalone card treatment around the Broadcast menu heading.
+- Grouped Broadcast selections into one shared metric-style surface with dividers.
+- No application logic, Firebase, data, viewport or navigation behaviour changed.
