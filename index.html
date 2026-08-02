@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=126.9-broadcast-fullscreen">
+<link rel="stylesheet" href="styles.css?v=127.0-live-intelligence">
 <title>AGNT</title>
 </head>
 <body>
@@ -291,6 +291,7 @@
           <div><strong id="dayLogContactTotal">0</strong><span>Contacts</span></div>
           <div><strong id="dayLogAppointmentTotal">0</strong><span>Appointments</span></div>
         </section>
+        <section id="todayWins" class="today-wins glass hidden" aria-live="polite"><div class="day-log-head"><div><span>TODAY’S WINS</span><strong>Momentum created</strong></div><small id="todayWinsMeta"></small></div><div id="todayWinsGrid" class="today-wins-grid"></div></section>
         <section class="day-log-card glass">
           <div class="day-log-head"><div><span>DAY LOG</span><strong id="dayLogTitle">Today’s story</strong></div><small id="dayLogMeta">Meaningful activity only</small></div>
           <div id="dayLogTimeline" class="day-log-timeline" aria-live="polite"></div>
@@ -452,17 +453,18 @@
       <div id="prospectingDashboard" class="prospecting-dashboard">
         <div id="prospectorTodayPanel" class="prospector-panel">
         <section class="prospecting-hero glass">
-          <div><span>PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small></div>
+          <div><span>PIPELINE</span><strong id="prospectingDueCount">0</strong><small id="prospectingDueLabel">follow-ups ready</small><em id="pipelineWorkState" class="prospector-work-state">Ready to build momentum</em></div>
           <button id="startProspectingSession" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small></div>
+          <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small><em id="hotSpottingWorkState" class="prospector-work-state">No live opportunity yet</em></div>
           <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
         <section class="prospecting-hero glass">
-          <div><span>BROADCAST</span><strong aria-hidden="true">SMS</strong><small>Build and send a campaign</small></div>
+          <div><span>BROADCAST</span><strong aria-hidden="true">SMS</strong><small>Build and send a campaign</small><em id="broadcastWorkState" class="prospector-work-state">Choose an audience to begin</em></div>
           <button id="openBroadcast" class="primary" type="button">Broadcast</button>
         </section>
+        <section class="prospector-live-intelligence glass" aria-label="Live prospecting intelligence"><div><span>CURRENT CALL STREAK</span><strong id="currentCallStreak">0</strong><small id="currentCallStreakMeta">Make the first call</small></div><p id="agntLiveInsight">AGNT will surface the strongest next move from your live activity.</p></section>
         <section class="prospecting-stats" aria-label="Prospecting overview">
           <button class="prospecting-stat glass" data-prospect-filter="overdue"><span>OVERDUE</span><strong id="prospectingOverdue">0</strong></button>
           <button class="prospecting-stat glass" data-prospect-filter="today"><span>DUE TODAY</span><strong id="prospectingToday">0</strong></button>
@@ -592,7 +594,7 @@
                 <button id="broadcastReviewTest" type="button">Test environment</button>
               </div>
               <div id="broadcastLiveReview" class="broadcast-step-surface">
-                <div id="campaignWarnings" class="campaign-warnings"></div>
+                <div id="campaignReadiness" class="broadcast-readiness" aria-live="polite"></div><div id="campaignWarnings" class="campaign-warnings"></div>
                 <div id="campaignPreview" class="campaign-preview"><div class="empty">Choose an audience and write a message to preview recipients.</div></div>
                 <button id="launchCampaignShortcut" class="primary campaign-launch" type="button">Open AGNT Bulk SMS</button>
                 <p class="campaign-disclaimer">AGNT prepares the personalised payload. iOS Shortcuts performs the sending. Review the recipient count and samples before continuing.</p>
@@ -848,6 +850,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=126.9-broadcast-fullscreen"></script>
+<script type="module" src="app.js?v=127.0-live-intelligence"></script>
 </body>
 </html>
