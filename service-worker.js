@@ -1,5 +1,5 @@
 const CACHE='agnt-v126-4-native-task-ui';
-const ASSETS=['./','./index.html','./styles.css?v=126.4-native-task-ui','./app.js?v=126.4-native-task-ui','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const ASSETS=['./','./index.html','./styles.css?v=126.5-best-of-both','./app.js?v=126.5-best-of-both','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

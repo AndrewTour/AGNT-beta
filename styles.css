@@ -5618,3 +5618,272 @@ select:focus{
 @media (prefers-color-scheme:dark){
   html,body,.app,.glass,.welcome-screen,.offday-review-screen{color-scheme:light;background:#ffffff;color:#111114}
 }
+
+/* =====================================================================
+   AGNT v126.5 — Best-of-both UI refinement
+   Visual-only pass. Restores the strongest practical controls from the
+   prior UI while retaining the cleaner native task-system direction.
+   ===================================================================== */
+
+:root{
+  --agnt-page:#f7f8fa;
+  --agnt-card:#ffffff;
+  --agnt-field:#f4f5f7;
+  --agnt-border:#e1e3e8;
+  --agnt-divider:#eceef1;
+  --agnt-ink:#111318;
+  --agnt-muted:#8b909a;
+  --agnt-label:#858b98;
+  --agnt-blue:#2f6df6;
+  --agnt-black:#050505;
+}
+
+/* Keep the app calm and consistent without changing layout geometry. */
+body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
+.glass{backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* One typography system across every view. */
+.topbar h1,.view-head h2,.settings h2,.prospecting-heading h2{
+  color:var(--agnt-ink);
+  letter-spacing:-.035em;
+  font-weight:800;
+}
+.section-label>span,.workday-settings legend,.calendar-preference-settings legend,
+.metric-copy>span,.prospecting-section-label,.pipeline-label{
+  color:var(--agnt-label);
+  letter-spacing:.16em;
+  font-weight:800;
+}
+
+/* Common surface treatment. */
+.score-week,.metrics,.appointment-form,.settings,.leaderboard-dashboard,
+.prospecting-toolbar,.prospecting-hero,.prospecting-section,.pipeline-overview,
+.pipeline-controls,.market-pulse-hero,.campaign-hero,.campaign-builder,
+.prospect-intelligence-hero,.prospect-intelligence-card{
+  background:var(--agnt-card);
+  border:1px solid var(--agnt-border);
+  box-shadow:0 10px 28px rgba(20,25,35,.045);
+}
+
+/* Inputs: light, practical and easy to scan. */
+.settings input,.settings select,.appointment-form input,
+.appointment-form select,.appointment-form textarea,.prospecting-toolbar input,
+.pipeline-controls input,.campaign-builder input,.campaign-builder textarea{
+  background:var(--agnt-field)!important;
+  border:1px solid var(--agnt-border)!important;
+  color:var(--agnt-ink)!important;
+  box-shadow:none!important;
+}
+
+/* SETTINGS — retain the new profile header, restore the old control clarity. */
+.settings{
+  padding:16px;
+  overflow:hidden;
+}
+.settings>label{
+  margin:14px 0 0;
+  gap:7px;
+  color:var(--agnt-muted);
+  font-size:.72rem;
+  letter-spacing:.01em;
+}
+.settings>label>input{
+  min-height:52px;
+  border-radius:16px;
+  padding:0 16px;
+  font-size:.96rem;
+  font-weight:650;
+}
+.profile-hero{margin-bottom:14px}
+.profile-kpis{margin-bottom:18px}
+
+.workday-settings{
+  margin:18px 0 8px;
+  padding:0;
+  border:0;
+}
+.workday-settings legend,
+.calendar-preference-settings legend{
+  margin:0 0 7px;
+  color:var(--agnt-label);
+  font-size:.73rem;
+}
+.workday-settings>p,
+.calendar-preference-settings>p{
+  margin:0 0 11px;
+  color:var(--agnt-muted);
+  font-size:.72rem;
+  line-height:1.42;
+}
+.workday-options{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+.workday-options label{
+  position:relative;
+  margin:0!important;
+  min-width:0;
+  background:transparent!important;
+  border:0!important;
+}
+.workday-options input{
+  position:absolute!important;
+  opacity:0!important;
+  pointer-events:none;
+  width:1px!important;
+  height:1px!important;
+}
+.workday-options span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  width:100%;
+  border:1px solid var(--agnt-border);
+  border-radius:15px;
+  background:var(--agnt-field);
+  color:#747b88;
+  font-size:.78rem;
+  font-weight:800;
+  box-shadow:none;
+}
+.workday-options input:checked+span{
+  background:var(--agnt-blue);
+  border-color:var(--agnt-blue);
+  color:#fff;
+  box-shadow:none;
+}
+.workday-options input:focus-visible+span{outline:3px solid rgba(47,109,246,.18)}
+
+.calendar-preference-settings{
+  margin:20px 0 10px;
+  padding:0;
+  border:0;
+}
+.calendar-preference-options{
+  display:grid;
+  gap:8px;
+}
+.calendar-preference-options label{
+  position:relative;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+}
+.calendar-preference-options input{
+  position:absolute!important;
+  opacity:0!important;
+  pointer-events:none;
+  width:1px!important;
+  height:1px!important;
+}
+.calendar-preference-options span{
+  min-height:50px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 15px;
+  border:1px solid var(--agnt-border);
+  border-radius:16px;
+  background:var(--agnt-field);
+  color:var(--agnt-ink);
+  font-size:.82rem;
+  font-weight:750;
+}
+.calendar-preference-options span::before{
+  content:"";
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  border-radius:50%;
+  border:2px solid #9ba0aa;
+  background:#fff;
+  box-sizing:border-box;
+}
+.calendar-preference-options input:checked+span{
+  border-color:var(--agnt-blue);
+  background:#f2f6ff;
+  color:var(--agnt-ink);
+}
+.calendar-preference-options input:checked+span::before{
+  border:5px solid var(--agnt-blue);
+}
+
+#saveSettings{
+  min-height:50px;
+  border-radius:16px;
+  margin-top:14px;
+  background:var(--agnt-black)!important;
+  color:#fff!important;
+}
+
+/* HOME — keep strong hierarchy, remove unnecessary visual weight. */
+.score-week,.metrics{box-shadow:0 8px 24px rgba(20,25,35,.04)}
+.metric{background:#fff;border-color:var(--agnt-divider)}
+.actions button,.metric-percent{box-shadow:none!important}
+.actions button:not(:last-child){background:var(--agnt-field);border-color:var(--agnt-border)}
+.actions button:last-child,.timer{background:var(--agnt-black)!important}
+
+/* PROSPECTOR — selected tab is unmistakable; cards stay clean and dense. */
+.prospect-tabs,.prospector-sections{
+  background:#fff;
+  border-color:var(--agnt-border);
+  box-shadow:none;
+}
+.prospect-tabs button,.prospector-sections button{
+  background:var(--agnt-field);
+  color:#24272d;
+  border-color:transparent;
+  font-weight:750;
+}
+.prospect-tabs button.active,.prospector-sections button.active{
+  background:var(--agnt-black);
+  color:#fff;
+}
+.prospecting-hero,.prospecting-section{box-shadow:0 8px 22px rgba(20,25,35,.035)}
+.prospecting-stat{background:#fff;border-color:var(--agnt-divider)}
+
+/* APPOINTMENTS — preserve native form usability and clear selection. */
+.appointment-form{box-shadow:0 8px 24px rgba(20,25,35,.04)}
+.appointment-types{gap:8px}
+.appointment-types label{
+  background:var(--agnt-field);
+  border-color:var(--agnt-border);
+  color:#737986;
+  font-weight:800;
+  box-shadow:none;
+}
+.appointment-types label:has(input:checked){
+  background:var(--agnt-black);
+  border-color:var(--agnt-black);
+  color:#fff;
+}
+
+/* Bottom navigation stays compact, readable and consistent. */
+.tabbar{
+  background:rgba(255,255,255,.97);
+  border-color:var(--agnt-border);
+  box-shadow:0 10px 28px rgba(20,25,35,.07);
+}
+.tabbar button{color:#a0a4ac}
+.tabbar button.active::before{
+  background:var(--agnt-black);
+  box-shadow:none;
+}
+.tabbar button.active{color:#fff}
+.tabbar button span{font-weight:600;letter-spacing:-.01em}
+
+/* Prevent inherited legacy fills from appearing behind pill controls. */
+.workday-options label:has(input:checked),
+.calendar-preference-options label:has(input:checked){
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+
+@media(max-width:380px){
+  .workday-options{gap:6px}
+  .workday-options span{min-height:40px;font-size:.72rem;border-radius:13px}
+  .calendar-preference-options span{min-height:46px}
+}
