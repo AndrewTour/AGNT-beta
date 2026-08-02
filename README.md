@@ -185,3 +185,10 @@ Firebase, authentication, Firestore paths and rules, UID separation, local cache
 - Changed Broadcast supporting copy to sentence case while preserving uppercase section labels.
 - Matched the Broadcast button width to the session buttons above and renamed it `Broadcast`.
 - No Firebase, authentication, Firestore, contact-data, cache, sync or workflow changes.
+
+## V126.4 — Native Task UI visual refinement
+
+- Built from the supplied `AGNT BIphoneSave.zip` baseline.
+- Visual-only refinement inspired by the approved native iPhone task interface.
+- Introduces flatter white surfaces, soft grey controls, black selected states, quieter borders, restrained typography and consistent section-label casing.
+- Existing component sizing, viewport behaviour, navigation, Firebase, authentication, Firestore paths, UID separation, local cache, sync and application logic remain unchanged.

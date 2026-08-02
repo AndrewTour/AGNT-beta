@@ -5272,3 +5272,349 @@ body.manual-dialler-open,body.manual-call-outcome-open{overflow:hidden}
 #prospectorBroadcastPanel .campaign-disclaimer{
   text-transform:none!important;
 }
+
+/* V126.4 — Native Task UI visual refinement.
+   Visual-only overrides based on the approved iPhone reference.
+   Existing component dimensions, layout geometry, viewport behaviour,
+   navigation, application logic, Firebase and data structures remain unchanged. */
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --line:#e3e4e8;
+  --ink:#0b0b0d;
+  --muted:#8c8c93;
+  --cyan:#286cff;
+  --blue:#286cff;
+  --green:#178a55;
+  --amber:#a96f00;
+  --red:#ef3f3f;
+  --shadow:none;
+  --surface-soft:#f6f6f8;
+  --surface-selected:#050505;
+  --label:#8e8e95;
+  --hairline:#ededf0;
+}
+
+html,body{
+  color-scheme:light;
+  background:#ffffff;
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body::before,
+body::after{display:none!important}
+
+.app{background:#ffffff}
+
+/* Remove the glassy visual language while retaining every existing box size. */
+.glass{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+/* Calm, native section-label hierarchy. */
+.metric span,
+.score span,
+.week-head span,
+.view-head>span,
+.insight span,
+.section-label>span,
+.timeline-overview-label,
+.leaderboard-hero-copy>span,
+.leaderboard-kpis span,
+.leaderboard-head span,
+.appointment-form legend,
+.appointment-form>label>span,
+.settings label,
+.settings legend,
+.action-sheet-head small,
+.day-review-head span,
+.day-review-coach span,
+.prospecting-section-head>span,
+.campaign-hero>span,
+.campaign-builder>span{
+  color:var(--label);
+  font-weight:650;
+  letter-spacing:.105em;
+  text-transform:uppercase;
+}
+
+#viewTitle,
+.view-head h2,
+.settings h2,
+.action-sheet-head h2,
+.modal-head h2,
+.day-review-card h2{
+  color:#08080a;
+  font-weight:700;
+  letter-spacing:-.025em;
+}
+
+#viewSubtitle,
+.date,
+.date-line,
+.metric-copy>small,
+.metric strong small,
+.leaderboard-note,
+.appointment-card small,
+.empty,
+.settings label,
+.action-sheet-head p{
+  color:var(--muted);
+}
+
+/* Shared soft-control treatment. Dimensions are deliberately inherited. */
+.icon-btn,
+.back-today,
+.actions button,
+.metric-percent,
+.year-head button,
+.modal-head button,
+.action-sheet-close,
+.insights-switch button,
+.leaderboard-period button,
+.prospect-tabs button,
+.prospector-sections button,
+.pipeline-controls button,
+.file-btn,
+.secondary{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#111114;
+  box-shadow:none;
+}
+
+/* Black active capsules mirror the supplied reference. */
+.tabbar button.active::before,
+.insights-switch button.active,
+.leaderboard-period button.active,
+.prospect-tabs button.active,
+.prospector-sections button.active,
+.pipeline-controls button.active,
+.filter-chip.active,
+.segmented button.active,
+[aria-pressed="true"].chip{
+  background:var(--surface-selected);
+  border-color:var(--surface-selected);
+  color:#ffffff;
+  box-shadow:none;
+}
+
+.tabbar button.active{color:#ffffff}
+.tabbar button.active::before{background:#050505}
+.tabbar button:not(.active){color:#85858c}
+.tabbar{background:#ffffff;border-color:var(--line);box-shadow:none}
+
+/* Cards become flat white surfaces with quiet dividers. */
+.score-week,
+.metrics,
+.timeline-overview,
+.daily-timeline,
+.scorecard-hero,
+.scorecard-metrics,
+.scorecard-focus,
+.scorecard-trends,
+.scorecard-productivity,
+.scorecard-momentum,
+.scorecard-personal-bests,
+.scorecard-recommendations,
+.scorecard-achievements,
+.day-log-summary,
+.day-log-card,
+.knocking-session-card,
+.knocking-history-summary,
+.knocking-history-list-wrap,
+.appointment-form,
+.leaderboard-dashboard,
+.leaderboard-unified-card,
+.prospecting-toolbar,
+.prospecting-hero,
+.prospecting-section,
+.pipeline-overview,
+.pipeline-controls,
+.pipeline-timeframe,
+.market-pulse-hero,
+.market-pulse-results,
+.market-pulse-import,
+.campaign-hero,
+.campaign-builder,
+.prospect-intelligence-hero,
+.prospect-intelligence-card,
+.prospect-weekly-focus,
+.settings{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:none;
+}
+
+.metric,
+.timeline-item,
+.appointment-card,
+.leaderboard-performance-row,
+.scorecard-metric,
+.prospecting-stat,
+.broadcast-type-card,
+.pipeline-seller-card,
+.contact-card{
+  background:#ffffff;
+  border-color:var(--hairline);
+  box-shadow:none;
+}
+
+/* Inputs use the light inset field from the reference. */
+input,
+textarea,
+select,
+.settings input,
+.settings select,
+.appointment-form input[type=text],
+.view-head input,
+.campaign-builder input,
+.campaign-builder textarea,
+.prospecting-toolbar input,
+.pipeline-controls input{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#111114;
+  box-shadow:none;
+}
+
+input::placeholder,
+textarea::placeholder{color:#9a9aa1;opacity:1}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#b8bac1;
+  outline:none;
+  box-shadow:0 0 0 3px rgba(0,0,0,.045);
+}
+
+/* Primary controls are confident black, without gradients or glow. */
+.primary,
+.welcome-start,
+.actions button:last-child,
+.timer,
+.manual-dialler-call,
+.day-review-close{
+  background:#050505!important;
+  border-color:#050505!important;
+  color:#ffffff!important;
+  box-shadow:none!important;
+}
+
+.primary:disabled,
+.welcome-start:disabled,
+.manual-dialler-call:disabled{
+  background:#f3f3f5!important;
+  border-color:#f3f3f5!important;
+  color:#99999f!important;
+  opacity:1;
+}
+
+/* Keep blue only for guidance and progress, rather than control chrome. */
+.metric em,
+.account-email,
+.back-today,
+.text-btn,
+.now-card-meta,
+.scorecard-focus p,
+.day-review-coach p{color:var(--blue)}
+
+.bar{background:#eeeef1;border-color:#eeeef1}
+.bar i{background:var(--blue)}
+
+.metric-percent.metric-ring{
+  background:
+    radial-gradient(circle at center,#ffffff 57%,transparent 58%),
+    conic-gradient(var(--blue) calc(var(--actual,0) * 1%),#e9e9ed 0)!important;
+  color:#111114;
+  box-shadow:none;
+}
+
+.metric.complete::before{background:var(--green)}
+.metric.complete strong{color:#111114}
+
+/* Selected day and status chips use restrained native states. */
+.week-day,
+.appointment-types label,
+.workday-settings label,
+.calendar-preference-settings label,
+.outcome-option,
+.manual-call-outcome-options button{
+  background:var(--surface-soft);
+  border-color:var(--line);
+  color:#3a3a3f;
+  box-shadow:none;
+}
+
+.week-day.selected,
+.appointment-types label:has(input:checked),
+.workday-settings label:has(input:checked),
+.calendar-preference-settings label:has(input:checked),
+.outcome-option.selected{
+  background:#050505;
+  border-color:#050505;
+  color:#ffffff;
+  box-shadow:none;
+}
+
+.week-day.complete{border-color:#bcd9ca;color:var(--green);background:#f5faf7}
+
+/* Modal and sheet presentation follows the clean white iOS panel. */
+.modal{background:rgba(0,0,0,.42)}
+.action-sheet,
+.day-review-card,
+.calendar-shell,
+.manual-dialler{
+  background:#ffffff;
+  border-color:var(--line);
+  box-shadow:0 -10px 38px rgba(0,0,0,.10);
+}
+.action-sheet-handle{background:#d6d6da}
+
+.toast{
+  background:#111114;
+  color:#ffffff;
+  border-color:#111114;
+  box-shadow:0 12px 28px rgba(0,0,0,.14);
+}
+
+/* Reference-style red remains reserved for urgent/destructive actions. */
+.danger,
+.destructive,
+.appointment-card button,
+.delete-button,
+.manual-call-cancelled{color:var(--red)}
+
+/* Welcome and review screens share the same restrained system. */
+.welcome-screen,
+.offday-review-screen{background:#ffffff;color:#111114}
+.welcome-brand,
+.welcome-heading h1,
+.welcome-appointments h2,
+.welcome-simple-section h2,
+.offday-review-heading h1{color:#111114}
+.welcome-date,
+.welcome-heading p,
+.welcome-simple-section p,
+.offday-review-heading p{color:var(--muted)}
+.welcome-simple-section>span,
+.offday-review-heading>span,
+.offday-review-section-head span{color:var(--label)}
+
+/* Ensure SVG icon strokes follow the native monochrome control colour. */
+.icon-btn svg,
+.tabbar svg,
+.action-sheet-close svg,
+.welcome-start svg{stroke:currentColor}
+
+@media (prefers-color-scheme:dark){
+  html,body,.app,.glass,.welcome-screen,.offday-review-screen{color-scheme:light;background:#ffffff;color:#111114}
+}
