@@ -6202,3 +6202,29 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
 .prospect-session-head-status{display:flex;justify-content:center;gap:6px;white-space:nowrap}
 .prospect-session-head-status span{padding:6px 9px;border-radius:999px;background:#eef4ff;color:#0b63f3;font-size:10px;font-weight:750}
 .settings>#saveSettings,.settings>#exportData,.settings>#signOut,.settings>.file-btn{font-size:14px;line-height:1.2}
+
+
+/* v127.2.2 — Hot Spotting card cleanup only. */
+.hotspot-opportunity-summary{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin:12px 0 16px;
+  padding:10px 0;
+  border-top:1px solid rgba(20,24,32,.07);
+  border-bottom:1px solid rgba(20,24,32,.07);
+}
+.hotspot-opportunity-summary span{
+  padding:0 8px;
+  border-radius:0;
+  background:transparent;
+  text-align:left;
+  border-left:1px solid rgba(20,24,32,.07);
+}
+.hotspot-opportunity-summary span:first-child{border-left:0;padding-left:0}
+.hotspot-opportunity-summary span:last-child{padding-right:0}
+.hotspot-opportunity-summary strong{font-size:12px;line-height:1.1}
+@media(max-width:390px){
+  .hotspot-opportunity-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .hotspot-opportunity-summary span{padding-inline:6px;font-size:8px}
+  .hotspot-opportunity-summary strong{font-size:11px}
+}

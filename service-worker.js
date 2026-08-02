@@ -1,5 +1,5 @@
-const CACHE='agnt-v127-2-1-pipeline-sms';
-const ASSETS=['./','./index.html','./styles.css?v=127.2.1-pipeline-sms','./app.js?v=127.2.1-pipeline-sms','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='agnt-v127-2-2-hotspot-cleanup';
+const ASSETS=['./','./index.html','./styles.css?v=127.2.2-hotspot-cleanup','./app.js?v=127.2.2-hotspot-cleanup','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
