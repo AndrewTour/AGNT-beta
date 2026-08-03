@@ -2134,16 +2134,10 @@ function renderProspecting(){
   renderProspectorInsights();
   const sessionLogOpen=prospectSessionActive&&$('#prospectLogForm')?.dataset.fromSession==='1'&&!$('#prospectDetail').classList.contains('hidden');
   setProspectorSection(prospectSection);
-  if(sessionLogOpen){
-    $('#prospectingDashboard')?.classList.add('hidden');
-    $('#prospectingSession')?.classList.add('hidden');
-    $('#prospectDetail')?.classList.remove('hidden');
-  }else{
-    $('#prospectingSession')?.classList.add('hidden');
-    $('#prospectDetail')?.classList.add('hidden');
-    $('#prospectingDashboard')?.classList.remove('hidden');
-    if(!prospectSessionActive&&activeProspectId&&!$('#prospectDetail').classList.contains('hidden'))renderProspectDetail(activeProspectId);
-  }
+  if(prospectSessionActive&&prospectSection==='today'){
+    if(sessionLogOpen){$('#prospectingDashboard')?.classList.add('hidden');$('#prospectingSession')?.classList.add('hidden');$('#prospectDetail')?.classList.remove('hidden')}
+    else showProspectingSession();
+  }else if(!prospectSessionActive&&activeProspectId&&!$('#prospectDetail').classList.contains('hidden'))renderProspectDetail(activeProspectId);
 }
 function prospectForm(p={}){return`<form id="prospectEditor" class="prospect-editor glass"><div class="prospect-detail-nav"><button type="button" data-close-prospect>‹ Back</button><strong>${p.id?'Edit Contact':'New Contact'}</strong><span></span></div><label>Name<input name="name" value="${escapeHtml(p.name||'')}" required></label><div class="prospect-form-grid"><label>Phone<input name="phone" type="tel" value="${escapeHtml(p.phone||'')}"></label><label>Email<input name="email" type="email" value="${escapeHtml(p.email||'')}"></label></div><label>Address<input name="address" value="${escapeHtml(p.address||'')}"></label><div class="prospect-form-grid"><label>Source<input name="source" value="${escapeHtml(p.source||'')}" placeholder="Door knock, database…"></label><label>Stage<select name="stage">${['New Lead','Nurture','Appraisal Opportunity','Appointment Booked','Pipeline','Past Client'].map(x=>`<option ${p.stage===x?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="prospect-form-grid"><label>Temperature<select name="temperature" data-pipeline-temperature-field>${['Cold','Warm','Hot'].map(x=>`<option ${p.temperature===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Motivation<select name="motivation" data-pipeline-motivation-field>${[1,2,3,4,5].map(x=>`<option value="${x}" ${Number(p.motivation)===x?'selected':''}>${x} / 5</option>`).join('')}</select></label></div><label>Selling timeframe<select name="sellingTimeframe" data-pipeline-timeframe-field><option value="">Not currently selling</option>${SELLING_TIMEFRAMES.map(x=>`<option value="${x}" ${p.sellingTimeframe===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Tags<input name="tags" value="${escapeHtml((p.tags||[]).join(', '))}" placeholder="Vendor, Toongabbie, Past client"></label><label>Next follow-up<input name="nextFollowUp" type="date" value="${p.nextFollowUp||''}"></label><label>Background notes<textarea name="notes" rows="4" placeholder="Long-term context, plans and personal details">${escapeHtml(p.notes||'')}</textarea></label><button class="primary" type="submit">${p.id?'Save Contact':'Add Contact'}</button></form>`}
 function openProspectEditor(id=''){const p=id?prospectById(id):{};activeProspectId=id||null;$('#prospectingDashboard').classList.add('hidden');$('#prospectingSession').classList.add('hidden');$('#prospectDetail').classList.remove('hidden');$('#prospectDetail').innerHTML=prospectForm(p)}
@@ -2230,20 +2224,11 @@ function endProspectingSession({completeMarketSession=false}={}){
   if(!prospectSessionActive)return closeProspectDetail();
   if(document.querySelector('.prospect-session-review-overlay'))return;
   const stats={...prospectSessionStats},marketEventId=cleanText(prospectSessionContext?.eventId,160),returnToHotSpotting=Boolean(marketEventId),marketEvent=marketPulseEvents.find(event=>event.id===marketEventId),marketProgress=marketEvent?marketSessionProgress(marketEvent,marketMatches(marketEvent)):null;
-  if(marketEventId){
-    marketPulseEvents=normaliseMarketPulseEvents(marketPulseEvents.map(event=>event.id===marketEventId?{
-      ...event,
-      sessionStartedAt:completeMarketSession?(event.sessionStartedAt||Date.now()):0,
-      sessionCompletedAt:completeMarketSession?Date.now():0
-    }:event));
-    saveLocal();
-    queueProspectingSave().catch(err=>console.error(completeMarketSession?'Hot Spotting completion sync failed':'Hot Spotting session reset sync failed',err));
-  }
-  prospectSessionActive=false;prospectSessionIds=[];prospectSessionIndex=0;prospectSessionContext=null;clearProspectingSessionState();
-  $('#prospectingSession').classList.add('hidden');$('#prospectDetail').classList.add('hidden');$('#prospectingDashboard').classList.remove('hidden');
   const overlay=document.createElement('div');overlay.className='prospect-session-review-overlay';overlay.innerHTML=`<section class="prospect-session-review glass" role="dialog" aria-modal="true" aria-label="Session review"><span class="eyebrow">SESSION REVIEW</span><h2>Strong work.</h2><p>Here’s what you completed.</p><div class="prospect-session-review-grid ${returnToHotSpotting?'expanded':''}">${returnToHotSpotting?`<div><strong>${marketProgress?.total||0}</strong><span>Neighbours</span></div>`:''}<div><strong>${stats.calls}</strong><span>Calls</span></div><div><strong>${Number(stats.sms)||0}</strong><span>SMS</span></div><div><strong>${stats.connects}</strong><span>Connects</span></div>${returnToHotSpotting?`<div><strong>${marketEvent?.skippedProspectIds?.length||0}</strong><span>Skips</span></div><div><strong>${marketProgress?.followUps||0}</strong><span>Follow-ups</span></div>`:`<div><strong>${stats.temperate}</strong><span>Warm / Hot</span></div><div><strong>${stats.appointments}</strong><span>Appointments</span></div>`}</div><button class="primary" type="button" data-close-session-review>Done</button></section>`;document.body.append(overlay);
   overlay.querySelector('[data-close-session-review]').onclick=()=>{
-    overlay.remove();setProspectorSection(returnToHotSpotting?'market':'today');renderProspecting();if(returnToHotSpotting)requestAnimationFrame(()=>{const view=$('#prospectingView');if(view)view.scrollTop=0});
+    if(completeMarketSession&&marketEventId){marketPulseEvents=normaliseMarketPulseEvents(marketPulseEvents.map(event=>event.id===marketEventId?{...event,sessionStartedAt:event.sessionStartedAt||Date.now(),sessionCompletedAt:Date.now()}:event));saveLocal();queueProspectingSave().catch(err=>console.error('Hot Spotting completion sync failed',err))}
+    prospectSessionActive=false;prospectSessionIds=[];prospectSessionIndex=0;prospectSessionContext=null;clearProspectingSessionState();
+    overlay.remove();$('#prospectingSession').classList.add('hidden');$('#prospectDetail').classList.add('hidden');$('#prospectingDashboard').classList.remove('hidden');setProspectorSection(returnToHotSpotting?'market':'today');renderProspecting();if(returnToHotSpotting)requestAnimationFrame(()=>{const view=$('#prospectingView');if(view)view.scrollTop=0});
   };
 }
 
