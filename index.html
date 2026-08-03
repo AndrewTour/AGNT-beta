@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=b19-hotspot-next-contact-fix-1">
+<link rel="stylesheet" href="styles.css?v=b26-appointment-invites-1">
 <title>AGNT</title>
 </head>
 <body>
@@ -361,6 +361,7 @@
           <label>Booking date<input id="appointmentDatePicker" type="date" required></label>
           <label>Booking time<input id="appointmentTime" type="time" value="12:00" required></label>
         </div>
+        <fieldset class="appointment-invite-fieldset" aria-label="Invite agents"><legend>Invite agents <small>Optional · read only</small></legend><div id="appointmentInviteOptions" class="appointment-invite-options"></div></fieldset>
         <fieldset class="appointment-types" aria-label="Appointment type">
           <label><input type="radio" name="appointmentType" value="BAP"><span>BAP</span></label>
           <label><input type="radio" name="appointmentType" value="MAP"><span>MAP</span></label>
@@ -878,6 +879,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=b19-hotspot-next-contact-fix-1"></script>
+<script type="module" src="app.js?v=b26-appointment-invites-1"></script>
 </body>
 </html>
