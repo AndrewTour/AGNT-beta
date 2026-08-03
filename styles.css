@@ -6372,3 +6372,82 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
   #listingsView .listing-calendar-day{padding:6px 0;border-radius:10px}
   .listing-progress-control{padding:12px}
 }
+
+/* Targeted bug fix: individual listing detail must remain vertically scrollable only. */
+#listingDetail,
+#listingDetail .listing-detail,
+#listingDetail .listing-panel,
+#listingDetail .listing-health-hero,
+#listingDetail .listing-accountability-strip,
+#listingDetail .listing-calendar,
+#listingDetail .listing-daily-steps,
+#listingDetail .listing-daily-actions,
+#listingDetail .listing-support-panel{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:hidden!important;
+  overscroll-behavior-x:none;
+}
+#listingDetail *{
+  box-sizing:border-box;
+  min-width:0;
+  max-width:100%;
+}
+#listingDetail p,
+#listingDetail span,
+#listingDetail strong,
+#listingDetail small,
+#listingDetail label,
+#listingDetail textarea,
+#listingDetail button{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+#listingDetail textarea,
+#listingDetail input:not([type="checkbox"]):not([type="radio"]),
+#listingDetail select{
+  width:100%;
+  max-width:100%;
+}
+
+/* Listings viewport correction: keep checklist controls and copy inside the detail card. */
+#listingDetail .listing-daily-steps label{
+  display:grid;
+  grid-template-columns:19px minmax(0,1fr);
+  align-items:start;
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+}
+#listingDetail .listing-daily-steps input[type="checkbox"]{
+  width:19px;
+  max-width:19px;
+  height:19px;
+  min-width:19px;
+  margin:0;
+}
+#listingDetail .listing-daily-steps label>span{
+  display:block;
+  width:auto;
+  max-width:100%;
+  min-width:0;
+  overflow:visible;
+  overflow-wrap:break-word;
+  word-break:normal;
+  white-space:normal;
+}
+#listingDetail textarea,
+#listingDetail input:not([type="checkbox"]):not([type="radio"]),
+#listingDetail select{
+  width:100%;
+  max-width:100%;
+}
+/* MarketPulse context enrichment — scoped to Hot Spotting only */
+.market-pulse-event-data{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-top:12px;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid rgba(18,24,38,.06);min-width:0}
+.market-pulse-event-data strong{font-size:17px;line-height:1.2;color:#111318}
+.market-pulse-event-data small{font-size:12px;line-height:1.35;color:#748096;font-weight:650;overflow-wrap:anywhere}
+.market-price-movement{display:block;font-size:12px;line-height:1.35;font-weight:800;font-style:normal}
+.market-price-above{color:#15865f}
+.market-price-below{color:#d7473f}
+.market-session-context .market-price-movement{margin-top:7px}

@@ -1,5 +1,5 @@
-const CACHE='agnt-b19-listings-ui-3';
-const ASSETS=['./','./index.html','./styles.css?v=b19-listings-ui-3','./app.js?v=b19-listings-ui-3','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='agnt-b19-marketpulse-context-1';
+const ASSETS=['./','./index.html','./styles.css?v=b19-marketpulse-context-1','./app.js?v=b19-marketpulse-context-1','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
