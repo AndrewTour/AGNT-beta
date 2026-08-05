@@ -6451,3 +6451,7 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
 .market-price-above{color:#15865f}
 .market-price-below{color:#d7473f}
 .market-session-context .market-price-movement{margin-top:7px}
+
+
+/* Buyer List session */
+.buyer-import-review{padding:18px}.buyer-import-review-head span{font-size:10px;font-weight:800;letter-spacing:.08em;color:#8a9099}.buyer-import-review-head h2{margin:4px 0;font-size:24px}.buyer-import-review-head p{margin:0 0 16px;color:var(--muted);font-size:13px}.buyer-import-rows{display:grid;gap:10px;max-height:58vh;overflow:auto;padding-right:2px;margin-bottom:14px}.buyer-import-rows article{position:relative;display:grid;gap:7px;padding:12px;border:1px solid rgba(0,0,0,.08);border-radius:16px;background:#f8f9fb}.buyer-import-rows input{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid rgba(0,0,0,.08);background:transparent;padding:8px 34px 8px 2px;font:inherit}.buyer-import-rows input:first-child{font-weight:800;font-size:15px}.buyer-import-rows article>button{position:absolute;right:9px;top:9px;width:28px;height:28px;border:0;border-radius:50%;background:#eceff3;color:#69717c;font-size:18px}.buyer-import-rows small{font-size:9px;font-weight:850;color:#b45a00;letter-spacing:.06em}.buyer-import-review>.primary{width:100%}

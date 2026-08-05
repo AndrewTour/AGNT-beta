@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=b19-hotspot-next-contact-fix-1">
+<link rel="stylesheet" href="styles.css?v=b20-buyer-list-session-1">
 <title>AGNT</title>
 </head>
 <body>
@@ -460,6 +460,11 @@
           <div><span>HOT SPOTTING</span><strong id="hotSpottingReadyCount">0</strong><small id="hotSpottingReadyLabel">clients ready</small><em id="hotSpottingWorkState" class="prospector-work-state">No live opportunity yet</em></div>
           <button id="openHotSpotting" class="primary" type="button">Start Session</button>
         </section>
+        <section class="prospecting-hero glass buyer-list-hero">
+          <div><span>BUYER LIST</span><strong id="buyerListReadyCount">PDF</strong><small id="buyerListReadyLabel">Import an Agentbox call list</small><em id="buyerListWorkState" class="prospector-work-state">Name, mobile and address/suburb</em></div>
+          <button id="openBuyerListSession" class="primary" type="button">Import PDF</button>
+          <input id="buyerPdfImport" type="file" accept="application/pdf,.pdf" hidden>
+        </section>
         <section class="prospecting-hero glass">
           <div><span>BROADCAST</span><strong aria-hidden="true">SMS</strong><small>Build and send a campaign</small><em id="broadcastWorkState" class="prospector-work-state">Choose an audience to begin</em></div>
           <button id="openBroadcast" class="primary" type="button">Broadcast</button>
@@ -878,6 +883,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=b19-hotspot-next-contact-fix-1"></script>
+<script type="module" src="app.js?v=b20-buyer-list-session-1"></script>
 </body>
 </html>
