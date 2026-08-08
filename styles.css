@@ -7702,3 +7702,159 @@ html[data-theme="dark"] .campaign-delay label{color:#a0a7b2!important}
 @media(max-width:390px){
   .appearance-options span{font-size:.68rem}
 }
+
+/* =====================================================================
+   AGNT v1.30.1 — Dark-mode visual parity + progress semantics
+   Visual correction only. Light-mode geometry remains unchanged.
+   ===================================================================== */
+
+/* Daily completion bar: blue for logged progress, green only at 100%. */
+.bar i,#scoreBar{background:var(--agnt-blue,#2f6df6)!important;transition:width .24s ease,background-color .2s ease}
+.bar i.complete,#scoreBar.complete{background:var(--agnt-green,#2fa866)!important}
+html[data-theme="dark"] .bar{background:#242932!important;border-color:#242932!important}
+html[data-theme="dark"] .bar i,
+html[data-theme="dark"] #scoreBar{background:#397dff!important}
+html[data-theme="dark"] .bar i.complete,
+html[data-theme="dark"] #scoreBar.complete{background:#59c99b!important}
+
+/* Navigation selected state: dark-mode equivalent of the light selected capsule. */
+html[data-theme="dark"] .tabbar{background:rgba(11,13,17,.97)!important;border-top-color:#262b33!important}
+html[data-theme="dark"] .tabbar button{color:#626975!important}
+html[data-theme="dark"] .tabbar button.active{color:#f7f8fa!important}
+html[data-theme="dark"] .tabbar button.active::before{
+  background:#1d2128!important;
+  border:1px solid #2b3038!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .tabbar button.active .tab-icon,
+html[data-theme="dark"] .tabbar button.active span{color:#f7f8fa!important}
+
+/* HOME — preserve light hierarchy with dark-native controls and readable rings. */
+html[data-theme="dark"] #dailyScore,
+html[data-theme="dark"] .dashboard .metric-copy>strong,
+html[data-theme="dark"] .dashboard .knock #knockValue,
+html[data-theme="dark"] .leaderboard-position>strong,
+html[data-theme="dark"] .now-card-copy strong{color:#f5f6f7!important}
+html[data-theme="dark"] .dashboard .metric-copy>strong small,
+html[data-theme="dark"] .dashboard .knock #knockValue small{color:#7f8794!important}
+html[data-theme="dark"] .metric-percent.metric-ring{color:#f5f6f7!important}
+html[data-theme="dark"] .metric-percent.metric-ring::before{background:#0b0d11!important}
+html[data-theme="dark"] .dashboard .actions:not(.knock-actions)>button,
+html[data-theme="dark"] .knock-actions>button{background:#181c22!important;color:#f5f6f7!important;border-color:#181c22!important}
+html[data-theme="dark"] .dashboard .actions:not(.knock-actions)>button:last-child,
+html[data-theme="dark"] .knock-actions .timer{background:#f4f5f7!important;color:#101217!important;border-color:#f4f5f7!important}
+html[data-theme="dark"] .knock-actions .reset{background:#181c22!important;color:#a1a9b5!important;border-color:#252a32!important}
+html[data-theme="dark"] .now-card{border-color:#242930!important;color:#f5f6f7!important}
+
+/* TODAY — convert the remaining light-only surfaces to dark equivalents. */
+html[data-theme="dark"] .open-day-review,
+html[data-theme="dark"] .day-review-card,
+html[data-theme="dark"] .day-review-metric,
+html[data-theme="dark"] .day-review-plan{
+  background:#12151b!important;
+  border-color:#2b3038!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .open-day-review strong,
+html[data-theme="dark"] .day-review-card h2,
+html[data-theme="dark"] .day-review-metric strong,
+html[data-theme="dark"] .day-review-plan strong{color:#f5f6f7!important}
+html[data-theme="dark"] .open-day-review span,
+html[data-theme="dark"] .day-review-metric span,
+html[data-theme="dark"] .day-review-metric small,
+html[data-theme="dark"] .day-review-plan span{color:#8e97a7!important}
+html[data-theme="dark"] .day-review-metric.complete{background:rgba(89,201,155,.08)!important;border-color:rgba(89,201,155,.28)!important}
+html[data-theme="dark"] .day-review-metric.complete strong{color:#59c99b!important}
+html[data-theme="dark"] .day-review-coach{background:#101b2d!important;border:1px solid #1c2d48!important}
+html[data-theme="dark"] .day-review-coach p{color:#4e8cff!important}
+html[data-theme="dark"] .day-review-close{background:#397dff!important;border-color:#397dff!important;color:#fff!important}
+html[data-theme="dark"] .timeline-item{color:#f5f6f7!important;border-color:#242930!important}
+html[data-theme="dark"] .timeline-item strong{color:#f5f6f7!important}
+
+/* PROSPECTOR — values and CTAs retain the same hierarchy as light mode. */
+html[data-theme="dark"] .prospecting-hero strong,
+html[data-theme="dark"] .prospecting-section-head h3,
+html[data-theme="dark"] .prospecting-stat strong,
+html[data-theme="dark"] .pipeline-overview strong{color:#f5f6f7!important}
+html[data-theme="dark"] .prospecting-hero small,
+html[data-theme="dark"] .prospector-work-state{color:#8f97a4!important}
+html[data-theme="dark"] .prospecting-hero>.primary,
+html[data-theme="dark"] .prospecting-hero>.market-session-start-btn,
+html[data-theme="dark"] .prospecting-hero .file-btn{
+  background:#1d2128!important;
+  color:#f7f8fa!important;
+  border-color:#303640!important;
+}
+html[data-theme="dark"] .prospecting-hero>.market-session-active-btn{background:#397dff!important;color:#fff!important;border-color:#397dff!important}
+html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn,
+html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn:disabled{background:#3aaf78!important;color:#fff!important;border-color:#3aaf78!important}
+
+/* APPOINTMENTS — all destination cards, appointment type pills and form controls use dark surfaces. */
+html[data-theme="dark"] .appointment-destination-card{
+  background:#14181e!important;
+  border:1px solid #2b3038!important;
+  color:#f5f6f7!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .appointment-destination-card strong{color:#f5f6f7!important}
+html[data-theme="dark"] .appointment-destination-card span,
+html[data-theme="dark"] .appointment-destination-card small,
+html[data-theme="dark"] .appointment-destination-card b{color:#9099a8!important}
+html[data-theme="dark"] .appointment-types label{background:#171b21!important;border-color:#303640!important;color:#a5adba!important}
+html[data-theme="dark"] .appointment-types label:has(input:checked){background:#2a3039!important;border-color:#4a5361!important;color:#f5f6f7!important}
+html[data-theme="dark"] #appointmentSubmitButton{background:#397dff!important;border-color:#397dff!important;color:#fff!important}
+html[data-theme="dark"] .appointment-form{background:transparent!important;border-color:transparent!important}
+html[data-theme="dark"] .appointment-form label{color:#9da5b2!important}
+
+/* LEADERBOARD — eliminate light-only foregrounds/tracks while preserving ranking emphasis. */
+html[data-theme="dark"] .leaderboard-dashboard,
+html[data-theme="dark"] .leaderboard-unified-card{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+html[data-theme="dark"] .leaderboard-ring::after{background:#0b0d11!important}
+html[data-theme="dark"] .leaderboard-ring strong,
+html[data-theme="dark"] .leaderboard-hero-copy>strong,
+html[data-theme="dark"] .leaderboard-weekly-leader>strong,
+html[data-theme="dark"] .leaderboard-summary-line strong,
+html[data-theme="dark"] .leaderboard-row .agent strong,
+html[data-theme="dark"] .leaderboard-row>span{color:#f5f6f7!important}
+html[data-theme="dark"] .leaderboard-hero-copy>span,
+html[data-theme="dark"] .leaderboard-weekly-leader>span,
+html[data-theme="dark"] .leaderboard-summary-line span,
+html[data-theme="dark"] .leaderboard-columns,
+html[data-theme="dark"] .leaderboard-metric-head{color:#8d95a2!important}
+html[data-theme="dark"] .leaderboard-row,
+html[data-theme="dark"] .leaderboard-row:first-child{background:#15191f!important;border-color:#2a2f37!important;color:#f5f6f7!important}
+html[data-theme="dark"] .leaderboard-row:not(:first-child){background:#12151a!important}
+html[data-theme="dark"] .leaderboard-row .rank{background:#20252d!important;color:#f5f6f7!important}
+html[data-theme="dark"] .leaderboard-mini-progress,
+html[data-theme="dark"] .leaderboard-row .bar,
+html[data-theme="dark"] .leaderboard-metric-cell .bar{background:#2a2f37!important}
+html[data-theme="dark"] .leaderboard-period-controls button{background:#1a1e24!important;border-color:#303640!important;color:#a5adba!important}
+html[data-theme="dark"] .leaderboard-period-controls button:disabled{background:#252a31!important;color:#6f7782!important;opacity:1!important}
+html[data-theme="dark"] .leaderboard-mode-tabs button.active{background:#2a2f37!important;color:#f7f8fa!important;box-shadow:none!important}
+
+/* SETTINGS — profile KPI cards should match the dark settings field hierarchy. */
+html[data-theme="dark"] .profile-kpis article{background:#15191f!important;border-color:#2a2f37!important;box-shadow:none!important}
+html[data-theme="dark"] .profile-kpis span{color:#8d95a2!important}
+html[data-theme="dark"] .profile-kpis strong{color:#f5f6f7!important}
+html[data-theme="dark"] .profile-avatar{background:#20252d!important;color:#f5f6f7!important}
+
+/* Common dark surface audit for white cards generated dynamically. */
+html[data-theme="dark"] .appointment-card,
+html[data-theme="dark"] .appointment-reminder,
+html[data-theme="dark"] .scorecard-appointment-item,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .prospect-session-card,
+html[data-theme="dark"] .campaign-history article,
+html[data-theme="dark"] .broadcast-recipient-list label{
+  background:#14181e!important;
+  border-color:#2b3038!important;
+  color:#f5f6f7!important;
+}
+
+/* Prevent inherited light black text on dark surfaces. */
+html[data-theme="dark"] .day-review-card strong,
+html[data-theme="dark"] .prospecting-view strong,
+html[data-theme="dark"] .appointments-list strong,
+html[data-theme="dark"] .leaderboard-only-view strong,
+html[data-theme="dark"] .settings strong{color:#f5f6f7}
+

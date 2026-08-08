@@ -698,6 +698,7 @@ function renderToday(){
   }
   $('#dailyScore').textContent=`${score}%`;
   $('#scoreBar').style.width=`${score}%`;
+  $('#scoreBar').classList.toggle('complete',score>=100);
   for(const m of ['calls','connects','data']){
     const val=d[m],target=targets[m],p=pct(val,target),rem=Math.max(0,target-val);
     $(`#${m}Value`).textContent=val;
