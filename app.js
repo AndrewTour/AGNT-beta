@@ -942,7 +942,12 @@ function timelineStatus(item,index,items,viewDate,focusItemId=''){
 function timelineTimeBlockIndex(items,viewDate){
   if(viewDate!==todayKey()||!items.length)return-1;
   const now=new Date(),nowMinutes=now.getHours()*60+now.getMinutes();
-  return items.findIndex(item=>item.minutes===nowMinutes);
+  const timed=items.map((item,index)=>({item,index})).filter(({item})=>item.kind!=='followup');
+  let active=-1;
+  for(const {item,index} of timed){
+    if(nowMinutes>=item.minutes)active=index;else break;
+  }
+  return active;
 }
 function timelineFocusId(items,kind){
   return items.find(item=>item.kind===kind)?.id||'';
@@ -1184,14 +1189,27 @@ function appointmentBookedLabel(a,sourceDate=''){
   const created=a.createdDate||a.logDate||sourceDate;
   return created?shortAppointmentDate(parseKey(created)):'';
 }
+function appointmentSortPriority(entry){
+  const a=entry.appointment,sourceDate=entry.sourceDate,lifecycle=appointmentLifecycle(a,sourceDate),outcome=appointmentOutcomeLabel(a.outcome);
+  if(lifecycle==='follow-up'&&!outcome&&!a.followUpDate)return 0; // requires outcome
+  if(lifecycle==='follow-up'&&outcome!=='Still Nurturing')return 1; // follow-up due/scheduled
+  if(outcome==='Still Nurturing')return 2; // nurturing
+  if(lifecycle==='upcoming')return 3;
+  if(lifecycle==='completed')return 4;
+  return 5;
+}
+function sortAppointmentEntries(entries){
+  return [...entries].sort((x,y)=>appointmentSortPriority(x)-appointmentSortPriority(y)||appointmentTimestamp(x.appointment,x.sourceDate)-appointmentTimestamp(y.appointment,y.sourceDate));
+}
 function appointmentHistoryEntries(mode){
   const now=Date.now();
-  return allAppointmentEntries().filter(({appointment:a,sourceDate})=>{
+  const entries=allAppointmentEntries().filter(({appointment:a,sourceDate})=>{
     if(mode==='past'&&isOfiAppointment(a))return false;
     const scheduledAt=appointmentTimestamp(a,sourceDate);
     if(!scheduledAt)return mode==='past';
     return mode==='past'?scheduledAt<=now:scheduledAt>now;
   });
+  return sortAppointmentEntries(entries);
 }
 function appointmentReminderText(){
   const due=dueFollowUps();
@@ -1279,7 +1297,7 @@ function renderAppointments(){
     $('#appointmentHistoryList').innerHTML=history.length?history.map(entry=>appointmentCardMarkup(entry,{history:true})).join(''):emptyStateMarkup(getEmptyState('appointments-history',{mode:appointmentHistoryMode}));
   }
 
-  const daily=all.filter(({appointment:a,sourceDate})=>appointmentCreatedDate(a,sourceDate)===appointmentDate);
+  const daily=sortAppointmentEntries(all.filter(({appointment:a,sourceDate})=>appointmentCreatedDate(a,sourceDate)===appointmentDate));
   $('#appointmentsList').innerHTML=daily.length?daily.map(entry=>appointmentCardMarkup(entry,{dailyLog:true})).join(''):emptyStateMarkup(getEmptyState('appointments-daily',{date:appointmentDate}));
   if(activeViewId()==='appointmentsView')updateTopbar('appointmentsView');
 }

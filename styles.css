@@ -9121,3 +9121,48 @@ html[data-theme="light"] .offday-open-agnt,
 html:not([data-theme="dark"]) .offday-open-agnt{
   color:#fff;
 }
+
+/* =====================================================================
+   AGNT v1.30.9 — targeted logic restoration only
+   Track-state colour parity, dark projection-ring parity and Today timeline
+   active-state parity. No layout changes.
+   ===================================================================== */
+
+/* Restore the established three-state colour language in both themes. */
+#todayView #welcomeMessage.track-on{color:#079a67!important}
+#todayView #welcomeMessage.track-risk{color:#c68416!important}
+#todayView #welcomeMessage.track-off{color:#d83c54!important}
+html[data-theme="dark"] #todayView #welcomeMessage.track-on{color:#59c99b!important}
+html[data-theme="dark"] #todayView #welcomeMessage.track-risk{color:#e4a846!important}
+html[data-theme="dark"] #todayView #welcomeMessage.track-off{color:#ef6578!important}
+
+/* Dark mode: keep expected pace visibly distinct from both actual progress and track. */
+html[data-theme="dark"]{
+  --agnt-ring-track:#252932;
+  --agnt-ring-pace:#616977;
+}
+html[data-theme="dark"] .dashboard .metric-percent.metric-ring,
+html[data-theme="dark"] .dashboard .knock .metric-percent.metric-ring{
+  background:
+    conic-gradient(var(--ring-color) 0 calc(var(--actual) * 1%), transparent 0),
+    conic-gradient(var(--agnt-ring-pace) 0 calc(var(--pace) * 1%), transparent 0),
+    var(--agnt-ring-track)!important;
+}
+
+/* Today timeline: the time-active row is the same current blue state as Light mode. */
+#scheduleView .today-overview-panel .timeline-item.time-active .timeline-marker,
+#scheduleView .today-overview-panel .timeline-item.current .timeline-marker{
+  background:var(--blue)!important;
+  color:#fff!important;
+  box-shadow:0 0 0 4px rgba(48,113,255,.12)!important;
+}
+#scheduleView .today-overview-panel .timeline-item.time-active>div>strong,
+#scheduleView .today-overview-panel .timeline-item.current>div>strong{color:var(--blue)!important}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active .timeline-marker,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current .timeline-marker{
+  background:#397dff!important;
+  color:#fff!important;
+  box-shadow:0 0 0 4px rgba(57,125,255,.16)!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active>div>strong,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current>div>strong{color:#4f8cff!important}
