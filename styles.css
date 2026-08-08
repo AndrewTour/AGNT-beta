@@ -8273,3 +8273,446 @@ html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item time{
   #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{font-size:.49rem!important}
   #leaderboardInsights .leaderboard-viewport-row>em{font-size:.66rem!important}
 }
+
+/* ==========================================================================\n   v1.30.5 — Leaderboard clarity pass\n   Larger, calmer hierarchy. Four complete agent rows remain visible without\n   horizontal scrolling. MAP/LAP/BAP are presented as one appointment total.\n   ========================================================================== */
+#leaderboardInsights{
+  gap:16px!important;
+}
+#leaderboardInsights .leaderboard-dashboard{
+  padding:5px 0 16px!important;
+}
+#leaderboardInsights .leaderboard-leaders{
+  grid-template-columns:minmax(0,1.52fr) minmax(122px,.78fr)!important;
+  gap:18px!important;
+}
+#leaderboardInsights .leaderboard-daily-leader{
+  gap:14px!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{
+  width:78px!important;
+  height:78px!important;
+  flex-basis:78px!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring strong{
+  font-size:1.26rem!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring span{
+  font-size:.55rem!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>span,
+#leaderboardInsights .leaderboard-weekly-leader>span{
+  font-size:.54rem!important;
+  letter-spacing:.14em!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>strong{
+  font-size:1.18rem!important;
+  margin-top:5px!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>small{
+  font-size:.64rem!important;
+  margin-top:5px!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader{
+  padding-left:18px!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader>strong{
+  font-size:.92rem!important;
+  margin-top:6px!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader>small{
+  font-size:.62rem!important;
+  margin-top:6px!important;
+}
+#leaderboardInsights .leaderboard-summary-line{
+  margin-top:15px!important;
+  padding-top:13px!important;
+}
+#leaderboardInsights .leaderboard-summary-line span{
+  font-size:.5rem!important;
+}
+#leaderboardInsights .leaderboard-summary-line strong{
+  font-size:.84rem!important;
+}
+
+#leaderboardInsights .leaderboard-unified-card{
+  display:block!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+#leaderboardInsights .leaderboard-unified-head{
+  margin:0 0 10px!important;
+}
+#leaderboardInsights .leaderboard-unified-head h2{
+  font-size:1.2rem!important;
+}
+#leaderboardInsights .leaderboard-metric-head,
+#leaderboardInsights .leaderboard-viewport-row{
+  grid-template-columns:30px minmax(96px,1.65fr) repeat(4,minmax(38px,.62fr)) minmax(42px,.66fr) 52px!important;
+  column-gap:7px!important;
+}
+#leaderboardInsights .leaderboard-metric-head{
+  padding:0 10px 8px!important;
+  font-size:.44rem!important;
+  letter-spacing:.055em!important;
+}
+#leaderboardInsights .leaderboard-unified-list{
+  display:block!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  border-top:1px solid #e7ebf0!important;
+  border-bottom:1px solid #e7ebf0!important;
+}
+#leaderboardInsights .leaderboard-viewport-row{
+  min-height:78px!important;
+  height:78px!important;
+  padding:10px 10px!important;
+  border-bottom:1px solid #e7ebf0!important;
+  background:transparent!important;
+  transition:background .18s ease;
+}
+#leaderboardInsights .leaderboard-viewport-row:last-child{
+  border-bottom:0!important;
+}
+#leaderboardInsights .leaderboard-viewport-row.me{
+  box-shadow:inset 3px 0 0 #2f73ff!important;
+  background:linear-gradient(90deg,rgba(47,115,255,.055),rgba(47,115,255,0) 42%)!important;
+}
+#leaderboardInsights .leaderboard-viewport-row.leader:not(.me){
+  background:linear-gradient(90deg,rgba(47,115,255,.035),transparent 42%)!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .rank{
+  width:29px!important;
+  height:29px!important;
+  font-size:.64rem!important;
+}
+#leaderboardInsights .leaderboard-agent-trigger{
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+  min-width:0;
+  padding:7px 4px 7px 0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:inherit!important;
+  text-align:left;
+  cursor:pointer;
+}
+#leaderboardInsights .leaderboard-agent-trigger:active{
+  opacity:.62;
+}
+#leaderboardInsights .leaderboard-agent-trigger:focus-visible{
+  outline:2px solid #2f73ff;
+  outline-offset:3px;
+  border-radius:8px!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .agent strong{
+  font-size:.73rem!important;
+  line-height:1.08!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .agent small{
+  margin-top:4px!important;
+  font-size:.41rem!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{
+  font-size:.64rem!important;
+  line-height:1!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i{
+  width:82%!important;
+  height:3px!important;
+  margin-top:6px!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-appointment-metric strong{
+  font-size:.72rem!important;
+}
+#leaderboardInsights .leaderboard-viewport-row>em{
+  font-size:.82rem!important;
+  align-items:flex-end!important;
+}
+#leaderboardInsights .leaderboard-viewport-row>em small{
+  font-size:.38rem!important;
+  margin-top:4px!important;
+}
+#leaderboardInsights .leaderboard-note{
+  margin:8px 0 0!important;
+  padding:9px 3px 0!important;
+  font-size:.54rem!important;
+}
+
+html[data-theme="dark"] #leaderboardInsights .leaderboard-unified-list{
+  border-top-color:#252b33!important;
+  border-bottom-color:#252b33!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row{
+  border-bottom-color:#252b33!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row.me{
+  background:linear-gradient(90deg,rgba(47,115,255,.11),rgba(47,115,255,0) 42%)!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-agent-trigger{
+  color:#f2f4f6!important;
+}
+
+@media(max-width:390px){
+  #leaderboardInsights .leaderboard-leaders{
+    grid-template-columns:minmax(0,1.52fr) minmax(108px,.74fr)!important;
+    gap:13px!important;
+  }
+  #leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{
+    width:70px!important;height:70px!important;flex-basis:70px!important;
+  }
+  #leaderboardInsights .leaderboard-hero-copy>strong{font-size:1.08rem!important}
+  #leaderboardInsights .leaderboard-weekly-leader{padding-left:12px!important}
+  #leaderboardInsights .leaderboard-metric-head,
+  #leaderboardInsights .leaderboard-viewport-row{
+    grid-template-columns:27px minmax(82px,1.52fr) repeat(4,minmax(34px,.6fr)) minmax(38px,.62fr) 46px!important;
+    column-gap:4px!important;
+  }
+  #leaderboardInsights .leaderboard-metric-head{padding-inline:6px!important;font-size:.39rem!important}
+  #leaderboardInsights .leaderboard-viewport-row{padding-inline:6px!important;height:74px!important;min-height:74px!important}
+  #leaderboardInsights .leaderboard-viewport-row .agent strong{font-size:.67rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{font-size:.58rem!important}
+  #leaderboardInsights .leaderboard-viewport-row>em{font-size:.76rem!important}
+}
+
+/* =====================================================================
+   AGNT v1.30.6 — overlay + session review visual parity
+   Presentation only. No application/data logic changes.
+   ===================================================================== */
+
+/* Shared overlay backdrop: enough separation without washing out the UI. */
+.prospect-session-review-overlay,
+.leaderboard-agent-summary-overlay,
+.day-review-overlay,
+.knocking-capture-overlay,
+.action-sheet-modal,
+.manual-dialler-modal{
+  background:rgba(18,24,34,.34)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(118%)!important;
+  backdrop-filter:blur(18px) saturate(118%)!important;
+}
+
+/* SESSION REVIEW — light mode */
+.prospect-session-review{
+  background:#f8f9fb!important;
+  border:1px solid rgba(21,28,40,.08)!important;
+  box-shadow:0 28px 80px rgba(20,28,45,.22)!important;
+  color:#151922!important;
+}
+.prospect-session-review h2,
+.prospect-session-review-grid strong,
+.prospect-session-review strong{color:#151922!important}
+.prospect-session-review p,
+.prospect-session-review-grid span{color:#7e8797!important}
+.prospect-session-review-grid div{
+  background:#fff!important;
+  border:1px solid #e3e7ed!important;
+  box-shadow:none!important;
+}
+.prospect-session-review .primary{
+  background:#101217!important;
+  color:#fff!important;
+  border-color:#101217!important;
+}
+.knocking-review-rates>div{
+  background:#fff!important;
+  border:1px solid #e3e7ed!important;
+}
+.knocking-review-rates strong{color:#151922!important}
+.knocking-review-rates span{color:#8b94a3!important}
+
+/* AGENT SUMMARY — light mode */
+.leaderboard-agent-summary{
+  background:#f8f9fb!important;
+  border:1px solid rgba(21,28,40,.08)!important;
+  box-shadow:0 28px 80px rgba(20,28,45,.22)!important;
+  color:#151922!important;
+}
+.leaderboard-agent-summary header h2,
+.leaderboard-agent-summary-kpis strong,
+.leaderboard-agent-appointment strong,
+.leaderboard-agent-summary-empty strong{color:#151922!important}
+.leaderboard-agent-summary header span,
+.leaderboard-agent-summary header p,
+.leaderboard-agent-summary-kpis span,
+.leaderboard-agent-appointment small,
+.leaderboard-agent-appointment time,
+.leaderboard-agent-summary-empty p{color:#7e8797!important}
+.leaderboard-agent-summary header button{
+  background:#eef1f5!important;
+  border:1px solid #e0e4ea!important;
+  color:#596270!important;
+}
+.leaderboard-agent-summary-kpis div,
+.leaderboard-agent-summary-empty{
+  background:#fff!important;
+  border:1px solid #e3e7ed!important;
+}
+.leaderboard-agent-appointment{border-color:#e1e5eb!important}
+.leaderboard-agent-appointment>span{
+  background:#e9f1ff!important;
+  color:#1464eb!important;
+}
+.leaderboard-agent-summary>.primary{
+  background:#397dff!important;
+  border-color:#397dff!important;
+  color:#fff!important;
+}
+
+/* DAY REVIEW — complete light hierarchy, including headings and inner cards. */
+#dayReviewOverlay .day-review-card{
+  background:#f8f9fb!important;
+  border-color:rgba(21,28,40,.09)!important;
+  box-shadow:0 28px 80px rgba(20,28,45,.22)!important;
+  color:#151922!important;
+}
+#dayReviewOverlay .day-review-card h2,
+#dayReviewOverlay .day-review-metric strong,
+#dayReviewOverlay .day-review-plan strong{color:#151922!important}
+#dayReviewOverlay .day-review-card>p,
+#dayReviewOverlay .day-review-metric span,
+#dayReviewOverlay .day-review-metric small,
+#dayReviewOverlay .day-review-plan span{color:#7e8797!important}
+#dayReviewOverlay .day-review-metric,
+#dayReviewOverlay .day-review-plan{
+  background:#fff!important;
+  border-color:#e3e7ed!important;
+}
+#dayReviewOverlay .day-review-coach{
+  background:#edf4ff!important;
+  border:1px solid #dce9ff!important;
+}
+#dayReviewOverlay .day-review-coach p{color:#315073!important}
+#dayReviewOverlay .day-review-close{
+  background:#397dff!important;
+  border-color:#397dff!important;
+  color:#fff!important;
+}
+
+/* Action sheets / manual dialler / capture overlays — light mode clarity. */
+.action-sheet,
+.manual-dialler,
+.knocking-capture-card{
+  background:#f8f9fb!important;
+  border-color:rgba(21,28,40,.08)!important;
+  color:#151922!important;
+}
+.action-sheet-head h2,.manual-dialler-head h2,.knocking-capture-head h2{color:#151922!important}
+.action-sheet>p,.action-sheet-head p{color:#7e8797!important}
+.action-sheet-close,.manual-dialler-head button,.knocking-capture-head button{
+  background:#eef1f5!important;
+  border:1px solid #e0e4ea!important;
+  color:#596270!important;
+}
+
+/* DARK MODE — use true dark surfaces, never translucent white cards. */
+html[data-theme="dark"] .prospect-session-review-overlay,
+html[data-theme="dark"] .leaderboard-agent-summary-overlay,
+html[data-theme="dark"] .day-review-overlay,
+html[data-theme="dark"] .knocking-capture-overlay,
+html[data-theme="dark"] .action-sheet-modal,
+html[data-theme="dark"] .manual-dialler-modal{
+  background:rgba(3,6,10,.58)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(112%)!important;
+  backdrop-filter:blur(18px) saturate(112%)!important;
+}
+
+html[data-theme="dark"] .prospect-session-review,
+html[data-theme="dark"] .leaderboard-agent-summary,
+html[data-theme="dark"] #dayReviewOverlay .day-review-card,
+html[data-theme="dark"] .action-sheet,
+html[data-theme="dark"] .manual-dialler,
+html[data-theme="dark"] .knocking-capture-card{
+  background:#11151b!important;
+  border:1px solid #303640!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.46)!important;
+  color:#f4f6f8!important;
+}
+
+html[data-theme="dark"] .prospect-session-review h2,
+html[data-theme="dark"] .prospect-session-review strong,
+html[data-theme="dark"] .leaderboard-agent-summary header h2,
+html[data-theme="dark"] .leaderboard-agent-summary-kpis strong,
+html[data-theme="dark"] .leaderboard-agent-appointment strong,
+html[data-theme="dark"] .leaderboard-agent-summary-empty strong,
+html[data-theme="dark"] #dayReviewOverlay .day-review-card h2,
+html[data-theme="dark"] #dayReviewOverlay .day-review-metric strong,
+html[data-theme="dark"] #dayReviewOverlay .day-review-plan strong,
+html[data-theme="dark"] .action-sheet-head h2,
+html[data-theme="dark"] .manual-dialler-head h2,
+html[data-theme="dark"] .knocking-capture-head h2{
+  color:#f4f6f8!important;
+}
+
+html[data-theme="dark"] .prospect-session-review p,
+html[data-theme="dark"] .prospect-session-review-grid span,
+html[data-theme="dark"] .leaderboard-agent-summary header span,
+html[data-theme="dark"] .leaderboard-agent-summary header p,
+html[data-theme="dark"] .leaderboard-agent-summary-kpis span,
+html[data-theme="dark"] .leaderboard-agent-appointment small,
+html[data-theme="dark"] .leaderboard-agent-appointment time,
+html[data-theme="dark"] .leaderboard-agent-summary-empty p,
+html[data-theme="dark"] #dayReviewOverlay .day-review-card>p,
+html[data-theme="dark"] #dayReviewOverlay .day-review-metric span,
+html[data-theme="dark"] #dayReviewOverlay .day-review-metric small,
+html[data-theme="dark"] #dayReviewOverlay .day-review-plan span,
+html[data-theme="dark"] .action-sheet>p,
+html[data-theme="dark"] .action-sheet-head p{
+  color:#98a2b1!important;
+}
+
+html[data-theme="dark"] .prospect-session-review-grid div,
+html[data-theme="dark"] .knocking-review-rates>div,
+html[data-theme="dark"] .leaderboard-agent-summary-kpis div,
+html[data-theme="dark"] .leaderboard-agent-summary-empty,
+html[data-theme="dark"] #dayReviewOverlay .day-review-metric,
+html[data-theme="dark"] #dayReviewOverlay .day-review-plan{
+  background:#191e25!important;
+  border:1px solid #303640!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .knocking-review-rates strong{color:#f4f6f8!important}
+html[data-theme="dark"] .knocking-review-rates span{color:#98a2b1!important}
+html[data-theme="dark"] .leaderboard-agent-appointment{border-color:#2d333c!important}
+html[data-theme="dark"] .leaderboard-agent-appointment>span{
+  background:#172a4c!important;
+  color:#5b91ff!important;
+}
+html[data-theme="dark"] .leaderboard-agent-summary header button,
+html[data-theme="dark"] .action-sheet-close,
+html[data-theme="dark"] .manual-dialler-head button,
+html[data-theme="dark"] .knocking-capture-head button{
+  background:#1c2129!important;
+  border:1px solid #303640!important;
+  color:#c6ced8!important;
+}
+html[data-theme="dark"] #dayReviewOverlay .day-review-coach{
+  background:#111f35!important;
+  border:1px solid #20385d!important;
+}
+html[data-theme="dark"] #dayReviewOverlay .day-review-coach p{color:#a8bad2!important}
+
+/* Primary CTA contrast: blue in dark, black/blue as authored in light. */
+html[data-theme="dark"] .prospect-session-review .primary,
+html[data-theme="dark"] .leaderboard-agent-summary>.primary,
+html[data-theme="dark"] #dayReviewOverlay .day-review-close,
+html[data-theme="dark"] .action-sheet-actions .primary{
+  background:#397dff!important;
+  border-color:#397dff!important;
+  color:#fff!important;
+}
+html[data-theme="dark"] .action-sheet-actions .secondary{
+  background:#1c2129!important;
+  border:1px solid #303640!important;
+  color:#f4f6f8!important;
+}
+
+/* Prevent inner text from being blurred/faded by inherited opacity. */
+.prospect-session-review *,
+.leaderboard-agent-summary *,
+.day-review-card *,
+.action-sheet *,
+.manual-dialler *,
+.knocking-capture-card *{text-shadow:none}

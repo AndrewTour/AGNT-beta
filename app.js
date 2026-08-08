@@ -1446,23 +1446,26 @@ function leaderboardMetricItem(value,target,label,suffix=''){
   const complete=safeTarget>0&&safeValue>=safeTarget;
   return `<span class="leaderboard-performance-metric ${complete?'complete':''}" role="img" aria-label="${label}: ${safeValue}${suffix}, ${metricPct}% complete"><strong>${safeValue}${suffix}</strong><i><b style="width:${metricPct}%"></b></i></span>`;
 }
-function leaderboardAppointmentItem(value,label){
-  if(value==null)return `<span class="leaderboard-performance-metric leaderboard-appointment-metric unavailable" role="img" aria-label="${label} appointments: unavailable"><strong>—</strong></span>`;
+function leaderboardAppointmentItem(value,label='Appointments'){
+  if(value==null)return `<span class="leaderboard-performance-metric leaderboard-appointment-metric unavailable" role="img" aria-label="${label}: unavailable"><strong>—</strong></span>`;
   const safeValue=Math.max(0,Math.round(Number(value)||0));
-  return `<span class="leaderboard-performance-metric leaderboard-appointment-metric" role="img" aria-label="${label} appointments booked: ${safeValue}"><strong>${safeValue}</strong></span>`;
+  return `<span class="leaderboard-performance-metric leaderboard-appointment-metric" role="img" aria-label="${label} booked: ${safeValue}"><strong>${safeValue}</strong></span>`;
+}
+function leaderboardAppointmentTotal(appointments){
+  const values=[appointments?.MAP,appointments?.LAP,appointments?.BAP];
+  if(values.every(value=>value==null))return null;
+  return values.reduce((sum,value)=>sum+(Number.isFinite(Number(value))?Math.max(0,Math.round(Number(value))):0),0);
 }
 function leaderboardRowHtml(r,i,weekly=false){
-  const t=r.targets||{},appointments=normaliseLeaderboardAppointmentCounts(r.appointments),score=Math.max(0,Math.min(100,r.score||0)),name=escapeHtml(r.name||r.email?.split('@')[0]||'Agent');
-  return `<article class="leaderboard-row leaderboard-performance-row leaderboard-viewport-row ${r.uid===uid?'me':''} ${i===0?'leader':''}" data-agent-summary="${escapeHtml(r.uid||'')}" role="button" tabindex="0" aria-label="View ${name} appointment summary">
+  const t=r.targets||{},appointments=normaliseLeaderboardAppointmentCounts(r.appointments),appointmentTotal=leaderboardAppointmentTotal(appointments),score=Math.max(0,Math.min(100,r.score||0)),name=escapeHtml(r.name||r.email?.split('@')[0]||'Agent'),agentUid=escapeHtml(r.uid||'');
+  return `<article class="leaderboard-row leaderboard-performance-row leaderboard-viewport-row ${r.uid===uid?'me':''} ${i===0?'leader':''}">
     <b class="rank">${i+1}</b>
-    <div class="agent"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</div>
+    <button class="agent leaderboard-agent-trigger" type="button" data-agent-summary="${agentUid}" aria-label="View ${name} appointment summary"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</button>
     ${leaderboardMetricItem(r.calls,t.calls,'Calls')}
     ${leaderboardMetricItem(r.connects,t.connects,'Connects')}
     ${leaderboardMetricItem(r.data,t.data,'Data')}
     ${leaderboardMetricItem(r.knockMinutes,t.knock,'Knock','m')}
-    ${leaderboardAppointmentItem(appointments.MAP,'MAP')}
-    ${leaderboardAppointmentItem(appointments.LAP,'LAP')}
-    ${leaderboardAppointmentItem(appointments.BAP,'BAP')}
+    ${leaderboardAppointmentItem(appointmentTotal)}
     <em>${score}%<small>${weekly?'W':'D'}</small></em>
   </article>`;
 }
