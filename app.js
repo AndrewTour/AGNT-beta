@@ -103,18 +103,24 @@ function endSyncOperation({error=false}={}){pendingSyncOperations=Math.max(0,pen
 function clearSyncError(){syncHasError=false;refreshSyncStatus()}
 
 const appearanceMedia=window.matchMedia?.('(prefers-color-scheme: dark)');
+let authScreenActive=true;
 function normaliseAppearance(value){return value==='light'||value==='dark'?value:'system'}
-function effectiveTheme(pref=appearancePreference){return pref==='dark'||(pref==='system'&&appearanceMedia?.matches)?'dark':'light'}
+function effectiveTheme(pref=appearancePreference){
+  if(authScreenActive)return 'light';
+  return pref==='dark'||(pref==='system'&&appearanceMedia?.matches)?'dark':'light';
+}
 function applyAppearance(pref=appearancePreference,{persist=true}={}){
   appearancePreference=normaliseAppearance(pref);
   const theme=effectiveTheme(appearancePreference);
   document.documentElement.dataset.appearance=appearancePreference;
   document.documentElement.dataset.theme=theme;
+  document.documentElement.dataset.auth=authScreenActive?'true':'false';
   document.documentElement.style.colorScheme=theme;
   const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',theme==='dark'?'#0b0d11':'#ffffff');
   if(persist){try{localStorage.setItem('agnt:appearance',appearancePreference)}catch{}}
 }
-appearanceMedia?.addEventListener?.('change',()=>{if(appearancePreference==='system')applyAppearance('system',{persist:false})});
+function setAuthScreenActive(active){authScreenActive=Boolean(active);applyAppearance(appearancePreference,{persist:false})}
+appearanceMedia?.addEventListener?.('change',()=>{if(appearancePreference==='system'&&!authScreenActive)applyAppearance('system',{persist:false})});
 applyAppearance(localStorage.getItem('agnt:appearance')||'system',{persist:false});
 function storagePrefix(userId=uid){return `da:${userId||'local'}:`}
 function resetState(){days={};targets={...DEFAULTS};workDays=[...DEFAULT_WORK_DAYS];agentName='';calendarPreference='outlook';appearancePreference=normaliseAppearance(localStorage.getItem('agnt:appearance')||'system');applyAppearance(appearancePreference,{persist:false});leaderboardEntries=[];marketPulseEvents=[];selectedDate=todayKey();appointmentDate=selectedDate}
@@ -2430,7 +2436,7 @@ async function startCloud(user){
   refreshSyncStatus();showApp();scheduleLeaderboardPublish();
 }
 
-function showApp(){$('#authGate').classList.add('hidden');$('#app').classList.remove('hidden');$('#appointmentDatePicker').value=appointmentDate;restoreProspectingSessionState();restoreKnockingSessionState();renderKnockingSession();renderAll();ensureTick();showLaunchExperience()}
+function showApp(){setAuthScreenActive(false);$('#authGate').classList.add('hidden');$('#app').classList.remove('hidden');$('#appointmentDatePicker').value=appointmentDate;restoreProspectingSessionState();restoreKnockingSessionState();renderKnockingSession();renderAll();ensureTick();showLaunchExperience()}
 let viewportFrame=0;
 function updateAppViewport(){
   cancelAnimationFrame(viewportFrame);
@@ -2453,7 +2459,7 @@ function bindViewport(){
   window.visualViewport?.addEventListener('scroll',updateAppViewport,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateAppViewport();finaliseExpiredTimers().then(()=>renderAll())}});
 }
-async function init(){bindViewport();loadLocal('local');await finaliseExpiredTimers();if(!configured()){showAuthMessage('Firebase is not configured. You can still use device-only mode.');return}try{const fb=initializeApp(firebaseConfig);auth=getAuth(fb);await setPersistence(auth,browserLocalPersistence);db=initializeFirestore(fb,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});onAuthStateChanged(auth,u=>{if(u){startCloud(u)}else{clearActiveSession();$('#app').classList.add('hidden');$('#authGate').classList.remove('hidden')}})}catch(err){console.error(err);showAuthMessage(err.message)}}
+async function init(){bindViewport();loadLocal('local');await finaliseExpiredTimers();if(!configured()){showAuthMessage('Firebase is not configured. You can still use device-only mode.');return}try{const fb=initializeApp(firebaseConfig);auth=getAuth(fb);await setPersistence(auth,browserLocalPersistence);db=initializeFirestore(fb,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});onAuthStateChanged(auth,u=>{if(u){startCloud(u)}else{clearActiveSession();setAuthScreenActive(true);$('#app').classList.add('hidden');$('#authGate').classList.remove('hidden')}})}catch(err){console.error(err);showAuthMessage(err.message)}}
 function showAuthMessage(msg){$('#authMessage').textContent=msg}
 function switchView(id){if(id!=='appointmentsView'&&appointmentHistoryMode)setAppointmentHistoryScreen(null);$$('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));updateTopbar(id);if(id==='scheduleView'){renderTimeline();setTodayPage(todayPage);}if(id==='appointmentsView')renderAppointments();if(id==='prospectingView')renderProspecting();if(id==='insightsView')renderInsights()}
 

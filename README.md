@@ -1,3 +1,7 @@
+AGNT v1.30.2 — Appearance PWA Fixes
+
+Targeted fixes: Settings appearance selector visible in installed PWA, login always light, dark-mode ring parity.
+
 AGNT v1.30.1 — Appearance Modes
 
 Adds System / Light / Dark appearance selection in Settings. Light preserves the v1.29.4 UI. Dark uses explicit theme colours across navigation, controls, inputs, rings, cards, sheets and Prospector surfaces. No Firebase changes required.
