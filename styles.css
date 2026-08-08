@@ -7101,3 +7101,223 @@ main{min-height:0;overflow:hidden}
   .prospecting-hero strong{font-size:2.25rem!important}
   .prospecting-hero>button.primary{min-height:40px}
 }
+
+/* v1.29.2 — premium proportional polish.
+   Presentation-only refinement: no data, Firebase, navigation or control logic changes. */
+
+/* Prospector: keep the supporting line visually quiet and permanently single-line. */
+.prospecting-view .view-subtitle{
+  display:block;
+  max-width:none!important;
+  width:100%;
+  margin-top:5px;
+  margin-bottom:12px;
+  padding-right:28px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:clamp(.70rem,2.9vw,.82rem);
+  line-height:1.25;
+  letter-spacing:-.012em;
+}
+
+/* Use the room created by the flatter layout: calmer, more intentional control proportions. */
+.dashboard .metrics>.metric{
+  column-gap:18px;
+}
+.dashboard .actions:not(.knock-actions){
+  grid-template-columns:44px 48px 44px;
+  gap:10px;
+}
+.dashboard .actions:not(.knock-actions)>button{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  border-radius:50%!important;
+  font-size:1.18rem;
+}
+.dashboard .actions:not(.knock-actions)>.metric-percent.metric-ring{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  --agnt-ring-thickness:5.5px;
+}
+
+/* Knocking: dedicated three-control group with explicit tracks so controls can never overlap. */
+.dashboard .knock-actions{
+  display:grid;
+  grid-template-columns:48px 78px 44px!important;
+  gap:10px!important;
+  width:190px;
+  min-width:190px;
+  align-items:center;
+  justify-content:end;
+}
+.dashboard .knock-actions>.metric-percent.metric-ring{
+  width:48px!important;
+  height:48px!important;
+  min-width:48px!important;
+  justify-self:center;
+  --agnt-ring-thickness:5.5px;
+}
+.dashboard .knock-actions>button{
+  position:relative;
+  inset:auto;
+  transform:none!important;
+  margin:0!important;
+  min-width:0!important;
+  box-sizing:border-box;
+  justify-self:stretch;
+}
+.dashboard .knock-actions .timer{
+  width:78px!important;
+  height:44px!important;
+  min-width:78px!important;
+  border-radius:22px!important;
+}
+.dashboard .knock-actions .reset{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  border-radius:50%!important;
+  justify-self:end;
+}
+
+/* Prospector action rhythm: preserve the open layout but make every row use the same visual ratio. */
+.prospecting-toolbar{
+  grid-template-columns:minmax(0,1fr) 46px 46px!important;
+  gap:10px;
+  margin-bottom:22px;
+}
+.prospecting-search-wrap{
+  height:46px;
+  border-radius:15px!important;
+}
+.prospecting-call-button,
+.prospecting-add{
+  width:46px!important;
+  height:46px!important;
+  min-width:46px!important;
+  border-radius:15px!important;
+}
+.prospecting-hero{
+  min-height:138px;
+  padding:22px 2px!important;
+  gap:24px;
+}
+.prospecting-hero>button.primary{
+  min-width:122px;
+  max-width:138px;
+  min-height:46px;
+  padding:0 18px!important;
+  border-radius:15px!important;
+  font-size:.76rem;
+  font-weight:760;
+}
+.prospecting-hero strong{
+  font-size:2.82rem!important;
+  line-height:.92;
+  letter-spacing:-.055em;
+}
+.prospecting-hero small,
+.prospector-work-state{
+  line-height:1.35;
+}
+
+/* Premium vertical rhythm: slightly more breathing room without introducing new containers. */
+.prospector-sections{margin-bottom:18px}
+.timeline-view-head{margin-top:18px;margin-bottom:16px}
+.leaderboard-mode-tabs{margin-top:4px}
+
+/* Keep the bottom bar calm and proportional to the viewport. */
+.tabbar button{
+  min-height:50px;
+}
+.tabbar .tab-icon{
+  margin-bottom:1px;
+}
+
+@media(max-width:390px){
+  .prospecting-view .view-subtitle{
+    padding-right:18px;
+    font-size:.70rem;
+  }
+  .dashboard .metrics>.metric{column-gap:12px}
+  .dashboard .actions:not(.knock-actions){
+    grid-template-columns:42px 46px 42px;
+    gap:8px;
+  }
+  .dashboard .actions:not(.knock-actions)>button{
+    width:42px;height:42px;min-width:42px;
+  }
+  .dashboard .actions:not(.knock-actions)>.metric-percent.metric-ring{
+    width:46px;height:46px;min-width:46px;
+  }
+  .dashboard .knock-actions{
+    grid-template-columns:46px 72px 42px!important;
+    gap:8px!important;
+    width:176px;
+    min-width:176px;
+  }
+  .dashboard .knock-actions>.metric-percent.metric-ring{
+    width:46px!important;height:46px!important;min-width:46px!important;
+  }
+  .dashboard .knock-actions .timer{
+    width:72px!important;height:42px!important;min-width:72px!important;
+    border-radius:21px!important;
+  }
+  .dashboard .knock-actions .reset{
+    width:42px!important;height:42px!important;min-width:42px!important;
+  }
+  .prospecting-toolbar{
+    grid-template-columns:minmax(0,1fr) 44px 44px!important;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .prospecting-search-wrap{height:44px}
+  .prospecting-call-button,.prospecting-add{
+    width:44px!important;height:44px!important;min-width:44px!important;
+  }
+  .prospecting-hero{min-height:126px;padding:18px 2px!important;gap:14px}
+  .prospecting-hero strong{font-size:2.55rem!important}
+  .prospecting-hero>button.primary{
+    min-width:108px;
+    max-width:122px;
+    min-height:44px;
+    padding:0 13px!important;
+    font-size:.71rem;
+  }
+}
+
+@media(max-height:760px){
+  .prospecting-view .view-subtitle{margin-bottom:8px}
+  .dashboard .metrics>.metric{column-gap:10px}
+  .dashboard .actions:not(.knock-actions){
+    grid-template-columns:38px 42px 38px;
+    gap:7px;
+  }
+  .dashboard .actions:not(.knock-actions)>button{
+    width:38px;height:38px;min-width:38px;
+  }
+  .dashboard .actions:not(.knock-actions)>.metric-percent.metric-ring{
+    width:42px;height:42px;min-width:42px;
+  }
+  .dashboard .knock-actions{
+    grid-template-columns:42px 64px 38px!important;
+    gap:7px!important;
+    width:158px;
+    min-width:158px;
+  }
+  .dashboard .knock-actions>.metric-percent.metric-ring{
+    width:42px!important;height:42px!important;min-width:42px!important;
+  }
+  .dashboard .knock-actions .timer{
+    width:64px!important;height:38px!important;min-width:64px!important;
+    border-radius:19px!important;
+  }
+  .dashboard .knock-actions .reset{
+    width:38px!important;height:38px!important;min-width:38px!important;
+  }
+  .prospecting-hero{min-height:102px;padding:12px 2px!important;gap:12px}
+  .prospecting-hero>button.primary{min-height:40px}
+}
