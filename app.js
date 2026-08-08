@@ -690,7 +690,7 @@ function renderToday(){
     $(`#${m}TargetLabel`).textContent=`/${target}`;
     $(`#${m}TargetText`).textContent=past?'Final result':(!scheduled?'No target today':metricRemainingText(val,target));
     const ring=$(`#${m}Percent`);
-    const pacePct=(selectedDate===todayKey()&&scheduled)?Math.min(100,Math.round(expectedAt(m,target,new Date())/Math.max(1,target)*100)):0;
+    const paceNow=new Date(),pacePct=(selectedDate===todayKey()&&scheduled)?(paceNow>=workdayEnd(paceNow)?100:Math.min(100,Math.round(expectedAt(m,target,paceNow)/Math.max(1,target)*100))):0;
     ring.textContent=`${p}%`;
     ring.classList.add('metric-ring');
     ring.style.setProperty('--actual',p);
@@ -704,7 +704,7 @@ function renderToday(){
   $('#knockTargetText').textContent=past?'Final result':(!scheduled?'No target today':knockRemainingText(Math.floor(secs/60),kt));
   $('#knockRemaining').textContent=past?'Day locked':(!scheduled?'Not scheduled':knockPaceText(Math.floor(secs/60),kt));
   const knockMinutes=Math.floor(secs/60),knockActual=pct(knockMinutes,kt);
-  const knockExpected=(selectedDate===todayKey()&&scheduled)?Math.min(100,Math.round(expectedKnockAt(kt,new Date())/Math.max(1,kt)*100)):0;
+  const knockPaceNow=new Date(),knockPaceEnd=new Date(knockPaceNow);knockPaceEnd.setHours(17,0,0,0);const knockExpected=(selectedDate===todayKey()&&scheduled)?(knockPaceNow>=knockPaceEnd?100:Math.min(100,Math.round(expectedKnockAt(kt,knockPaceNow)/Math.max(1,kt)*100))):0;
   const knockRing=$('#knockPercent');
   if(knockRing){
     knockRing.textContent=`${knockActual}%`;

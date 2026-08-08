@@ -7336,3 +7336,37 @@ main{min-height:0;overflow:hidden}
   font-size:clamp(.62rem,2.7vw,.76rem);
   line-height:1.2;
 }
+
+
+/* v1.29.4 — three requested refinements only.
+   1) projection ring visibility, 2) standard Prospector subtitle sizing,
+   3) tighter search-to-session spacing. */
+
+/* Restore a true layered pace projection: actual progress sits over the faint expected ring. */
+.dashboard .metric-percent.metric-ring,
+.dashboard .knock .metric-percent.metric-ring{
+  background:
+    conic-gradient(var(--ring-color) 0 calc(var(--actual) * 1%), transparent 0),
+    conic-gradient(var(--agnt-ring-pace) 0 calc(var(--pace) * 1%), transparent 0),
+    var(--agnt-ring-track)!important;
+}
+
+/* Prospector subtitle matches the standard non-Today page subtitle while staying strictly single-line. */
+.app:has(#prospectingView.active) .view-subtitle{
+  font-size:.82rem;
+  line-height:1.15;
+  letter-spacing:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Pull the first Prospector session stack closer to search controls. */
+.app:has(#prospectingView.active) .prospecting-toolbar{
+  margin-bottom:10px;
+}
+
+@media(max-width:390px){
+  .app:has(#prospectingView.active) .view-subtitle{font-size:.82rem}
+  .app:has(#prospectingView.active) .prospecting-toolbar{margin-bottom:10px}
+}
