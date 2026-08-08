@@ -7370,3 +7370,335 @@ main{min-height:0;overflow:hidden}
   .app:has(#prospectingView.active) .view-subtitle{font-size:.82rem}
   .app:has(#prospectingView.active) .prospecting-toolbar{margin-bottom:10px}
 }
+
+/* =====================================================================
+   AGNT v1.30.0 — Appearance: System / Light / Dark
+   Theme-only feature. Light remains the v1.29.4 visual baseline.
+   ===================================================================== */
+
+/* Settings appearance selector */
+.appearance-settings{border:0;margin:18px 0 8px;padding:0}
+.appearance-settings legend{margin:0 0 7px;color:var(--agnt-label);font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.appearance-settings>p{margin:0 0 11px;color:var(--agnt-muted);font-size:.72rem;line-height:1.35}
+.appearance-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border:1px solid var(--agnt-border);border-radius:16px;background:var(--agnt-field)}
+.appearance-options label{margin:0!important;position:relative;display:block!important}
+.appearance-options input{position:absolute!important;opacity:0!important;pointer-events:none!important;width:1px!important;height:1px!important}
+.appearance-options span{display:grid;place-items:center;min-height:40px;padding:0 8px;border-radius:12px;color:var(--agnt-muted);font-size:.72rem;font-weight:760;cursor:pointer}
+.appearance-options input:checked+span{background:var(--agnt-card);color:var(--agnt-ink);box-shadow:0 2px 8px rgba(20,25,35,.08)}
+
+/* Core dark tokens. */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0b0d11;
+  --card:#11141a;
+  --line:#292d35;
+  --ink:#f5f6f7;
+  --muted:#969ca7;
+  --shadow:0 18px 50px rgba(0,0,0,.42);
+  --agnt-page:#0b0d11;
+  --agnt-card:#11141a;
+  --agnt-field:#171a20;
+  --agnt-border:#2a2e36;
+  --agnt-divider:#23272e;
+  --agnt-rule:#242830;
+  --agnt-ink:#f5f6f7;
+  --agnt-muted:#969ca7;
+  --agnt-label:#858d99;
+  --agnt-subtle:#8f96a2;
+  --agnt-faint:#6f7681;
+  --agnt-soft:#171a20;
+  --agnt-black:#f5f6f7;
+  --agnt-ring-track:#252932;
+  --agnt-ring-pace:#454b57;
+  --agnt-green:#59c99b;
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] .app,
+html[data-theme="dark"] .welcome-screen,
+html[data-theme="dark"] .offday-review-screen{
+  background:#0b0d11!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] body{background-image:none!important}
+
+/* Typography and icon colour */
+html[data-theme="dark"] .topbar h1,
+html[data-theme="dark"] .view-head h2,
+html[data-theme="dark"] .settings h2,
+html[data-theme="dark"] .prospecting-heading h2,
+html[data-theme="dark"] .leaderboard-head h2,
+html[data-theme="dark"] .timeline-overview strong,
+html[data-theme="dark"] .welcome-heading h1,
+html[data-theme="dark"] .welcome-appointments h2,
+html[data-theme="dark"] .welcome-simple-section h2,
+html[data-theme="dark"] .offday-review-heading h1,
+html[data-theme="dark"] .appointment-card-premium strong,
+html[data-theme="dark"] .leaderboard-kpis strong,
+html[data-theme="dark"] .profile-kpis strong,
+html[data-theme="dark"] .leaderboard-metric-cell strong,
+html[data-theme="dark"] .market-session-context strong,
+html[data-theme="dark"] .market-pulse-event-data strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .date,
+html[data-theme="dark"] .view-subtitle,
+html[data-theme="dark"] .welcome-date,
+html[data-theme="dark"] .welcome-heading p,
+html[data-theme="dark"] .welcome-simple-section p,
+html[data-theme="dark"] .offday-review-heading p,
+html[data-theme="dark"] .settings label,
+html[data-theme="dark"] .settings p,
+html[data-theme="dark"] .settings small{
+  color:#969ca7!important;
+}
+
+/* Main navigation and persistent chrome */
+html[data-theme="dark"] .tabbar{
+  background:rgba(11,13,17,.96)!important;
+  border-top-color:#242830!important;
+}
+html[data-theme="dark"] .tabbar button{color:#707681!important}
+html[data-theme="dark"] .tabbar button.active{color:#f5f6f7!important;background:transparent!important}
+html[data-theme="dark"] .tabbar button.active span,
+html[data-theme="dark"] .tabbar button.active .tab-icon{color:#f5f6f7!important}
+html[data-theme="dark"] .icon-btn,
+html[data-theme="dark"] .back-today,
+html[data-theme="dark"] .settings-shortcut-icon{
+  background:#171a20!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+}
+
+/* Segmented controls */
+html[data-theme="dark"] .today-page-tabs,
+html[data-theme="dark"] .prospector-sections,
+html[data-theme="dark"] .leaderboard-mode-tabs,
+html[data-theme="dark"] .appointment-filter,
+html[data-theme="dark"] .broadcast-review-switch{
+  background:#15181e!important;
+  border-color:#292d35!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .today-page-tabs button,
+html[data-theme="dark"] .prospector-sections button,
+html[data-theme="dark"] .leaderboard-mode-tabs button,
+html[data-theme="dark"] .appointment-filter button,
+html[data-theme="dark"] .broadcast-review-switch button{color:#868d98!important}
+html[data-theme="dark"] .today-page-tabs button.active,
+html[data-theme="dark"] .prospector-sections button.active,
+html[data-theme="dark"] .leaderboard-mode-tabs button.active,
+html[data-theme="dark"] .appointment-filter button.active,
+html[data-theme="dark"] .broadcast-review-switch button.active{
+  background:#2a2e36!important;
+  color:#f7f8fa!important;
+  box-shadow:none!important;
+}
+
+/* Inputs, search, selects and textareas */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .view-head input,
+html[data-theme="dark"] .settings input,
+html[data-theme="dark"] .settings select,
+html[data-theme="dark"] .appointment-form input,
+html[data-theme="dark"] .appointment-form select,
+html[data-theme="dark"] .appointment-form textarea,
+html[data-theme="dark"] .prospecting-toolbar input,
+html[data-theme="dark"] .pipeline-controls input,
+html[data-theme="dark"] .campaign-builder input,
+html[data-theme="dark"] .campaign-builder textarea,
+html[data-theme="dark"] .campaign-filter-grid select,
+html[data-theme="dark"] .campaign-delay select,
+html[data-theme="dark"] .broadcast-select-field select,
+html[data-theme="dark"] .bulk-sms-test-field textarea,
+html[data-theme="dark"] .hotspot-sms-preview textarea{
+  background:#171a20!important;
+  border-color:#2a2e36!important;
+  color:#f5f6f7!important;
+  -webkit-text-fill-color:#f5f6f7!important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:#6f7681!important;opacity:1}
+html[data-theme="dark"] .prospecting-search-wrap{
+  background:#171a20!important;
+  border-color:#2a2e36!important;
+}
+html[data-theme="dark"] .prospecting-search-wrap svg{stroke:#858d99!important}
+
+/* Standard buttons: preserve hierarchy and guarantee contrast. */
+html[data-theme="dark"] .primary{background:#397dff!important;color:#fff!important;border-color:transparent!important}
+html[data-theme="dark"] .secondary,
+html[data-theme="dark"] .file-btn{
+  background:#1a1e25!important;
+  border-color:#2e333c!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .text-btn{color:#a0a7b2!important}
+html[data-theme="dark"] .danger{background:rgba(255,86,105,.12)!important;color:#ff7d8f!important}
+html[data-theme="dark"] .prospecting-hero>.primary,
+html[data-theme="dark"] .prospecting-hero>.market-session-start-btn,
+html[data-theme="dark"] .pipeline-start,
+html[data-theme="dark"] .campaign-launch{
+  background:#f3f4f6!important;
+  color:#0b0d11!important;
+  border-color:#f3f4f6!important;
+}
+html[data-theme="dark"] .prospecting-call-button{
+  background:#171a20!important;
+  border-color:#2a2e36!important;
+  color:#f5f6f7!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .prospecting-add{background:#397dff!important;color:#fff!important}
+
+/* Home dashboard controls and pace rings. */
+html[data-theme="dark"] .dashboard .actions:not(.knock-actions)>button,
+html[data-theme="dark"] .knock-actions>button{
+  background:#181b21!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .dashboard .actions:not(.knock-actions)>button:last-child,
+html[data-theme="dark"] .knock-actions .timer{
+  background:#f4f5f7!important;
+  color:#0b0d11!important;
+}
+html[data-theme="dark"] .knock-actions .reset{background:#181b21!important;color:#a4abb5!important}
+html[data-theme="dark"] .metric-percent.metric-ring{
+  background:
+    conic-gradient(var(--ring-color) 0 calc(var(--actual) * 1%), transparent 0),
+    conic-gradient(var(--agnt-ring-pace) 0 calc(var(--pace) * 1%), transparent 0),
+    var(--agnt-ring-track)!important;
+}
+html[data-theme="dark"] .metric-percent.metric-ring::before{background:#0b0d11!important}
+html[data-theme="dark"] .leaderboard-ring::after,
+html[data-theme="dark"] .leaderboard-metric-ring>i::after{background:#0b0d11!important}
+html[data-theme="dark"] .leaderboard-metric-ring strong{color:#f5f6f7!important}
+
+/* Functional surfaces and cards */
+html[data-theme="dark"] .modal .glass,
+html[data-theme="dark"] .action-sheet.glass,
+html[data-theme="dark"] .manual-dialler.glass,
+html[data-theme="dark"] .calendar-shell.glass,
+html[data-theme="dark"] .day-review-card,
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .broadcast-step-surface,
+html[data-theme="dark"] #broadcastStepSuccess .campaign-history,
+html[data-theme="dark"] .knocking-hotspot-recommendations{
+  background:#11141a!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.4)!important;
+}
+html[data-theme="dark"] .appointment-card,
+html[data-theme="dark"] .appointment-card-premium,
+html[data-theme="dark"] .leaderboard-row:first-child,
+html[data-theme="dark"] .improvement-row,
+html[data-theme="dark"] .scorecard-appointment-item,
+html[data-theme="dark"] .scorecard-trend-grid article,
+html[data-theme="dark"] .scorecard-productivity-grid article,
+html[data-theme="dark"] .campaign-preview article,
+html[data-theme="dark"] .campaign-history article,
+html[data-theme="dark"] .broadcast-recipient-list label,
+html[data-theme="dark"] .knocking-hotspot-item,
+html[data-theme="dark"] .market-pulse-event-data{
+  background:#15181e!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+}
+
+/* Prospector detail surfaces */
+html[data-theme="dark"] .prospect-card{border-top-color:#252932!important;color:#f5f6f7!important}
+html[data-theme="dark"] .prospect-card-copy strong,
+html[data-theme="dark"] .prospect-profile-top h2,
+html[data-theme="dark"] .prospect-profile-grid strong,
+html[data-theme="dark"] .prospect-session-context strong{color:#f5f6f7!important}
+html[data-theme="dark"] .prospect-card-copy small,
+html[data-theme="dark"] .prospect-card-copy em,
+html[data-theme="dark"] .prospect-profile-top small,
+html[data-theme="dark"] .prospect-history small{color:#9097a2!important}
+html[data-theme="dark"] .prospect-avatar{background:#14243a!important;color:#6aa9ff!important}
+html[data-theme="dark"] .prospect-quick-actions a,
+html[data-theme="dark"] .prospect-quick-actions button{background:#14243a!important;color:#79b3ff!important}
+html[data-theme="dark"] .prospect-profile-grid,
+html[data-theme="dark"] .prospect-session-context{background:#292d35!important}
+html[data-theme="dark"] .prospect-profile-grid div,
+html[data-theme="dark"] .prospect-session-context div{background:#11141a!important}
+html[data-theme="dark"] .prospect-tags span,
+html[data-theme="dark"] .prospect-background{background:#171a20!important;color:#c3c7ce!important}
+html[data-theme="dark"] .prospect-history article+article{border-top-color:#252932!important}
+html[data-theme="dark"] .prospect-history article i{box-shadow:0 0 0 4px #14243a!important}
+
+/* Appointment outcomes / selectable rows */
+html[data-theme="dark"] .outcome-options button{
+  background:#15181e!important;
+  border-color:#2a2e36!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .outcome-options button.selected{background:rgba(57,125,255,.13)!important;border-color:#397dff!important}
+
+/* Settings controls */
+html[data-theme="dark"] .appearance-options,
+html[data-theme="dark"] .workday-options span,
+html[data-theme="dark"] .calendar-preference-options label,
+html[data-theme="dark"] .calendar-option-content{
+  background:#15181e!important;
+  border-color:#292d35!important;
+  color:#9ca3ae!important;
+}
+html[data-theme="dark"] .appearance-options input:checked+span,
+html[data-theme="dark"] .workday-options input:checked+span,
+html[data-theme="dark"] .calendar-preference-options input:checked+span,
+html[data-theme="dark"] .calendar-preference-options label:has(input:checked){
+  background:#2a2e36!important;
+  color:#f5f6f7!important;
+  border-color:#3a404b!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .calendar-preference-options span::before{background:#11141a!important;border-color:#6f7681!important}
+
+/* Manual dialler */
+html[data-theme="dark"] .manual-dialler-head button{background:#20242b!important;color:#f5f6f7!important}
+html[data-theme="dark"] .manual-dialler-number{color:#f5f6f7!important}
+html[data-theme="dark"] .manual-dialler-keypad button{
+  background:#171a20!important;
+  border-color:#2a2e36!important;
+  color:#f5f6f7!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .manual-dialler-keypad button:active{background:#242830!important}
+html[data-theme="dark"] .manual-dialler-keypad small{color:#858d99!important}
+
+/* Calendar / review / timeline utility surfaces */
+html[data-theme="dark"] .timeline-followup-check{background:#11141a!important}
+html[data-theme="dark"] .month,
+html[data-theme="dark"] .week-day,
+html[data-theme="dark"] .year-head button,
+html[data-theme="dark"] .scorecard-head button,
+html[data-theme="dark"] .scorecard-metric,
+html[data-theme="dark"] .scorecard-call{
+  background:#15181e!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .heatmap i{background:#20242b!important}
+
+/* Broadcast / campaign controls */
+html[data-theme="dark"] .broadcast-type-card,
+html[data-theme="dark"] .broadcast-audience-intro strong,
+html[data-theme="dark"] .broadcast-recipient-list label{color:#f5f6f7!important}
+html[data-theme="dark"] .campaign-preview article>span{background:#252932!important;color:#f5f6f7!important}
+html[data-theme="dark"] .campaign-checks label,
+html[data-theme="dark"] .campaign-filter-grid label,
+html[data-theme="dark"] .campaign-delay label{color:#a0a7b2!important}
+
+/* System bars / installed PWA background must follow theme, not force white. */
+@media (display-mode:standalone){
+  html[data-theme="dark"],html[data-theme="dark"] body{background:#0b0d11!important}
+}
+
+@media(max-width:390px){
+  .appearance-options span{font-size:.68rem}
+}

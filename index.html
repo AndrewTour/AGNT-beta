@@ -4,12 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#ffffff">
+<script>
+(function(){
+  try{
+    var pref=localStorage.getItem('agnt:appearance')||'system';
+    var dark=pref==='dark'||(pref==='system'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.appearance=pref;
+    document.documentElement.dataset.theme=dark?'dark':'light';
+    document.querySelector('meta[name="theme-color"]').setAttribute('content',dark?'#0b0d11':'#ffffff');
+  }catch(e){}
+})();
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=v1.29.4-pace-prospector-refine">
+<link rel="stylesheet" href="styles.css?v=v1.30.0-dark-mode">
 <title>AGNT</title>
 </head>
 <body>
@@ -723,6 +734,15 @@ Andrew Tour | McGrath</textarea></label>
             <label><input type="checkbox" name="workDay" value="0"><span>Sun</span></label>
           </div>
         </fieldset>
+        <fieldset class="appearance-settings">
+          <legend>Appearance</legend>
+          <p>Choose how AGNT looks on this device.</p>
+          <div class="appearance-options" role="radiogroup" aria-label="Appearance">
+            <label><input type="radio" name="appearancePreference" value="system"><span>System</span></label>
+            <label><input type="radio" name="appearancePreference" value="light"><span>Light</span></label>
+            <label><input type="radio" name="appearancePreference" value="dark"><span>Dark</span></label>
+          </div>
+        </fieldset>
         <fieldset class="calendar-preference-settings">
           <legend>Calendar Preference</legend>
           <p>Calendar</p>
@@ -856,6 +876,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=v1.29.4-pace-prospector-refine"></script>
+<script type="module" src="app.js?v=v1.30.0-dark-mode"></script>
 </body>
 </html>

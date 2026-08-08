@@ -1,3 +1,7 @@
+AGNT v1.30.0 — Appearance Modes
+
+Adds System / Light / Dark appearance selection in Settings. Light preserves the v1.29.4 UI. Dark uses explicit theme colours across navigation, controls, inputs, rings, cards, sheets and Prospector surfaces. No Firebase changes required.
+
 # AGNT V91 — Booking / Editor Header Separation
 
 Incremental update built from V90.
