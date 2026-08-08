@@ -1,5 +1,5 @@
-const CACHE='agnt-b20-buyer-list-session-2';
-const ASSETS=['./','./index.html','./styles.css?v=b20-buyer-list-session-1','./app.js?v=b20-buyer-list-session-1','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='agnt-v1.29.0';
+const ASSETS=['./','./index.html','./styles.css?v=v1.29.0-crux-visual','./app.js?v=b20-buyer-list-session-1','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

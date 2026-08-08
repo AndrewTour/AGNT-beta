@@ -6455,3 +6455,409 @@ body,.app{background:var(--agnt-page);color:var(--agnt-ink)}
 
 /* Buyer List session */
 .buyer-import-review{padding:18px}.buyer-import-review-head span{font-size:10px;font-weight:800;letter-spacing:.08em;color:#8a9099}.buyer-import-review-head h2{margin:4px 0;font-size:24px}.buyer-import-review-head p{margin:0 0 16px;color:var(--muted);font-size:13px}.buyer-import-rows{display:grid;gap:10px;max-height:58vh;overflow:auto;padding-right:2px;margin-bottom:14px}.buyer-import-rows article{position:relative;display:grid;gap:7px;padding:12px;border:1px solid rgba(0,0,0,.08);border-radius:16px;background:#f8f9fb}.buyer-import-rows input{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid rgba(0,0,0,.08);background:transparent;padding:8px 34px 8px 2px;font:inherit}.buyer-import-rows input:first-child{font-weight:800;font-size:15px}.buyer-import-rows article>button{position:absolute;right:9px;top:9px;width:28px;height:28px;border:0;border-radius:50%;background:#eceff3;color:#69717c;font-size:18px}.buyer-import-rows small{font-size:9px;font-weight:850;color:#b45a00;letter-spacing:.06em}.buyer-import-review>.primary{width:100%}
+
+/* v1.29.0 — CRUX-inspired visual architecture.
+   Presentation layer only. No IDs, data hooks, event targets, Firebase, auth,
+   Firestore, cache, sync, metric, timer, rollover or navigation logic changed. */
+:root{
+  --agnt-page:#ffffff;
+  --agnt-ink:#101114;
+  --agnt-subtle:#747b86;
+  --agnt-faint:#a4a9b1;
+  --agnt-rule:#eceef1;
+  --agnt-soft:#f5f6f7;
+  --agnt-blue:#1769ff;
+  --agnt-green:#079a67;
+  --agnt-red:#d83c54;
+  --agnt-nav-height:72px;
+}
+
+html,body{background:var(--agnt-page)!important}
+body::before,body::after{display:none!important}
+
+.app{
+  width:100%;
+  max-width:560px;
+  height:100dvh;
+  margin:0 auto;
+  padding:max(12px,env(safe-area-inset-top)) 16px calc(var(--agnt-nav-height) + max(8px,env(safe-area-inset-bottom))) 16px;
+  row-gap:0;
+  background:var(--agnt-page)!important;
+}
+
+.topbar{
+  min-height:68px;
+  padding:0;
+  border:0!important;
+  background:transparent;
+}
+.topbar h1{
+  margin:0 0 4px;
+  color:var(--agnt-ink);
+  font-size:1.55rem;
+  line-height:1;
+  font-weight:720;
+  letter-spacing:-.045em;
+}
+.date{color:var(--agnt-subtle);font-size:.76rem}
+.date-line{gap:6px}
+.top-actions{gap:6px}
+.icon-btn,.back-today{
+  width:38px;
+  height:38px;
+  min-width:38px;
+  padding:0;
+  border:0!important;
+  border-radius:50%;
+  background:var(--agnt-soft)!important;
+  box-shadow:none!important;
+}
+.back-today{width:auto;min-width:0;padding:0 12px;border-radius:999px}
+.sync-badge{font-size:.54rem}
+
+main{min-height:0;overflow:hidden}
+.view{padding:0 0 14px}
+.view-head{margin:18px 0 18px}
+.view-head>div>span,
+.section-label>span,
+.score-copy>span,
+.trend-wrap>span,
+.leaderboard-position span,
+.metric-copy>span,
+.timeline-overview-label{
+  color:var(--agnt-subtle)!important;
+  font-size:.63rem!important;
+  font-weight:760!important;
+  letter-spacing:.11em!important;
+}
+.view-head h2{font-size:1.45rem;letter-spacing:-.035em;font-weight:720}
+
+/* Flat surfaces: spacing and typography do the grouping instead of card chrome. */
+.glass{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Home — use the viewport itself as the primary surface. */
+.dashboard.active{
+  grid-template-rows:auto minmax(0,1fr);
+  gap:0;
+  padding-bottom:0;
+}
+.dashboard .score-week{
+  padding:8px 0 16px;
+  border-bottom:1px solid var(--agnt-rule)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.score-overview{
+  grid-template-columns:minmax(0,1fr) minmax(118px,.82fr);
+  gap:18px;
+  align-items:end;
+}
+.score-copy strong{
+  margin-top:8px;
+  color:var(--agnt-ink)!important;
+  font-size:3.65rem;
+  line-height:.88;
+  font-weight:650;
+  letter-spacing:-.075em;
+}
+.score-copy .momentum-whisper{
+  height:auto;
+  min-height:0;
+  max-height:none;
+  margin-top:10px;
+  color:var(--agnt-subtle);
+  font-size:.72rem;
+  line-height:1.35;
+  -webkit-line-clamp:2;
+}
+.trend-wrap{align-self:end}
+.trend-wrap>span{display:block;margin-bottom:6px}
+.score-week>.bar{
+  height:3px;
+  margin-top:14px;
+  border:0;
+  border-radius:999px;
+  background:#eceef1;
+  box-shadow:none;
+}
+.score-week>.bar i{background:var(--agnt-ink);box-shadow:none}
+.leaderboard-position{
+  min-height:0;
+  margin-top:14px;
+  padding:0 0 14px;
+  border:0!important;
+  border-bottom:1px solid var(--agnt-rule)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.leaderboard-position>div{row-gap:4px}
+.leaderboard-position small{color:var(--agnt-subtle);font-size:.62rem}
+.leaderboard-position>strong{
+  color:var(--agnt-ink)!important;
+  font-size:1.72rem;
+  font-weight:680;
+  letter-spacing:-.04em;
+}
+.now-card{
+  min-height:0;
+  margin:0;
+  padding:14px 0 0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.now-card-label{color:var(--agnt-blue)!important;font-size:.62rem!important;letter-spacing:.1em!important}
+.now-card-copy strong{font-size:.92rem;font-weight:700;letter-spacing:-.015em}
+.now-card-copy small{margin-top:3px;color:var(--agnt-subtle);font-size:.65rem}
+.now-card svg{width:18px;height:18px;color:var(--agnt-faint)}
+
+.dashboard .metrics{
+  display:grid;
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  min-height:0;
+  margin:0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible;
+}
+.dashboard .metrics>.metric{
+  padding:11px 0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  overflow:visible;
+}
+.dashboard .metrics>.metric + .metric::after{
+  left:0;
+  right:0;
+  background:var(--agnt-rule);
+  opacity:1;
+}
+.dashboard .metrics>.metric.complete::before{
+  left:-16px;
+  top:14px;
+  bottom:14px;
+  width:3px;
+  border-radius:99px;
+  background:var(--agnt-green);
+}
+.metric-copy{overflow:visible}
+.dashboard .metric-copy>span{color:var(--agnt-subtle)!important}
+.dashboard .metric-copy>small{
+  margin-top:4px;
+  color:var(--agnt-subtle)!important;
+  font-size:.68rem!important;
+  line-height:1.2;
+}
+.dashboard .metric-copy>em{
+  margin-top:3px;
+  color:var(--agnt-blue)!important;
+  font-size:.7rem!important;
+  line-height:1.2;
+}
+.dashboard .metric.complete .metric-copy>em{color:var(--agnt-green)!important}
+.dashboard .metric-copy>strong,
+.dashboard .knock #knockValue{
+  margin-top:5px;
+  color:var(--agnt-ink)!important;
+  font-size:1.92rem;
+  line-height:.95;
+  font-weight:650;
+  letter-spacing:-.055em;
+}
+.dashboard .metric-copy>strong>small{color:var(--agnt-faint)!important;font-size:.72rem!important;font-weight:520}
+
+.actions{gap:6px}
+.dashboard .actions:not(.knock-actions){grid-template-columns:38px 44px 38px}
+.dashboard .actions:not(.knock-actions)>button,
+.knock-actions>button{
+  width:38px;
+  height:38px;
+  min-width:38px;
+  border:0!important;
+  border-radius:50%!important;
+  background:var(--agnt-soft)!important;
+  color:var(--agnt-ink)!important;
+  box-shadow:none!important;
+  font-size:1.12rem;
+}
+.dashboard .actions:not(.knock-actions)>button:last-child,
+.knock-actions .timer{
+  background:var(--agnt-ink)!important;
+  color:#fff!important;
+}
+.metric-percent.metric-ring{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  --agnt-ring-thickness:5px;
+  border:0!important;
+  background:
+    conic-gradient(var(--ring-color) calc(var(--actual) * 1%),transparent 0),
+    conic-gradient(var(--agnt-ring-pace) calc(var(--pace) * 1%),transparent 0),
+    #eff1f3;
+  font-size:.61rem;
+}
+.metric-percent.metric-ring::before{background:#fff}
+.metric-percent.metric-ring::after{display:none}
+.knock-actions{grid-template-columns:44px 64px 38px;gap:6px}
+.knock-actions .timer{width:64px!important;border-radius:19px!important}
+.knock-actions .reset{background:var(--agnt-soft)!important;color:var(--agnt-subtle)!important}
+
+/* Today / Coach — editorial hierarchy with only functional containers retained. */
+.today-page-tabs{
+  position:sticky;
+  top:0;
+  z-index:5;
+  display:flex;
+  gap:20px;
+  padding:8px 0 12px;
+  margin:0 0 8px;
+  border-bottom:1px solid var(--agnt-rule);
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.today-page-tabs button{
+  min-height:32px;
+  padding:0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--agnt-faint);
+  box-shadow:none!important;
+  font-weight:650;
+}
+.today-page-tabs button.active{color:var(--agnt-ink)}
+.today-page-tabs button.active::after{height:2px;left:0;right:0;bottom:-13px;border-radius:0;background:var(--agnt-ink)}
+.timeline-view-head{margin-top:14px}
+.timeline-overview{
+  padding:4px 0 18px!important;
+  border-bottom:1px solid var(--agnt-rule)!important;
+}
+.timeline-overview strong{font-size:1.55rem;line-height:1.08;letter-spacing:-.045em;font-weight:680}
+.timeline-overview small{margin-top:7px;color:var(--agnt-subtle);font-size:.72rem;line-height:1.4}
+.daily-timeline{margin-top:0!important;padding:0!important}
+.open-day-review{border-radius:14px}
+
+/* Secondary screens: retain controls, remove ornamental card stacking. */
+.scorecard-hero,.scorecard-metrics,.scorecard-focus,
+.leaderboard-card,.weekly-leaderboard-card,.improvement-card,
+.appointment-form,.settings,.personal-bests,.monday-review,
+.year-card,.month-card,.insight{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.scorecard-hero,.scorecard-metrics,.scorecard-focus,
+.leaderboard-card,.weekly-leaderboard-card,.improvement-card,
+.appointment-form,.settings,.personal-bests,.monday-review,
+.year-card,.month-card,.insight{
+  padding-left:0!important;
+  padding-right:0!important;
+}
+.appointment-form,.settings,.scorecard-hero,.scorecard-metrics,.scorecard-focus,
+.leaderboard-card,.weekly-leaderboard-card,.improvement-card{
+  border-bottom:1px solid var(--agnt-rule)!important;
+}
+
+/* Full-width bottom navigation: no floating pill; the viewport carries the chrome. */
+.tabbar{
+  position:fixed;
+  z-index:25;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:560px;
+  min-height:calc(var(--agnt-nav-height) + env(safe-area-inset-bottom));
+  padding:7px 8px max(7px,env(safe-area-inset-bottom));
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  border:0!important;
+  border-top:1px solid var(--agnt-rule)!important;
+  border-radius:0!important;
+  background:rgba(255,255,255,.97)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(22px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(120%)!important;
+}
+.tabbar button{
+  min-width:0;
+  min-height:52px;
+  padding:5px 1px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#989da5;
+  box-shadow:none!important;
+}
+.tabbar button.active{color:var(--agnt-ink)!important;background:transparent!important}
+.tabbar .tab-icon,.tabbar .tab-icon svg{width:20px;height:20px}
+.tabbar span{margin-top:3px;font-size:.48rem;font-weight:560;letter-spacing:-.01em}
+
+/* Keep sheets/modals visually contained because containment carries interaction meaning. */
+.modal .glass,.action-sheet.glass,.manual-dialler.glass,.calendar-shell.glass,.day-review-card{
+  background:#fff!important;
+  border:1px solid var(--agnt-rule)!important;
+  border-radius:22px!important;
+  box-shadow:0 18px 50px rgba(20,24,32,.12)!important;
+}
+
+@media (display-mode:standalone){
+  html,body{background:#fff!important}
+  body{background:#fff!important}
+  .app{
+    position:fixed;
+    inset:0;
+    width:100%;
+    max-width:560px;
+    height:var(--app-height);
+    min-height:var(--app-height);
+    max-height:var(--app-height);
+    padding:max(12px,env(safe-area-inset-top)) 16px calc(var(--agnt-nav-height) + max(8px,env(safe-area-inset-bottom))) 16px;
+  }
+  .tabbar{bottom:0;width:100%;max-width:560px}
+}
+
+@media(max-width:390px){
+  .app{padding-left:14px;padding-right:14px}
+  .score-copy strong{font-size:3.3rem}
+  .dashboard .metric-copy>strong,.dashboard .knock #knockValue{font-size:1.72rem}
+  .dashboard .metrics>.metric.complete::before{left:-14px}
+  .tabbar span{font-size:.45rem}
+}
+
+@media(max-height:760px){
+  :root{--agnt-nav-height:64px}
+  .topbar{min-height:58px}
+  .topbar h1{font-size:1.38rem}
+  .dashboard .score-week{padding-top:4px;padding-bottom:10px}
+  .score-copy strong{font-size:2.75rem;margin-top:5px}
+  .score-copy .momentum-whisper{margin-top:6px;font-size:.62rem}
+  .leaderboard-position{margin-top:9px;padding-bottom:9px}
+  .now-card{padding-top:9px}
+  .dashboard .metrics>.metric{padding:7px 0}
+  .dashboard .metric-copy>small,.dashboard .metric-copy>em{font-size:.57rem!important}
+  .dashboard .metric-copy>strong,.dashboard .knock #knockValue{font-size:1.5rem}
+  .dashboard .actions:not(.knock-actions){grid-template-columns:34px 38px 34px}
+  .dashboard .actions:not(.knock-actions)>button,.knock-actions>button{width:34px;height:34px;min-width:34px}
+  .metric-percent.metric-ring{width:38px;height:38px;min-width:38px}
+  .knock-actions{grid-template-columns:38px 56px 34px}
+  .knock-actions .timer{width:56px!important}
+  .tabbar{min-height:calc(var(--agnt-nav-height) + env(safe-area-inset-bottom));padding-top:4px}
+  .tabbar button{min-height:46px}
+}
