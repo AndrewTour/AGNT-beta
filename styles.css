@@ -8100,3 +8100,176 @@ html[data-theme="dark"] #dayReviewOverlay .day-review-close{
     grid-template-columns:minmax(0,1fr) auto;
   }
 }
+
+
+/* =====================================================================
+   AGNT v1.30.4 — Today dark timeline parity + viewport leaderboard
+   Targeted UI only. Existing data/calculations remain unchanged.
+   ===================================================================== */
+
+/* Leaderboard header: compact circular D/W mode control replaces settings. */
+.leaderboard-mode-shortcut{
+  width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  padding:0!important;border-radius:50%!important;
+  display:grid;place-items:center;
+  border:1px solid #e5e8ed!important;background:#f4f5f7!important;color:#111318!important;
+  font-size:.72rem!important;font-weight:900!important;letter-spacing:.02em!important;
+  box-shadow:none!important;
+}
+.leaderboard-mode-shortcut.hidden{display:none!important}
+html[data-theme="dark"] .leaderboard-mode-shortcut{background:#191d23!important;border-color:#2b3139!important;color:#f5f7f9!important}
+
+/* Retire the large Day / Week selector without touching its existing mode logic. */
+.leaderboard-mode-tabs-legacy{display:none!important}
+
+/* Open the leaderboard to the viewport instead of a pill/card stack. */
+#insightsView.leaderboard-only-view{overflow:hidden!important}
+#leaderboardInsights{
+  height:100%;min-height:0;display:grid!important;
+  grid-template-rows:auto minmax(0,1fr);gap:12px;
+}
+#leaderboardInsights .leaderboard-dashboard{
+  margin:0!important;padding:2px 0 12px!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+#leaderboardInsights .leaderboard-leaders{
+  grid-template-columns:minmax(0,1.45fr) minmax(116px,.75fr);gap:16px;align-items:center;
+}
+#leaderboardInsights .leaderboard-daily-leader{gap:12px}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{width:70px;height:70px;flex-basis:70px}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring strong{font-size:1.14rem}
+#leaderboardInsights .leaderboard-hero-copy>strong{font-size:1.08rem}
+#leaderboardInsights .leaderboard-weekly-leader{padding-left:15px}
+#leaderboardInsights .leaderboard-weekly-leader>strong{font-size:.82rem}
+#leaderboardInsights .leaderboard-summary-line{margin-top:11px;padding-top:10px}
+#leaderboardInsights .leaderboard-summary-line strong{font-size:.76rem}
+
+#leaderboardInsights .leaderboard-unified-card{
+  min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+  display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto;align-content:start;
+}
+#leaderboardInsights .leaderboard-unified-head{margin:0 0 8px!important;align-items:end}
+#leaderboardInsights .leaderboard-unified-head h2{font-size:1.12rem;line-height:1.05;margin-top:4px}
+#leaderboardInsights .leaderboard-head-actions{gap:6px}
+#leaderboardInsights .leaderboard-live{min-height:28px;padding:0 10px;font-size:.52rem}
+#leaderboardInsights .leaderboard-period-controls button{min-width:32px;height:32px;padding:0 8px;border-radius:11px;font-size:.58rem}
+
+/* Column headings and each agent are a true single horizontal row. */
+#leaderboardInsights .leaderboard-metric-head,
+#leaderboardInsights .leaderboard-viewport-row{
+  display:grid!important;
+  grid-template-columns:24px minmax(66px,1.5fr) repeat(7,minmax(22px,.55fr)) 40px!important;
+  column-gap:3px!important;align-items:center!important;width:100%!important;min-width:0!important;
+}
+#leaderboardInsights .leaderboard-metric-head{
+  padding:0 4px 5px!important;margin:0!important;
+  color:#8c94a0;font-size:.39rem!important;font-weight:850;letter-spacing:.025em;text-transform:uppercase;
+  text-align:center;overflow:visible!important;
+}
+#leaderboardInsights .leaderboard-metric-head span:nth-child(2){text-align:left}
+#leaderboardInsights .leaderboard-unified-list{
+  display:grid!important;grid-template-rows:repeat(4,minmax(48px,1fr));gap:0!important;
+  min-height:0!important;overflow:hidden!important;padding:0!important;border-top:1px solid #e9edf2;
+}
+#leaderboardInsights .leaderboard-viewport-row{
+  min-height:48px!important;padding:7px 4px!important;margin:0!important;
+  border:0!important;border-bottom:1px solid #edf0f4!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;color:#111318!important;
+}
+#leaderboardInsights .leaderboard-viewport-row.me{box-shadow:inset 2px 0 0 #2f73ff!important}
+#leaderboardInsights .leaderboard-viewport-row.leader{background:linear-gradient(90deg,rgba(47,115,255,.045),transparent)!important}
+#leaderboardInsights .leaderboard-viewport-row .rank{
+  width:22px!important;height:22px!important;border-radius:50%;display:grid;place-items:center;
+  background:#f0f2f5;color:#343945;font-size:.55rem;font-weight:850;
+}
+#leaderboardInsights .leaderboard-viewport-row.leader .rank{background:#161a20;color:#fff}
+#leaderboardInsights .leaderboard-viewport-row .agent{min-width:0;display:block!important}
+#leaderboardInsights .leaderboard-viewport-row .agent strong{
+  display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:#16191f!important;font-size:.62rem!important;line-height:1.1;font-weight:850;
+}
+#leaderboardInsights .leaderboard-viewport-row .agent small{
+  display:block;margin-top:2px;color:#2f73ff!important;font-size:.38rem!important;line-height:1;text-transform:uppercase;letter-spacing:.06em;font-weight:850;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric{
+  min-width:0!important;display:grid!important;align-content:center!important;justify-items:center!important;overflow:hidden!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{
+  display:block!important;width:100%;overflow:hidden;text-overflow:clip;white-space:nowrap;
+  color:#20242b!important;font-size:.54rem!important;line-height:1!important;text-align:center;font-weight:850;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i{
+  display:block;width:78%;height:2px;margin-top:4px;border-radius:99px;background:#e8ecf1;overflow:hidden;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i b{display:block;height:100%;background:#94b5ff;border-radius:99px}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric.complete i b{background:#35b987}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-appointment-metric i{display:none!important}
+#leaderboardInsights .leaderboard-viewport-row>em{
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+  color:#2f73ff!important;font-size:.72rem!important;line-height:1;font-weight:900;font-style:normal;
+}
+#leaderboardInsights .leaderboard-viewport-row>em small{margin-top:2px;color:#9aa1ac;font-size:.34rem;font-weight:850;text-transform:uppercase}
+#leaderboardInsights .leaderboard-note{
+  margin:5px 0 0!important;padding:6px 2px 0!important;border-top:1px solid #edf0f4!important;
+  font-size:.5rem!important;line-height:1.2;color:#9299a4!important;
+}
+
+/* Dark-mode parity for the open leaderboard. */
+html[data-theme="dark"] #leaderboardInsights .leaderboard-unified-list{border-color:#252a31}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row{
+  color:#f3f5f7!important;border-color:#252a31!important;background:transparent!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row.leader{background:linear-gradient(90deg,rgba(47,115,255,.09),transparent)!important}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row .rank{background:#20252d;color:#f3f5f7}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row.leader .rank{background:#f1f3f6;color:#111318}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row .agent strong,
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{color:#f2f4f6!important}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i{background:#272c34}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-note{border-color:#252a31!important;color:#8d95a2!important}
+
+/* Today timeline: dark mode mirrors the working light timeline exactly. */
+html[data-theme="dark"] #scheduleView .today-overview-panel .daily-timeline{
+  background:#11151b!important;border-color:#2a3038!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item{
+  background:transparent!important;border-color:transparent!important;opacity:1!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .daily-timeline::before{
+  display:block!important;background:#343b45!important;opacity:1!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item:not(:last-child)::after{display:none!important}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-marker{
+  position:relative;z-index:2;background:#11151b!important;border-color:#596270!important;color:#87909d!important;
+  box-shadow:0 0 0 3px #11151b!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current{
+  background:rgba(47,115,255,.075)!important;border-radius:15px!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current .timeline-marker,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active .timeline-marker{
+  background:#2f73ff!important;border-color:#2f73ff!important;color:#fff!important;
+  box-shadow:0 0 0 4px rgba(47,115,255,.16),0 0 0 3px #11151b!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current strong,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active strong{color:#4a82ff!important}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.complete .timeline-marker{
+  background:#123026!important;border-color:#36b985!important;color:#55d3a2!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item strong{color:#f2f4f6!important}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item small,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item time{color:#919aa7!important}
+
+@media(max-width:390px){
+  #leaderboardInsights .leaderboard-leaders{grid-template-columns:minmax(0,1.5fr) minmax(100px,.72fr);gap:11px}
+  #leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{width:62px;height:62px;flex-basis:62px}
+  #leaderboardInsights .leaderboard-hero-copy>strong{font-size:.96rem}
+  #leaderboardInsights .leaderboard-weekly-leader{padding-left:10px}
+  #leaderboardInsights .leaderboard-metric-head,
+  #leaderboardInsights .leaderboard-viewport-row{grid-template-columns:22px minmax(58px,1.4fr) repeat(7,minmax(20px,.54fr)) 36px!important;column-gap:2px!important}
+  #leaderboardInsights .leaderboard-metric-head{font-size:.35rem!important;padding-inline:2px!important}
+  #leaderboardInsights .leaderboard-viewport-row{padding-inline:2px!important}
+  #leaderboardInsights .leaderboard-viewport-row .agent strong{font-size:.57rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{font-size:.49rem!important}
+  #leaderboardInsights .leaderboard-viewport-row>em{font-size:.66rem!important}
+}

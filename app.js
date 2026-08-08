@@ -608,7 +608,7 @@ function updateTopbar(id=activeViewId()){
   if(syncPopover&&syncPopover.parentElement!==document.body)document.body.append(syncPopover);
   const showDateNav=id==='todayView'||id==='scheduleView'||id==='appointmentsView';
   $('#dateNavActions')?.classList.toggle('hidden',!showDateNav);
-  $('#settingsShortcut')?.classList.toggle('hidden',id!=='insightsView');
+  $('#leaderboardModeShortcut')?.classList.toggle('hidden',id!=='insightsView');
   $('#homeShortcut')?.classList.toggle('hidden',id!=='settingsView');
 }
 function dayLogTime(at){
@@ -1453,22 +1453,17 @@ function leaderboardAppointmentItem(value,label){
 }
 function leaderboardRowHtml(r,i,weekly=false){
   const t=r.targets||{},appointments=normaliseLeaderboardAppointmentCounts(r.appointments),score=Math.max(0,Math.min(100,r.score||0)),name=escapeHtml(r.name||r.email?.split('@')[0]||'Agent');
-  return `<article class="leaderboard-row leaderboard-performance-row ${r.uid===uid?'me':''} ${i===0?'leader':''}" data-agent-summary="${escapeHtml(r.uid||'')}" role="button" tabindex="0" aria-label="View ${name} appointment summary">
-    <div class="leaderboard-performance-head">
-      <b class="rank">${i+1}</b>
-      <div class="agent"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</div>
-      <em>${score}%<small>${weekly?'Week':'Day'}</small></em>
-    </div>
-    <i class="leaderboard-overall-progress" aria-hidden="true"><b style="width:${score}%"></b></i>
-    <div class="leaderboard-performance-metrics">
-      ${leaderboardMetricItem(r.calls,t.calls,'Calls')}
-      ${leaderboardMetricItem(r.connects,t.connects,'Connects')}
-      ${leaderboardMetricItem(r.data,t.data,'Data')}
-      ${leaderboardMetricItem(r.knockMinutes,t.knock,'Knock','m')}
-      ${leaderboardAppointmentItem(appointments.MAP,'MAP')}
-      ${leaderboardAppointmentItem(appointments.LAP,'LAP')}
-      ${leaderboardAppointmentItem(appointments.BAP,'BAP')}
-    </div>
+  return `<article class="leaderboard-row leaderboard-performance-row leaderboard-viewport-row ${r.uid===uid?'me':''} ${i===0?'leader':''}" data-agent-summary="${escapeHtml(r.uid||'')}" role="button" tabindex="0" aria-label="View ${name} appointment summary">
+    <b class="rank">${i+1}</b>
+    <div class="agent"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</div>
+    ${leaderboardMetricItem(r.calls,t.calls,'Calls')}
+    ${leaderboardMetricItem(r.connects,t.connects,'Connects')}
+    ${leaderboardMetricItem(r.data,t.data,'Data')}
+    ${leaderboardMetricItem(r.knockMinutes,t.knock,'Knock','m')}
+    ${leaderboardAppointmentItem(appointments.MAP,'MAP')}
+    ${leaderboardAppointmentItem(appointments.LAP,'LAP')}
+    ${leaderboardAppointmentItem(appointments.BAP,'BAP')}
+    <em>${score}%<small>${weekly?'W':'D'}</small></em>
   </article>`;
 }
 function leaderboardAppointmentPeriodLabel(){return leaderboardMode==='week'?`Week ${formatWeekRange(selectedLeaderboardWeekDate())}`:fmtDate(selectedLeaderboardDayKey())}
@@ -1492,6 +1487,7 @@ function renderUnifiedLeaderboard(){
   const isWeek=leaderboardMode==='week',rows=isWeek?weeklyLeaderboardRows():dailyLeaderboardRows();
   $('#leaderboardDayTab').classList.toggle('active',!isWeek);$('#leaderboardWeekTab').classList.toggle('active',isWeek);
   $('#leaderboardDayTab').setAttribute('aria-selected',String(!isWeek));$('#leaderboardWeekTab').setAttribute('aria-selected',String(isWeek));
+  if($('#leaderboardModeShortcut')){$('#leaderboardModeShortcut').textContent=isWeek?'W':'D';$('#leaderboardModeShortcut').setAttribute('aria-label',isWeek?'Switch leaderboard to daily view':'Switch leaderboard to weekly view');$('#leaderboardModeShortcut').title=isWeek?'Weekly leaderboard':'Daily leaderboard';}
   $('#dayHistoryControls').classList.toggle('hidden',isWeek);$('#weekHistoryControls').classList.toggle('hidden',!isWeek);
   $('#leaderboardPeriodLabel').textContent=isWeek?'WEEKLY LEADERBOARD':'DAILY LEADERBOARD';
   $('#leaderboardDate').textContent=isWeek?`Week ${formatWeekRange(selectedLeaderboardWeekDate())}`:fmtDate(selectedLeaderboardDayKey());
@@ -2491,7 +2487,7 @@ $('#knockingSession').addEventListener('click',async e=>{const adjust=e.target.c
 $('#knockingSession').addEventListener('submit',async e=>{if(e.target.id!=='knockingCaptureForm')return;e.preventDefault();await submitKnockingCapture(e.target)});
 document.querySelector('.today-page-tabs')?.addEventListener('click',e=>{const button=e.target.closest('[data-today-page]');if(button)setTodayPage(button.dataset.todayPage)});
 let todaySwipeStartX=0,todaySwipeStartY=0;$('#scheduleView')?.addEventListener('touchstart',e=>{const touch=e.changedTouches?.[0];if(!touch)return;todaySwipeStartX=touch.clientX;todaySwipeStartY=touch.clientY},{passive:true});$('#scheduleView')?.addEventListener('touchend',e=>{const touch=e.changedTouches?.[0];if(!touch)return;const dx=touch.clientX-todaySwipeStartX,dy=touch.clientY-todaySwipeStartY;if(Math.abs(dx)<60||Math.abs(dx)<=Math.abs(dy)*1.25)return;const pages=['overview','insights','log'],index=pages.indexOf(todayPage),next=dx<0?Math.min(pages.length-1,index+1):Math.max(0,index-1);if(next!==index)setTodayPage(pages[next])},{passive:true});
-$('#openTodayTimeline').onclick=()=>switchView('scheduleView');$('#resetKnock').onclick=resetKnock;$('#knockingMetricCard').onclick=e=>{if(e.target.closest('button'))return;openKnockingHistory()};$('#knockingMetricCard').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button')){e.preventDefault();openKnockingHistory()}};$('#closeKnockingHistory').onclick=closeKnockingHistory;$('#previousDay').onclick=()=>shiftHeaderDate(-1);$('#nextDay').onclick=()=>shiftHeaderDate(1);$('#settingsShortcut').onclick=()=>switchView('settingsView');$('#homeShortcut').onclick=()=>switchView('todayView');$('#backToday').onclick=()=>{selectedDate=todayKey();appointmentDate=selectedDate;$('#appointmentDatePicker').value=appointmentDate;renderAll();ensureTick()};
+$('#openTodayTimeline').onclick=()=>switchView('scheduleView');$('#resetKnock').onclick=resetKnock;$('#knockingMetricCard').onclick=e=>{if(e.target.closest('button'))return;openKnockingHistory()};$('#knockingMetricCard').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button')){e.preventDefault();openKnockingHistory()}};$('#closeKnockingHistory').onclick=closeKnockingHistory;$('#previousDay').onclick=()=>shiftHeaderDate(-1);$('#nextDay').onclick=()=>shiftHeaderDate(1);$('#leaderboardModeShortcut').onclick=()=>{leaderboardMode=leaderboardMode==='week'?'day':'week';renderUnifiedLeaderboard()};$('#homeShortcut').onclick=()=>switchView('todayView');$('#backToday').onclick=()=>{selectedDate=todayKey();appointmentDate=selectedDate;$('#appointmentDatePicker').value=appointmentDate;renderAll();ensureTick()};
 $('.tabbar').onclick=e=>{const b=e.target.closest('button[data-view]');if(b)switchView(b.dataset.view)};
 $('#dailyTimeline').onclick=e=>{
   const prospectCheck=e.target.closest('[data-followup-prospect]');if(prospectCheck){switchView('prospectingView');openProspectLog(prospectCheck.dataset.followupProspect,false);return}
