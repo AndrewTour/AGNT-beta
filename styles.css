@@ -6861,3 +6861,243 @@ main{min-height:0;overflow:hidden}
   .tabbar{min-height:calc(var(--agnt-nav-height) + env(safe-area-inset-bottom));padding-top:4px}
   .tabbar button{min-height:46px}
 }
+
+/* v1.29.1 — visual refinement pass.
+   Keeps v1.29.0 viewport-led design while restoring proven control containment
+   where interaction benefits from it. Presentation layer only. */
+
+/* Header safety: long page titles/subtitles must never collide with actions. */
+.topbar>div:first-child,
+.view-head>div:first-child,
+.prospector-intro>div:first-child,
+.leaderboard-head>div:first-child{
+  min-width:0;
+  flex:1 1 auto;
+}
+.topbar .top-actions,
+.view-head>small,
+.view-head>div:last-child,
+.leaderboard-head-actions{
+  flex:0 0 auto;
+}
+.topbar h1,
+.view-head h2,
+.prospector-intro h2{
+  max-width:100%;
+  overflow-wrap:break-word;
+  text-wrap:balance;
+}
+.view-subtitle{
+  max-width:calc(100% - 88px);
+  margin-top:5px;
+  line-height:1.3;
+}
+.prospecting-view .view-subtitle{max-width:440px;margin-bottom:10px}
+
+/* Restore segmented-pill controls where the pills communicate selection. */
+.today-page-tabs{
+  position:relative;
+  top:auto;
+  z-index:5;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;
+  padding:4px;
+  margin:2px 0 14px;
+  border:1px solid rgba(118,128,154,.16)!important;
+  border-radius:15px!important;
+  background:rgba(242,244,249,.82)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.today-page-tabs button{
+  min-height:38px;
+  padding:0 10px;
+  border:0!important;
+  border-radius:11px!important;
+  background:transparent!important;
+  color:#858b94!important;
+  box-shadow:none!important;
+  font-size:.72rem;
+  font-weight:760;
+}
+.today-page-tabs button.active{
+  background:#fff!important;
+  color:var(--agnt-ink)!important;
+  box-shadow:0 2px 9px rgba(28,36,56,.09)!important;
+}
+.today-page-tabs button.active::after{display:none!important}
+
+.prospector-sections{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:4px;
+  padding:4px!important;
+  margin:4px 0 14px;
+  overflow:hidden;
+  border:1px solid rgba(118,128,154,.14)!important;
+  border-radius:16px!important;
+  background:#f2f4f7!important;
+  box-shadow:none!important;
+}
+.prospector-sections button{
+  min-width:0!important;
+  min-height:40px;
+  padding:0 6px;
+  border-radius:12px!important;
+  background:transparent!important;
+  color:#7f8691!important;
+  font-size:.71rem;
+  font-weight:760;
+  box-shadow:none!important;
+}
+.prospector-sections button.active{
+  background:#111318!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+
+.leaderboard-mode-tabs{
+  padding:4px!important;
+  border:1px solid rgba(118,128,154,.14)!important;
+  border-radius:16px!important;
+  background:#f2f4f7!important;
+  box-shadow:none!important;
+}
+.leaderboard-mode-tabs button{
+  min-height:38px;
+  border-radius:12px!important;
+  background:transparent!important;
+  color:#8b919a!important;
+  box-shadow:none!important;
+}
+.leaderboard-mode-tabs button.active{
+  background:#fff!important;
+  color:#111318!important;
+  box-shadow:0 2px 8px rgba(28,36,56,.08)!important;
+}
+
+/* Prospector: keep the new open layout, but return controls to compact working sizes. */
+.prospecting-toolbar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 44px 44px!important;
+  gap:8px;
+  align-items:center;
+  padding:0!important;
+  margin-bottom:18px;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.prospecting-search-wrap{min-width:0;height:44px;border-radius:14px!important}
+.prospecting-search-wrap input{min-width:0;font-size:.92rem}
+.prospecting-call-button,
+.prospecting-add{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  border-radius:14px!important;
+}
+.prospecting-hero{
+  min-height:122px;
+  padding:18px 2px!important;
+  gap:18px;
+  align-items:center;
+}
+.prospecting-hero>div{min-width:0;flex:1 1 auto}
+.prospecting-hero>button.primary{
+  flex:0 0 auto;
+  width:auto!important;
+  min-width:116px;
+  max-width:142px;
+  min-height:44px;
+  margin:0!important;
+  padding:0 16px!important;
+  border-radius:14px!important;
+  background:#111318!important;
+  color:#fff!important;
+  box-shadow:none!important;
+  font-size:.78rem;
+  white-space:nowrap;
+}
+.prospecting-hero strong{font-size:2.9rem!important;line-height:.94}
+.prospecting-hero small,.prospector-work-state{max-width:250px;line-height:1.3}
+
+/* Today: compact appointment action and make timeline headers collision-proof. */
+.timeline-view-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:end;
+  margin:16px 0 14px;
+}
+.timeline-view-head>div{min-width:0}
+.timeline-view-head h2{font-size:1.48rem;line-height:1.08}
+.timeline-view-head>small{max-width:148px;text-align:right;line-height:1.25;color:var(--agnt-subtle)}
+.timeline-item{min-width:0}
+.timeline-item>*{min-width:0}
+.timeline-item .appointment-call,
+.timeline-item a.appointment-call{
+  min-width:82px;
+  width:auto;
+  min-height:36px;
+  padding:0 16px;
+  border-radius:12px;
+}
+.open-day-review{min-height:66px;padding:12px 16px}
+
+/* Leaderboard: keep controls grouped, contained and sized consistently. */
+.leaderboard-head{gap:10px;align-items:end}
+.leaderboard-head-actions{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.leaderboard-period-controls{display:flex;gap:5px;align-items:center}
+.leaderboard-period-controls button{
+  height:34px!important;
+  min-width:34px!important;
+  padding:0 10px!important;
+  border:1px solid #e3e6eb!important;
+  border-radius:11px!important;
+  background:#f6f7f9!important;
+  color:#59606b!important;
+  box-shadow:none!important;
+}
+.leaderboard-live{min-height:34px;display:flex;align-items:center;padding:0 11px;border-radius:999px}
+
+/* Home: equalise control geometry while preserving the clean metric rows. */
+.dashboard .actions:not(.knock-actions){grid-template-columns:42px 46px 42px;gap:7px}
+.dashboard .actions:not(.knock-actions)>button{width:42px;height:42px;min-width:42px}
+.metric-percent.metric-ring{width:46px;height:46px;min-width:46px}
+.knock-actions{grid-template-columns:46px 70px 42px;gap:7px}
+.knock-actions>button{height:42px;min-width:42px}
+.knock-actions .timer{width:70px!important;height:42px!important;border-radius:21px!important}
+.knock-actions .reset{width:42px!important}
+
+/* Keep the navigation treatment from v1.29.0; improve label fit only. */
+.tabbar button{overflow:hidden}
+.tabbar span{max-width:100%;overflow:hidden;text-overflow:clip;white-space:nowrap}
+
+@media(max-width:390px){
+  .topbar h1{font-size:1.45rem}
+  .view-subtitle{max-width:calc(100% - 76px);font-size:.76rem}
+  .prospector-sections button{font-size:.66rem;padding-inline:3px}
+  .prospecting-hero{min-height:112px;gap:10px}
+  .prospecting-hero strong{font-size:2.55rem!important}
+  .prospecting-hero>button.primary{min-width:104px;max-width:122px;padding:0 12px!important;font-size:.72rem}
+  .timeline-view-head{grid-template-columns:1fr}
+  .timeline-view-head>small{max-width:none;text-align:left}
+  .leaderboard-head{align-items:start}
+  .leaderboard-head-actions{gap:5px}
+  .leaderboard-period-controls button{padding:0 8px!important}
+  .dashboard .actions:not(.knock-actions){grid-template-columns:40px 44px 40px;gap:6px}
+  .dashboard .actions:not(.knock-actions)>button{width:40px;height:40px;min-width:40px}
+  .metric-percent.metric-ring{width:44px;height:44px;min-width:44px}
+}
+
+@media(max-height:760px){
+  .today-page-tabs{margin-bottom:9px}
+  .today-page-tabs button,.prospector-sections button{min-height:34px}
+  .prospecting-toolbar{margin-bottom:12px}
+  .prospecting-hero{min-height:96px;padding:12px 2px!important}
+  .prospecting-hero strong{font-size:2.25rem!important}
+  .prospecting-hero>button.primary{min-height:40px}
+}
