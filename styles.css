@@ -9166,3 +9166,24 @@ html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.curre
 }
 html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active>div>strong,
 html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current>div>strong{color:#4f8cff!important}
+
+/* AGNT v1.30.10 — light-mode parity fixes only.
+   1) Active Prospector session buttons use the same solid blue state as Dark mode.
+   2) Today timeline connector remains visible on Light mode. */
+html:not([data-theme="dark"]) .prospecting-hero>.market-session-active-btn,
+html[data-theme="light"] .prospecting-hero>.market-session-active-btn,
+html:not([data-theme="dark"]) .market-pulse-card>.market-session-active-btn,
+html[data-theme="light"] .market-pulse-card>.market-session-active-btn{
+  background:#397dff!important;
+  color:#fff!important;
+  border-color:#397dff!important;
+  box-shadow:none!important;
+}
+
+html:not([data-theme="dark"]) #scheduleView .today-overview-panel .daily-timeline::before,
+html[data-theme="light"] #scheduleView .today-overview-panel .daily-timeline::before{
+  display:block!important;
+  background:#d7dce4!important;
+  opacity:1!important;
+}
+
