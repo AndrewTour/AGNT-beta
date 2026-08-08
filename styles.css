@@ -8716,3 +8716,275 @@ html[data-theme="dark"] .action-sheet-actions .secondary{
 .action-sheet *,
 .manual-dialler *,
 .knocking-capture-card *{text-shadow:none}
+
+/* =====================================================================
+   AGNT v1.30.7 — Leaderboard redesign
+   Leaderboard presentation only. Five metrics: Calls, Connects, Data,
+   Knocking, Appointments. Four agents visible, no horizontal scrolling.
+   ===================================================================== */
+
+/* DAY / WEEK control — same compact top-bar role, clearer label. */
+.leaderboard-mode-shortcut{
+  width:58px!important;
+  height:38px!important;
+  min-width:58px!important;
+  min-height:38px!important;
+  padding:0 10px!important;
+  border-radius:19px!important;
+  font-size:.57rem!important;
+  letter-spacing:.09em!important;
+}
+
+/* Give the overview real visual weight. */
+#leaderboardInsights{
+  gap:18px!important;
+}
+#leaderboardInsights .leaderboard-dashboard{
+  padding:8px 0 20px!important;
+}
+#leaderboardInsights .leaderboard-leaders{
+  grid-template-columns:minmax(0,1.62fr) minmax(132px,.78fr)!important;
+  gap:22px!important;
+  align-items:center!important;
+}
+#leaderboardInsights .leaderboard-daily-leader{
+  gap:17px!important;
+  align-items:center!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{
+  width:88px!important;
+  height:88px!important;
+  flex-basis:88px!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring strong{
+  font-size:1.48rem!important;
+  line-height:.96!important;
+}
+#leaderboardInsights .leaderboard-daily-leader .leaderboard-ring span{
+  margin-top:5px!important;
+  font-size:.58rem!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>span,
+#leaderboardInsights .leaderboard-weekly-leader>span{
+  font-size:.58rem!important;
+  letter-spacing:.16em!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>strong{
+  margin-top:7px!important;
+  font-size:1.34rem!important;
+  line-height:1.02!important;
+}
+#leaderboardInsights .leaderboard-hero-copy>small{
+  margin-top:7px!important;
+  font-size:.69rem!important;
+  line-height:1.25!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader{
+  padding-left:20px!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader>strong{
+  margin-top:7px!important;
+  font-size:1.01rem!important;
+  line-height:1.08!important;
+}
+#leaderboardInsights .leaderboard-weekly-leader>small{
+  margin-top:7px!important;
+  font-size:.66rem!important;
+}
+#leaderboardInsights .leaderboard-summary-line{
+  margin-top:18px!important;
+  padding-top:16px!important;
+}
+#leaderboardInsights .leaderboard-summary-line span{
+  font-size:.52rem!important;
+  letter-spacing:.02em!important;
+}
+#leaderboardInsights .leaderboard-summary-line strong{
+  font-size:.9rem!important;
+}
+
+/* Leaderboard section: open viewport, no card/pill treatment. */
+#leaderboardInsights .leaderboard-unified-card{
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+}
+#leaderboardInsights .leaderboard-unified-head{
+  margin:0 0 12px!important;
+  padding:0!important;
+  align-items:flex-end!important;
+}
+#leaderboardInsights .leaderboard-unified-head h2{
+  margin-top:3px!important;
+  font-size:1.34rem!important;
+  line-height:1!important;
+}
+#leaderboardInsights .leaderboard-unified-head>div>span{
+  font-size:.59rem!important;
+  letter-spacing:.16em!important;
+}
+#leaderboardInsights .leaderboard-head-actions{
+  gap:7px!important;
+}
+
+/* Exactly: rank + agent + Calls + Connects + Data + Knocking + Appts + Score. */
+#leaderboardInsights .leaderboard-metric-head,
+#leaderboardInsights .leaderboard-viewport-row{
+  grid-template-columns:34px minmax(112px,1.65fr) repeat(5,minmax(42px,.67fr)) 55px!important;
+  column-gap:7px!important;
+  width:100%!important;
+  min-width:0!important;
+}
+#leaderboardInsights .leaderboard-metric-head{
+  padding:0 8px 9px!important;
+  font-size:.43rem!important;
+  letter-spacing:.035em!important;
+  text-transform:none!important;
+  color:#8992a1!important;
+}
+#leaderboardInsights .leaderboard-metric-head span{
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-align:center!important;
+}
+#leaderboardInsights .leaderboard-metric-head span:nth-child(2){text-align:left!important}
+
+#leaderboardInsights .leaderboard-unified-list{
+  flex:0 0 auto!important;
+  display:block!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  border-top:1px solid #e5e9ee!important;
+  border-bottom:1px solid #e5e9ee!important;
+}
+#leaderboardInsights .leaderboard-viewport-row{
+  height:88px!important;
+  min-height:88px!important;
+  padding:11px 8px!important;
+  border-bottom:1px solid #e5e9ee!important;
+  background:transparent!important;
+  align-items:center!important;
+}
+#leaderboardInsights .leaderboard-viewport-row:last-child{border-bottom:0!important}
+#leaderboardInsights .leaderboard-viewport-row.me{
+  box-shadow:inset 3px 0 0 #2f73ff!important;
+  background:linear-gradient(90deg,rgba(47,115,255,.055),rgba(47,115,255,0) 38%)!important;
+}
+#leaderboardInsights .leaderboard-viewport-row.leader:not(.me){
+  background:linear-gradient(90deg,rgba(47,115,255,.026),transparent 36%)!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .rank{
+  width:31px!important;
+  height:31px!important;
+  font-size:.67rem!important;
+}
+#leaderboardInsights .leaderboard-agent-trigger{
+  padding:9px 4px 9px 0!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .agent strong{
+  font-size:.78rem!important;
+  line-height:1.04!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .agent small{
+  margin-top:5px!important;
+  font-size:.42rem!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric{
+  min-width:0!important;
+  width:100%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{
+  font-size:.69rem!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i{
+  width:84%!important;
+  max-width:36px!important;
+  height:3px!important;
+  margin-top:7px!important;
+}
+#leaderboardInsights .leaderboard-viewport-row .leaderboard-appointment-metric strong{
+  font-size:.76rem!important;
+}
+#leaderboardInsights .leaderboard-viewport-row>em{
+  font-size:.9rem!important;
+  line-height:1!important;
+  align-items:flex-end!important;
+  white-space:nowrap!important;
+}
+#leaderboardInsights .leaderboard-viewport-row>em small{
+  margin-top:5px!important;
+  font-size:.39rem!important;
+}
+#leaderboardInsights .leaderboard-note{
+  margin:10px 0 0!important;
+  padding:9px 3px 0!important;
+  font-size:.55rem!important;
+  line-height:1.3!important;
+}
+
+html[data-theme="dark"] #leaderboardInsights .leaderboard-unified-list{
+  border-color:#252b33!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row{
+  border-bottom-color:#252b33!important;
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-metric-head{color:#8e97a5!important}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row.me{
+  background:linear-gradient(90deg,rgba(47,115,255,.115),rgba(47,115,255,0) 38%)!important;
+}
+
+/* iPhone narrow widths: keep every metric visible without horizontal scroll. */
+@media(max-width:390px){
+  #leaderboardInsights{gap:15px!important}
+  #leaderboardInsights .leaderboard-dashboard{padding-top:5px!important;padding-bottom:16px!important}
+  #leaderboardInsights .leaderboard-leaders{
+    grid-template-columns:minmax(0,1.55fr) minmax(112px,.72fr)!important;
+    gap:14px!important;
+  }
+  #leaderboardInsights .leaderboard-daily-leader{gap:12px!important}
+  #leaderboardInsights .leaderboard-daily-leader .leaderboard-ring{
+    width:78px!important;height:78px!important;flex-basis:78px!important;
+  }
+  #leaderboardInsights .leaderboard-daily-leader .leaderboard-ring strong{font-size:1.32rem!important}
+  #leaderboardInsights .leaderboard-hero-copy>strong{font-size:1.17rem!important}
+  #leaderboardInsights .leaderboard-hero-copy>small{font-size:.62rem!important}
+  #leaderboardInsights .leaderboard-weekly-leader{padding-left:12px!important}
+  #leaderboardInsights .leaderboard-weekly-leader>strong{font-size:.9rem!important}
+  #leaderboardInsights .leaderboard-weekly-leader>small{font-size:.6rem!important}
+  #leaderboardInsights .leaderboard-summary-line{margin-top:15px!important;padding-top:13px!important}
+  #leaderboardInsights .leaderboard-unified-head h2{font-size:1.2rem!important}
+  #leaderboardInsights .leaderboard-metric-head,
+  #leaderboardInsights .leaderboard-viewport-row{
+    grid-template-columns:29px minmax(88px,1.5fr) repeat(5,minmax(34px,.61fr)) 45px!important;
+    column-gap:4px!important;
+  }
+  #leaderboardInsights .leaderboard-metric-head{
+    padding-inline:4px!important;
+    font-size:.36rem!important;
+    letter-spacing:0!important;
+  }
+  #leaderboardInsights .leaderboard-viewport-row{
+    height:82px!important;min-height:82px!important;padding:9px 4px!important;
+  }
+  #leaderboardInsights .leaderboard-viewport-row .rank{width:28px!important;height:28px!important;font-size:.62rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .agent strong{font-size:.68rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .agent small{font-size:.38rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric strong{font-size:.59rem!important}
+  #leaderboardInsights .leaderboard-viewport-row .leaderboard-performance-metric i{max-width:29px!important}
+  #leaderboardInsights .leaderboard-viewport-row .leaderboard-appointment-metric strong{font-size:.66rem!important}
+  #leaderboardInsights .leaderboard-viewport-row>em{font-size:.78rem!important}
+}
