@@ -9,3 +9,7 @@ No Firebase, authentication, Firestore, UID, sync, data, leaderboard, Today, Pro
 
 ## v1.30.7
 Leaderboard presentation redesign only: five metrics (Calls, Connects, Data, Knocking, Appts), larger overview stack, cleaner four-agent viewport rows, and DAY/WEEK mode label. No Firebase or data model changes.
+
+
+## v1.30.8
+Targeted UI pass only: rounded overlay/review surfaces, full leaderboard agent-row tap target for appointment detail, and dark-mode Weekly Review contrast parity. No Firebase or data-model changes.

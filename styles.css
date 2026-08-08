@@ -8988,3 +8988,136 @@ html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row.me{
   #leaderboardInsights .leaderboard-viewport-row .leaderboard-appointment-metric strong{font-size:.66rem!important}
   #leaderboardInsights .leaderboard-viewport-row>em{font-size:.78rem!important}
 }
+
+/* =====================================================================
+   AGNT v1.30.8 — overlay radius + row tap target + weekly review parity
+   Strictly presentation/accessibility changes requested after v1.30.7.
+   ===================================================================== */
+
+/* Every overlay/review surface uses the same premium rounded geometry. */
+.prospect-session-review,
+.leaderboard-agent-summary,
+#dayReviewOverlay .day-review-card,
+.action-sheet,
+.manual-dialler,
+.knocking-capture-card,
+.calendar-shell{
+  border-radius:28px!important;
+  overflow:hidden;
+}
+
+/* Agent Summary needs internal scrolling without sacrificing rounded shell. */
+.leaderboard-agent-summary{
+  border-radius:28px!important;
+}
+.leaderboard-agent-summary .leaderboard-agent-appointments{
+  scrollbar-gutter:stable;
+}
+
+/* Entire leaderboard agent row is the appointment-detail trigger. */
+#leaderboardInsights .leaderboard-viewport-row[data-agent-summary]{
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+#leaderboardInsights .leaderboard-viewport-row[data-agent-summary]:focus-visible{
+  outline:2px solid #397dff;
+  outline-offset:-2px;
+}
+#leaderboardInsights .leaderboard-agent-trigger{
+  pointer-events:none;
+}
+#leaderboardInsights .leaderboard-viewport-row[data-agent-summary]:active{
+  background:rgba(57,125,255,.045);
+}
+html[data-theme="dark"] #leaderboardInsights .leaderboard-viewport-row[data-agent-summary]:active{
+  background:rgba(57,125,255,.09)!important;
+}
+
+/* Weekly Review — dark mode visual parity with the rest of AGNT. */
+html[data-theme="dark"] .offday-review-screen{
+  background:#0b0d11!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .offday-review-heading h1,
+html[data-theme="dark"] .offday-review-section-head h2,
+html[data-theme="dark"] .offday-review-week-summary>div>strong,
+html[data-theme="dark"] .offday-metric-grid strong,
+html[data-theme="dark"] .offday-appointment-counts strong,
+html[data-theme="dark"] .offday-appointment-list strong,
+html[data-theme="dark"] .offday-empty strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .offday-review-heading p,
+html[data-theme="dark"] .offday-review-week-summary>p,
+html[data-theme="dark"] .offday-metric-grid small,
+html[data-theme="dark"] .offday-appointment-list small,
+html[data-theme="dark"] .offday-empty span{
+  color:#969eaa!important;
+}
+html[data-theme="dark"] .offday-review-heading>span,
+html[data-theme="dark"] .offday-review-section-head span,
+html[data-theme="dark"] .offday-review-week-summary>div>span,
+html[data-theme="dark"] .offday-review-week-days-head>span,
+html[data-theme="dark"] .offday-metric-grid span,
+html[data-theme="dark"] .offday-day-list span{
+  color:#8c95a4!important;
+}
+html[data-theme="dark"] .offday-review-score,
+html[data-theme="dark"] .offday-review-section,
+html[data-theme="dark"] .offday-review-week-card{
+  background:#11151b!important;
+  border:1px solid #2a3039!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .offday-metric-grid article,
+html[data-theme="dark"] .offday-day-list article,
+html[data-theme="dark"] .offday-appointment-counts span,
+html[data-theme="dark"] .offday-empty{
+  background:#191e25!important;
+  border-color:#2d333c!important;
+}
+html[data-theme="dark"] .offday-day-list article.rest,
+html[data-theme="dark"] .offday-day-list article.upcoming{
+  background:#15191f!important;
+}
+html[data-theme="dark"] .offday-day-list strong{
+  color:#c3cad4!important;
+}
+html[data-theme="dark"] .offday-day-list article.rest strong,
+html[data-theme="dark"] .offday-day-list article.upcoming strong{
+  color:#707987!important;
+}
+html[data-theme="dark"] .offday-day-list article.complete{
+  background:#10241d!important;
+}
+html[data-theme="dark"] .offday-day-list article.complete strong{
+  color:#59c99b!important;
+}
+html[data-theme="dark"] .offday-review-week-days,
+html[data-theme="dark"] .offday-appointment-list article{
+  border-color:#2a3039!important;
+}
+html[data-theme="dark"] .offday-metric-grid i{
+  background:#2a3039!important;
+}
+html[data-theme="dark"] .offday-metric-grid i b{
+  background:#397dff!important;
+}
+html[data-theme="dark"] .offday-appointment-type{
+  background:#172a4c!important;
+  color:#5b91ff!important;
+}
+html[data-theme="dark"] .offday-appointment-list em{
+  color:#6fa1ff!important;
+}
+html[data-theme="dark"] .offday-open-agnt{
+  background:#397dff!important;
+  border-color:#397dff!important;
+  color:#fff!important;
+}
+
+/* Light review keeps the established light palette; only action contrast is explicit. */
+html[data-theme="light"] .offday-open-agnt,
+html:not([data-theme="dark"]) .offday-open-agnt{
+  color:#fff;
+}

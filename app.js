@@ -1458,9 +1458,9 @@ function leaderboardAppointmentTotal(appointments){
 }
 function leaderboardRowHtml(r,i,weekly=false){
   const t=r.targets||{},appointments=normaliseLeaderboardAppointmentCounts(r.appointments),appointmentTotal=leaderboardAppointmentTotal(appointments),score=Math.max(0,Math.min(100,r.score||0)),name=escapeHtml(r.name||r.email?.split('@')[0]||'Agent'),agentUid=escapeHtml(r.uid||'');
-  return `<article class="leaderboard-row leaderboard-performance-row leaderboard-viewport-row ${r.uid===uid?'me':''} ${i===0?'leader':''}">
+  return `<article class="leaderboard-row leaderboard-performance-row leaderboard-viewport-row ${r.uid===uid?'me':''} ${i===0?'leader':''}" data-agent-summary="${agentUid}" role="button" tabindex="0" aria-label="View ${name} appointment summary">
     <b class="rank">${i+1}</b>
-    <button class="agent leaderboard-agent-trigger" type="button" data-agent-summary="${agentUid}" aria-label="View ${name} appointment summary"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</button>
+    <div class="agent leaderboard-agent-trigger"><strong>${name}</strong>${r.uid===uid?'<small>You</small>':i===0?'<small>Leading</small>':''}</div>
     ${leaderboardMetricItem(r.calls,t.calls,'Calls')}
     ${leaderboardMetricItem(r.connects,t.connects,'Connects')}
     ${leaderboardMetricItem(r.data,t.data,'Data')}
