@@ -9363,3 +9363,62 @@ html[data-theme="dark"] .knocking-recommendation-context span{
 html[data-theme="dark"] .knocking-hotspot-item p strong{
   color:#c9ced6!important;
 }
+
+/* AGNT v1.30.15 — Prospector session + Hot Spotting dark-mode parity only. */
+html[data-theme="dark"] .market-session-context{
+  background:#101b2d!important;
+  border:1px solid #1c2d48!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .market-session-context span{color:#5f9cff!important}
+html[data-theme="dark"] .market-session-context strong{color:#f5f6f7!important}
+html[data-theme="dark"] .market-session-context small{color:#9aa3b1!important}
+html[data-theme="dark"] .prospect-session-head-status span{
+  background:#14243a!important;
+  color:#6aa9ff!important;
+}
+html[data-theme="dark"] .prospect-session-card blockquote{
+  background:#171a20!important;
+  color:#c5cad1!important;
+}
+html[data-theme="dark"] .market-pulse-hero h3,
+html[data-theme="dark"] .prospecting-section-head h3,
+html[data-theme="dark"] .market-pulse-card h4{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .market-pulse-hero p,
+html[data-theme="dark"] .market-pulse-card>p,
+html[data-theme="dark"] .market-pulse-match span,
+html[data-theme="dark"] #marketPulseMatchSummary{
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .market-pulse-hero>strong{color:#f5f6f7!important}
+html[data-theme="dark"] .market-pulse-card{
+  background:#14181e!important;
+  border-color:#2b3038!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .market-pulse-card-head>button{
+  background:#1d2128!important;
+  color:#9da5b1!important;
+}
+html[data-theme="dark"] .market-pulse-event-data{
+  background:#101318!important;
+  border-color:#292d35!important;
+}
+html[data-theme="dark"] .market-pulse-event-data strong{color:#f5f6f7!important}
+html[data-theme="dark"] .market-pulse-event-data small{color:#9099a8!important}
+html[data-theme="dark"] .market-pulse-details span{
+  background:#1b1f26!important;
+  color:#c5cad1!important;
+}
+html[data-theme="dark"] .hotspot-opportunity-summary{
+  border-top-color:#292d35!important;
+  border-bottom-color:#292d35!important;
+}
+html[data-theme="dark"] .hotspot-opportunity-summary span{color:#9099a8!important}
+html[data-theme="dark"] .hotspot-opportunity-summary span strong{color:#f5f6f7!important}
+html[data-theme="dark"] .hotspot-opportunity-summary .priority-high strong{color:#ef5a52!important}
+html[data-theme="dark"] .hotspot-opportunity-summary .priority-medium strong{color:#d89a28!important}
+html[data-theme="dark"] .market-pulse-back,
+html[data-theme="dark"] #clearMarketPulseEvents{color:#a0a7b2!important}
