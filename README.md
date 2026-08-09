@@ -1,4 +1,4 @@
-# AGNT v1.30.12 — Track, Timeline + Appointment Priority
+# AGNT v1.30.13 — Track, Timeline + Appointment Priority
 
 Targeted logic restoration built directly on v1.30.8.
 
@@ -15,5 +15,5 @@ Leaderboard presentation redesign only: five metrics (Calls, Connects, Data, Kno
 Targeted UI pass only: rounded overlay/review surfaces, full leaderboard agent-row tap target for appointment detail, and dark-mode Weekly Review contrast parity. No Firebase or data-model changes.
 
 
-## v1.30.12
+## v1.30.13
 Restores On Track / At Risk / Off Track colour parity in Light and Dark mode, fixes dark projection-ring visibility, restores time-based Today timeline active highlighting, and orders appointment lists by urgency state then appointment time. No Firebase or data-model changes.
