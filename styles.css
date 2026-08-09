@@ -9187,3 +9187,22 @@ html[data-theme="light"] #scheduleView .today-overview-panel .daily-timeline::be
   opacity:1!important;
 }
 
+
+/* AGNT v1.30.11 — strictly Today timeline fixes only */
+#scheduleView .today-overview-panel .timeline-item.time-active .timeline-marker,
+#scheduleView .today-overview-panel .timeline-item.current .timeline-marker{
+ background:var(--blue)!important;color:transparent!important;border:0!important;box-shadow:none!important;
+}
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.time-active .timeline-marker,
+html[data-theme="dark"] #scheduleView .today-overview-panel .timeline-item.current .timeline-marker{
+ background:#397dff!important;color:transparent!important;border:0!important;box-shadow:none!important;
+}
+html:not([data-theme="dark"]) #scheduleView .today-overview-panel .daily-timeline::before,
+html[data-theme="light"] #scheduleView .today-overview-panel .daily-timeline::before{
+ display:block!important;content:''!important;position:absolute!important;
+ left:calc(15px + var(--timeline-axis-x))!important;top:39px!important;bottom:39px!important;
+ width:2px!important;background:#d6dbe3!important;opacity:1!important;
+ transform:translateX(-1px)!important;z-index:0!important;pointer-events:none!important;
+}
+#scheduleView .today-overview-panel .timeline-item{z-index:1}
+#scheduleView .today-overview-panel .timeline-marker{z-index:2}
