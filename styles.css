@@ -9250,3 +9250,116 @@ html[data-theme="dark"] #scheduleView .today-log-panel .smart-log-card.target{
 html[data-theme="dark"] #scheduleView .today-log-panel .smart-log-card.target strong{
   color:#68d4a7!important;
 }
+
+/* v1.30.14 — Door Knocking session dark-mode parity only. */
+html[data-theme="dark"] .knocking-session{
+  background:#0b0d11!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-session-head>button{
+  background:#181b21!important;
+  border-color:#2a2e36!important;
+  color:#5f9cff!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .knocking-session-head span,
+html[data-theme="dark"] .knocking-session-hint,
+html[data-theme="dark"] .knocking-session-log-head small{
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .knocking-session-head strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-session-card,
+html[data-theme="dark"] .knocking-session-grid button,
+html[data-theme="dark"] .knocking-session-grid .knocking-tally-card{
+  background:#11141a!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .knocking-session-grid span,
+html[data-theme="dark"] .knocking-session-grid .knocking-tally-card>span,
+html[data-theme="dark"] .knocking-session-log-head span{
+  color:#969daa!important;
+}
+html[data-theme="dark"] .knocking-session-grid strong,
+html[data-theme="dark"] .knocking-session-grid .knocking-tally-card>strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-session-grid small{
+  color:#5f9cff!important;
+}
+html[data-theme="dark"] .knocking-tally-actions button{
+  background:#181b21!important;
+  color:#5f9cff!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .knocking-tally-actions button:first-child{
+  color:#a4abb5!important;
+}
+html[data-theme="dark"] .knocking-session-rates>div{
+  background:#15181e!important;
+  border:1px solid #292d35!important;
+}
+html[data-theme="dark"] .knocking-session-rates strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-session-rates span{
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .knocking-session-log-section{
+  border-top-color:#292d35!important;
+}
+html[data-theme="dark"] .knocking-log-empty,
+html[data-theme="dark"] .knocking-log-item{
+  background:#15181e!important;
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .knocking-log-item strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-log-item small{
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .knocking-log-actions button{
+  background:#1b1f26!important;
+  color:#5f9cff!important;
+}
+html[data-theme="dark"] .knocking-hotspot-recommendations{
+  background:#11141a!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .knocking-hotspot-head strong,
+html[data-theme="dark"] .knocking-hotspot-item>div:first-child strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-hotspot-head small,
+html[data-theme="dark"] .knocking-hotspot-item>div:first-child small,
+html[data-theme="dark"] .knocking-hotspot-item p{
+  color:#9097a2!important;
+}
+html[data-theme="dark"] .knocking-hotspot-toggle-meta{
+  color:#8d95a2!important;
+}
+html[data-theme="dark"] .knocking-hotspot-toggle-meta b{
+  background:#f1f3f6!important;
+  color:#20242b!important;
+}
+html[data-theme="dark"] .knocking-hotspot-list{
+  border-top-color:#292d35!important;
+}
+html[data-theme="dark"] .knocking-hotspot-item{
+  background:#15181e!important;
+  border-color:#292d35!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .knocking-recommendation-context span{
+  background:#1b1f26!important;
+  color:#c5cad1!important;
+}
+html[data-theme="dark"] .knocking-hotspot-item p strong{
+  color:#c9ced6!important;
+}
