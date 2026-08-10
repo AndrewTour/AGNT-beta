@@ -9483,3 +9483,59 @@ html[data-theme="dark"] #scheduleView .smart-log-card.target strong{
   color:#66d6a6!important;
 }
 
+/* AGNT v1.30.20 — manual call outcome dark-mode parity only. */
+html[data-theme="dark"] .manual-call-outcome-sheet{
+  background:#11151c!important;
+  border-color:#2b313b!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-outcome-sheet .action-sheet-head h2,
+html[data-theme="dark"] .manual-call-outcome-sheet .action-sheet-head small{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-outcome-sheet .action-sheet-head p{
+  color:#98a1b2!important;
+}
+html[data-theme="dark"] .manual-call-outcome-sheet .action-sheet-close{
+  background:#1b2028!important;
+  border-color:#303641!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options button{
+  background:#181d25!important;
+  border-color:#303641!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options button span{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options button small{
+  color:#98a1b2!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options button:first-child{
+  background:#10271f!important;
+  border-color:#1c6045!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options button:first-child span{
+  color:#66d6a6!important;
+}
+html[data-theme="dark"] .manual-call-outcome-options .manual-call-cancelled{
+  background:#14181f!important;
+  color:#98a1b2!important;
+}
+html[data-theme="dark"] .manual-call-result{
+  background:#10271f!important;
+  border:1px solid #1c6045!important;
+}
+html[data-theme="dark"] .manual-call-result strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .manual-call-result small{
+  color:#a8b5b0!important;
+}
+html[data-theme="dark"] .manual-call-post-actions .secondary{
+  background:#1b2028!important;
+  border-color:#303641!important;
+  color:#f5f6f7!important;
+}
+
