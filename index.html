@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=1.30.20">
+<link rel="stylesheet" href="styles.css?v=1.31.0">
 <title>AGNT</title>
 </head>
 <body>
@@ -25,6 +25,28 @@
     <button id="localMode" class="text-btn" type="button">Continue on this device only</button>
     <small id="authMessage"></small>
   </form>
+</div>
+
+<div id="teamOnboarding" class="team-onboarding hidden" aria-hidden="true">
+  <section class="team-onboarding-card glass">
+    <div class="brand-mark">AGNT</div>
+    <div data-team-panel="choices">
+      <span class="team-onboarding-kicker">ACCOUNT SETUP</span><h1>How are you using AGNT?</h1><p id="teamOnboardingEmail" class="team-onboarding-email"></p>
+      <button id="teamChoiceSolo" class="team-choice" type="button"><strong>Just me</strong><span>Use AGNT solo</span></button>
+      <button id="teamChoiceCreate" class="team-choice" type="button"><strong>Create a team</strong><span>Start your own team</span></button>
+      <button id="teamChoiceJoin" class="team-choice" type="button"><strong>Join a team</strong><span>Find your team</span></button>
+    </div>
+    <div data-team-panel="create" class="hidden">
+      <button class="team-back text-btn" type="button" data-team-back>Back</button><span class="team-onboarding-kicker">CREATE TEAM</span><h1>Start your team</h1><p>Your team gets its own shared leaderboard. Your personal history stays attached to your account.</p>
+      <label>Team name<input id="newTeamName" type="text" maxlength="60" placeholder="Team name"></label><button id="createTeamSubmit" class="primary" type="button">Create team</button>
+    </div>
+    <div data-team-panel="join" class="hidden">
+      <button class="team-back text-btn" type="button" data-team-back>Back</button><span class="team-onboarding-kicker">JOIN TEAM</span><h1>Find your team</h1>
+      <div class="team-search-row"><input id="teamSearchInput" type="search" placeholder="Search teams"><button id="teamSearchButton" class="secondary" type="button">Search</button></div><div id="teamSearchResults" class="team-search-results"></div>
+      <div class="team-code-divider"><span>or use a team code</span></div><div class="team-search-row"><input id="teamCodeInput" type="text" autocapitalize="characters" placeholder="TEAM-1234"><button id="joinTeamCode" class="secondary" type="button">Join</button></div>
+    </div>
+    <small id="teamSetupMessage"></small>
+  </section>
 </div>
 
 <div id="welcomeScreen" class="welcome-screen hidden" aria-hidden="true">
@@ -705,6 +727,11 @@ Andrew Tour | McGrath</textarea></label>
           <article><span>This week</span><strong id="profileWeekScore">0%</strong></article>
           <article><span>Work days</span><strong id="profileWorkDays">4</strong></article>
         </div>
+
+        <fieldset id="teamAccountCard" class="team-account-settings">
+          <legend>Account</legend>
+          <div class="team-account-summary"><div><span id="teamAccountMode">Solo</span><strong id="teamAccountName">Solo experience</strong><small id="teamAccountRole"></small><small id="teamAccountCode"></small></div></div>
+        </fieldset>
         <label>Agent name<input id="agentName" type="text" maxlength="40" placeholder="Your name"></label>
         <label>Calls target<input id="callsTarget" type="number" min="1"></label>
         <label>Connects target<input id="connectsTarget" type="number" min="1"></label>
@@ -865,6 +892,6 @@ Andrew Tour | McGrath</textarea></label>
 </div>
 
 <div id="toast" class="toast"></div>
-<script type="module" src="app.js?v=1.30.20"></script>
+<script type="module" src="app.js?v=1.31.0"></script>
 </body>
 </html>

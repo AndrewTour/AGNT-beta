@@ -1,4 +1,4 @@
-# AGNT v1.30.20 — Track, Timeline + Appointment Priority
+# AGNT v1.31.0 — Team Accounts
 
 Targeted logic restoration built directly on v1.30.8.
 
@@ -17,3 +17,7 @@ Targeted UI pass only: rounded overlay/review surfaces, full leaderboard agent-r
 
 ## v1.30.20
 Restores On Track / At Risk / Off Track colour parity in Light and Dark mode, fixes dark projection-ring visibility, restores time-based Today timeline active highlighting, and orders appointment lists by urgency state then appointment time. No Firebase or data-model changes.
+
+
+## v1.31.0
+Adds account modes (Solo / Create Team / Join Team) and team-scoped leaderboards. Existing pre-update cloud profiles are assigned to Team Pana on first sign-in. No activity-data paths were changed.

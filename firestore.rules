@@ -1,19 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Private account data. Each agent can only access their own records.
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    function signedIn() { return request.auth != null; }
+    function isSelf(userId) { return signedIn() && request.auth.uid == userId; }
+    function isTeamMember(teamId) { return signedIn() && exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid)); }
+    function isTeamOwner(teamId) { return signedIn() && get(/databases/$(database)/documents/teams/$(teamId)).data.ownerUid == request.auth.uid; }
+
+    // Private account data remains UID separated exactly as before.
+    match /users/{userId}/{document=**} { allow read, write: if isSelf(userId); }
+
+    // Lightweight searchable directory. No member activity is stored here.
+    match /teamDirectory/{teamId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.teamId == teamId;
+      allow update, delete: if isTeamOwner(teamId);
     }
 
-    // Shared daily leaderboard. Signed-in agents can read the team table,
-    // but can only create or change the row that matches their own UID.
+    // Join-code lookup contains only code -> teamId.
+    match /teamCodes/{code} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update, delete: if signedIn();
+    }
+
+    match /teams/{teamId} {
+      allow read: if isTeamMember(teamId);
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid;
+      // Team Pana is the legacy team and can be materialised by an existing signed-in member.
+      allow create: if signedIn() && teamId == 'team_pana' && request.resource.data.name == 'Team Pana';
+      allow update, delete: if isTeamOwner(teamId) || (signedIn() && teamId == 'team_pana');
+
+      match /members/{userId} {
+        allow read: if isTeamMember(teamId);
+        allow create, update: if isSelf(userId) || isTeamOwner(teamId);
+        allow delete: if isSelf(userId) || isTeamOwner(teamId);
+      }
+
+      match /leaderboard/{userId} {
+        allow read: if isTeamMember(teamId);
+        allow create, update: if isSelf(userId) && isTeamMember(teamId) && request.resource.data.uid == request.auth.uid;
+        allow delete: if isSelf(userId) || isTeamOwner(teamId);
+      }
+    }
+
+    // Legacy collection is intentionally left readable/writable during the migration window.
+    // The updated app no longer reads or publishes here.
     match /leaderboard/{userId} {
-      allow read: if request.auth != null;
-      allow create, update: if request.auth != null
-                            && request.auth.uid == userId
-                            && request.resource.data.uid == request.auth.uid;
-      allow delete: if request.auth != null && request.auth.uid == userId;
+      allow read: if signedIn();
+      allow create, update: if isSelf(userId) && request.resource.data.uid == request.auth.uid;
+      allow delete: if isSelf(userId);
     }
   }
 }

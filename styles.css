@@ -9539,3 +9539,15 @@ html[data-theme="dark"] .manual-call-post-actions .secondary{
   color:#f5f6f7!important;
 }
 
+
+
+/* Team account onboarding */
+.team-onboarding{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:max(22px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom));background:var(--bg,#f5f5f7);overflow:auto}
+.team-onboarding.hidden{display:none}
+.team-onboarding-card{width:min(100%,430px);padding:28px 22px;border-radius:28px}
+.team-onboarding-card h1{margin:8px 0 8px;font-size:28px;line-height:1.05}.team-onboarding-card p{margin:0 0 20px;color:var(--muted,#6e6e73)}
+.team-onboarding-kicker{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted,#6e6e73)}.team-onboarding-email{font-size:13px}
+.team-choice{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:10px 0;padding:17px 18px;border:1px solid var(--line,rgba(0,0,0,.1));border-radius:18px;background:var(--surface,#fff);color:inherit;text-align:left}.team-choice strong{font-size:16px}.team-choice span{font-size:13px;color:var(--muted,#6e6e73)}
+.team-back{margin:-6px 0 14px;padding-left:0}.team-onboarding-card label{display:block;margin:18px 0 12px;font-size:12px;font-weight:700}.team-onboarding-card input{width:100%;box-sizing:border-box}.team-onboarding-card #teamSetupMessage{display:block;min-height:18px;margin-top:12px;color:var(--muted,#6e6e73)}
+.team-search-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.team-search-row .secondary{width:auto;margin:0}.team-search-results{display:grid;gap:8px;margin:12px 0}.team-search-result{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 15px;border:1px solid var(--line,rgba(0,0,0,.1));border-radius:15px;background:var(--surface,#fff);color:inherit;text-align:left}.team-search-result span{font-weight:700}.team-search-result small,.team-search-empty{color:var(--muted,#6e6e73);font-size:12px}.team-code-divider{display:flex;align-items:center;gap:10px;margin:20px 0 12px;color:var(--muted,#6e6e73);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.team-code-divider:before,.team-code-divider:after{content:"";height:1px;background:var(--line,rgba(0,0,0,.1));flex:1}
+.team-account-settings{margin-top:18px}.team-account-summary{padding:4px 0}.team-account-summary div{display:flex;flex-direction:column;gap:4px}.team-account-summary span{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--muted,#6e6e73);text-transform:uppercase}.team-account-summary strong{font-size:17px}.team-account-summary small{color:var(--muted,#6e6e73)}

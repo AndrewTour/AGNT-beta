@@ -1,7 +1,7 @@
 import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const DEFAULT_WORK_DAYS=[1,2,4,5];
@@ -15,6 +15,7 @@ let targets={...DEFAULTS}, days={}, prospects=[], prospectInteractions=[], marke
 let knockingSessionActive=false,knockingSessionVisible=false,knockingSessionEnding=false,knockingSessionStats={knocks:0,clients:0,data:0,MAP:0,LAP:0},knockingSessionLog=[],knockingSessionStartSeconds=0,knockingCaptureType='',knockingEditingLogId='';
 let year=new Date().getFullYear(), monthCursor=new Date(), uid='local', currentUser=null, cloud=false, db=null, auth=null;
 let unsubDays=null, unsubProfile=null, unsubLeaderboard=null, unsubProspecting=null, timerTick=null, syncTimer=null, leaderboardPublishTimer=null, prospectingSaveTimer=null;
+let accountMode='solo',teamId=null,teamRole=null,teamName='',teamJoinCode='',creatingAccount=false,newAccountUidPending='',teamOnboardingActive=false;
 let pendingSyncOperations=0, syncHasError=false, lastLeaderboardSignature='', lastProspectingSignature='';
 let pendingProspectingPayload=null, pendingProspectingSignature='', prospectingWriteInFlight=false, prospectingSaveWaiters=[];
 let editingAppointment=null;
@@ -123,7 +124,7 @@ function setAuthScreenActive(active){authScreenActive=Boolean(active);applyAppea
 appearanceMedia?.addEventListener?.('change',()=>{if(appearancePreference==='system'&&!authScreenActive)applyAppearance('system',{persist:false})});
 applyAppearance(localStorage.getItem('agnt:appearance')||'system',{persist:false});
 function storagePrefix(userId=uid){return `da:${userId||'local'}:`}
-function resetState(){days={};targets={...DEFAULTS};workDays=[...DEFAULT_WORK_DAYS];agentName='';calendarPreference='outlook';appearancePreference=normaliseAppearance(localStorage.getItem('agnt:appearance')||'system');applyAppearance(appearancePreference,{persist:false});leaderboardEntries=[];marketPulseEvents=[];selectedDate=todayKey();appointmentDate=selectedDate}
+function resetState(){days={};targets={...DEFAULTS};workDays=[...DEFAULT_WORK_DAYS];agentName='';calendarPreference='outlook';appearancePreference=normaliseAppearance(localStorage.getItem('agnt:appearance')||'system');applyAppearance(appearancePreference,{persist:false});leaderboardEntries=[];marketPulseEvents=[];accountMode='solo';teamId=null;teamRole=null;teamName='';teamJoinCode='';teamOnboardingActive=false;selectedDate=todayKey();appointmentDate=selectedDate}
 function safeJsonParse(value,fallback){try{return JSON.parse(value)}catch{return fallback}}
 function loadLocal(userId=uid){resetState();const prefix=storagePrefix(userId);try{days=normaliseDaysMap(safeJsonParse(localStorage.getItem(prefix+'days')||localStorage.getItem(prefix+'days-backup')||'{}',{}));targets={...DEFAULTS,...safeJsonParse(localStorage.getItem(prefix+'targets')||'{}',{})};agentName=localStorage.getItem(prefix+'agent-name')||'';const savedWorkDays=safeJsonParse(localStorage.getItem(prefix+'work-days')||'null',null);if(Array.isArray(savedWorkDays)&&savedWorkDays.length)workDays=normaliseWorkDays(savedWorkDays);const savedCalendarPreference=localStorage.getItem(prefix+'calendar-preference');calendarPreference=savedCalendarPreference==='apple'?'apple':'outlook';prospects=normaliseProspects(safeJsonParse(localStorage.getItem(prefix+'prospects')||'[]',[]));prospectInteractions=normaliseProspectInteractions(safeJsonParse(localStorage.getItem(prefix+'prospect-interactions')||'[]',[]));marketPulseEvents=normaliseMarketPulseEvents(safeJsonParse(localStorage.getItem(prefix+'market-pulse-events')||'[]',[]));campaignHistory=safeJsonParse(localStorage.getItem(prefix+'campaign-history')||'[]',[]);bulkSmsTestLaunches=safeJsonParse(localStorage.getItem(prefix+'bulk-sms-test-launches')||'[]',[]);dirtyDayKeys=new Set(safeJsonParse(localStorage.getItem(prefix+'dirty-days')||'[]',[]).filter(validDateKey))}catch(err){console.error('Local data recovery failed',err);resetState();dirtyDayKeys=new Set()}}
 function saveDirtyDays(){try{localStorage.setItem(storagePrefix(uid)+'dirty-days',JSON.stringify([...dirtyDayKeys]))}catch(err){console.error('Dirty-day queue save failed',err)}}
@@ -261,7 +262,7 @@ function leaderboardPayload(){
 }
 function leaderboardSignature(payload){const clean={...payload};delete clean.clientUpdatedAt;delete clean.updatedAt;return JSON.stringify(clean)}
 function scheduleLeaderboardPublish(){if(!cloud||!db||!uid)return;clearTimeout(leaderboardPublishTimer);leaderboardPublishTimer=setTimeout(publishLeaderboard,180)}
-async function publishLeaderboard(){if(!cloud||!db||!uid)return;const payload=leaderboardPayload(),signature=leaderboardSignature(payload);if(signature===lastLeaderboardSignature){if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='LIVE';return}beginSyncOperation();try{await setDoc(doc(db,'leaderboard',uid),payload,{merge:true});lastLeaderboardSignature=signature;if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='LIVE';endSyncOperation()}catch(err){console.error('Leaderboard publish failed',err);endSyncOperation({error:true});if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='SYNC ERROR'}}
+async function publishLeaderboard(){if(!cloud||!db||!uid)return;const payload=leaderboardPayload(),signature=leaderboardSignature(payload);if(accountMode!=='team'||!teamId){leaderboardEntries=[payload];lastLeaderboardSignature=signature;renderLeaderboard();if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='SOLO';return}if(signature===lastLeaderboardSignature){if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='LIVE';return}beginSyncOperation();try{await setDoc(doc(db,'teams',teamId,'leaderboard',uid),payload,{merge:true});lastLeaderboardSignature=signature;if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='LIVE';endSyncOperation()}catch(err){console.error('Leaderboard publish failed',err);endSyncOperation({error:true});if($('#leaderboardStatus'))$('#leaderboardStatus').textContent='SYNC ERROR'}}
 async function persistDayToCloud(k,clean,{quiet=false}={}){
   if(!cloud||!db||!uid)return;
   beginSyncOperation();
@@ -2447,12 +2448,71 @@ async function endKnockingSession(){
 function parseCsv(text){const rows=[];let row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'&&quoted&&n==='"'){cell+='"';i++;continue}if(c==='"'){quoted=!quoted;continue}if(c===','&&!quoted){row.push(cell);cell='';continue}if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(cell);if(row.some(x=>x.trim()))rows.push(row);row=[];cell='';continue}cell+=c}row.push(cell);if(row.some(x=>x.trim()))rows.push(row);return rows}
 async function importProspectCsv(file){const rows=parseCsv(await file.text());if(rows.length<2)throw new Error('No contact rows found');const headers=rows.shift().map(x=>x.trim().toLowerCase());const findExact=(obj,names)=>{for(const n of names){const key=headers.findIndex(h=>h===n);if(key>=0&&obj[key])return obj[key]}return''};const find=(obj,names)=>{const exact=findExact(obj,names);if(exact)return exact;for(const n of names){const key=headers.findIndex(h=>h.includes(n));if(key>=0&&obj[key])return obj[key]}return''};let added=0;for(const r of rows){const name=find(r,['name','contact name','full name'])||[find(r,['first name']),find(r,['last name'])].filter(Boolean).join(' ');const phone=find(r,['mobile','phone','telephone']);const email=find(r,['email']);const organisation=findExact(r,['organisation','organization']);const company=findExact(r,['company']);const suburb=find(r,['suburb']);const rawAddress=organisation||findExact(r,['address'])||find(r,['property address','street address'])||company;const address=formatProspectAddress(rawAddress,suburb);if(!name&&!phone&&!email&&!address&&!company)continue;prospects.push(normaliseProspect({name:name||'Unnamed contact',phone,email,address,company:organisation||company,suburb,source:find(r,['source']),tags:find(r,['tags','category']),stage:find(r,['stage'])||'Nurture',temperature:find(r,['temperature'])||'Cold',nextFollowUp:find(r,['next follow up','follow up date'])}));added++}prospects=normaliseProspects(prospects);await saveProspecting();toast(`${added} contact${added===1?'':'s'} imported`)}
 
-function renderSettings(){const name=displayAgentName();$('#agentName').value=name;$('#callsTarget').value=targets.calls;$('#connectsTarget').value=targets.connects;$('#dataTarget').value=targets.data;$('#weeklyKnockTarget').value=targets.weeklyKnock;$$('[name=workDay]').forEach(el=>el.checked=workDays.includes(Number(el.value)));$$('[name=calendarPreference]').forEach(el=>el.checked=el.value===calendarPreference);$$('[name=appearancePreference]').forEach(el=>el.checked=el.value===appearancePreference);$('#accountEmail').textContent=currentUser?.email||'Device-only mode';$('#modeNote').textContent=cloud?'Live sync is active. Use the same login on every device.':'Data is stored only on this device.';const initials=name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('')||'A';if($('#profileAvatar'))$('#profileAvatar').textContent=initials;if($('#profileSyncState'))$('#profileSyncState').textContent=cloud?'Live sync active':'Device-only profile';if($('#profileTodayScore'))$('#profileTodayScore').textContent=`${completion(todayKey())}%`;if($('#profileWeekScore'))$('#profileWeekScore').textContent=`${weekSummary().score}%`;if($('#profileWorkDays'))$('#profileWorkDays').textContent=workDays.length}
+function renderSettings(){const name=displayAgentName();$('#agentName').value=name;$('#callsTarget').value=targets.calls;$('#connectsTarget').value=targets.connects;$('#dataTarget').value=targets.data;$('#weeklyKnockTarget').value=targets.weeklyKnock;$$('[name=workDay]').forEach(el=>el.checked=workDays.includes(Number(el.value)));$$('[name=calendarPreference]').forEach(el=>el.checked=el.value===calendarPreference);$$('[name=appearancePreference]').forEach(el=>el.checked=el.value===appearancePreference);$('#accountEmail').textContent=currentUser?.email||'Device-only mode';$('#modeNote').textContent=cloud?'Live sync is active. Use the same login on every device.':'Data is stored only on this device.';const initials=name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('')||'A';if($('#profileAvatar'))$('#profileAvatar').textContent=initials;if($('#profileSyncState'))$('#profileSyncState').textContent=cloud?'Live sync active':'Device-only profile';if($('#profileTodayScore'))$('#profileTodayScore').textContent=`${completion(todayKey())}%`;if($('#profileWeekScore'))$('#profileWeekScore').textContent=`${weekSummary().score}%`;if($('#profileWorkDays'))$('#profileWorkDays').textContent=workDays.length;renderTeamSettings()}
 function renderDayViews(){renderToday();renderTimeline();renderAppointments();renderInsights();renderSettings()}
 function renderAll(){renderDayViews();renderProspecting();const reviewButton=$('#openDayReview');if(reviewButton)reviewButton.classList.toggle('hidden',new Date().getHours()<17||selectedDate!==todayKey()||!isWorkDayKey(todayKey()));maybeShowDayReview()}
 
-async function startCloud(user){
-  unsubDays?.();unsubProfile?.();unsubLeaderboard?.();currentUser=user;uid=user.uid;loadBuyerSession();cloud=true;loadLocal(uid);await finaliseExpiredTimers();
+
+function teamCodeValue(){return String(teamJoinCode||'').trim().toUpperCase()}
+function normaliseTeamCode(value){return String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12)}
+function makeTeamCode(name='TEAM'){const prefix=normaliseTeamCode(name).slice(0,5)||'TEAM';return `${prefix}-${Math.floor(1000+Math.random()*9000)}`}
+function makeTeamId(){return `team_${uid}_${Date.now().toString(36)}`}
+function setTeamState(profile={}){const previousTeamId=teamId,previousJoinCode=teamJoinCode;accountMode=profile.accountMode==='team'?'team':'solo';teamId=accountMode==='team'&&profile.teamId?String(profile.teamId):null;teamRole=teamId?String(profile.teamRole||'member'):null;teamName=teamId?String(profile.teamName||''):'';teamJoinCode=teamId?String(profile.teamJoinCode||(teamId===previousTeamId?previousJoinCode:'')):''}
+async function ensureLegacyTeamPana(profile={}){
+  const next={accountMode:'team',teamId:'team_pana',teamRole:profile.teamRole||'member',teamName:'Team Pana',updatedAt:serverTimestamp()};
+  await setDoc(doc(db,'users',uid),next,{merge:true});
+  await setDoc(doc(db,'teams','team_pana'),{name:'Team Pana',joinEnabled:true,updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,'teamDirectory','team_pana'),{teamId:'team_pana',name:'Team Pana',joinEnabled:true,updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,'teams','team_pana','members',uid),{uid,name:profile.name||displayAgentName(),email:currentUser?.email||'',role:next.teamRole,joinedAt:serverTimestamp()},{merge:true});
+  setTeamState(next);
+}
+async function loadTeamMeta(){
+  if(accountMode!=='team'||!teamId){teamName='';teamJoinCode='';return}
+  try{const snap=await getDoc(doc(db,'teams',teamId));if(snap.exists()){const data=snap.data();teamName=String(data.name||teamName||'Team');teamJoinCode=String(data.joinCode||'')}}catch(err){console.error('Team metadata read failed',err)}
+}
+function showTeamOnboarding(){
+  teamOnboardingActive=true;setAuthScreenActive(true);$('#app').classList.add('hidden');$('#authGate').classList.add('hidden');$('#teamOnboarding').classList.remove('hidden');$('#teamOnboarding').setAttribute('aria-hidden','false');$('#teamOnboardingEmail').textContent=currentUser?.email||'';showTeamSetupPanel('choices');
+}
+function hideTeamOnboarding(){teamOnboardingActive=false;$('#teamOnboarding').classList.add('hidden');$('#teamOnboarding').setAttribute('aria-hidden','true')}
+function showTeamSetupPanel(panel){$$('[data-team-panel]').forEach(el=>el.classList.toggle('hidden',el.dataset.teamPanel!==panel));$('#teamSetupMessage').textContent=''}
+function showTeamSetupMessage(message){$('#teamSetupMessage').textContent=message||''}
+async function writeUserTeamProfile(data){await setDoc(doc(db,'users',uid),{...data,onboardingPending:false,email:currentUser?.email||'',updatedAt:serverTimestamp()},{merge:true});newAccountUidPending=''}
+async function completeSoloSetup(){
+  showTeamSetupMessage('Setting up your account…');await writeUserTeamProfile({accountMode:'solo',teamId:null,teamRole:null,teamName:null});setTeamState({accountMode:'solo'});hideTeamOnboarding();await startCloud(currentUser,{profileReady:true});
+}
+async function completeCreateTeam(){
+  const name=$('#newTeamName').value.trim();if(!name){showTeamSetupMessage('Add a team name.');return}
+  const id=makeTeamId(),code=makeTeamCode(name);showTeamSetupMessage('Creating your team…');
+  await setDoc(doc(db,'teams',id),{name,ownerUid:uid,joinCode:code,joinEnabled:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  await setDoc(doc(db,'teamDirectory',id),{teamId:id,name,joinEnabled:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  await setDoc(doc(db,'teamCodes',normaliseTeamCode(code)),{teamId:id,createdAt:serverTimestamp()});
+  await setDoc(doc(db,'teams',id,'members',uid),{uid,name:displayAgentName(),email:currentUser?.email||'',role:'owner',joinedAt:serverTimestamp()});
+  await writeUserTeamProfile({accountMode:'team',teamId:id,teamRole:'owner',teamName:name});setTeamState({accountMode:'team',teamId:id,teamRole:'owner',teamName:name,teamJoinCode:code});hideTeamOnboarding();await startCloud(currentUser,{profileReady:true});
+}
+async function joinTeamById(id){
+  const directory=await getDoc(doc(db,'teamDirectory',id));if(!directory.exists()||directory.data().joinEnabled===false)throw new Error('That team is not available to join.');const name=String(directory.data().name||'Team');
+  await setDoc(doc(db,'teams',id,'members',uid),{uid,name:displayAgentName(),email:currentUser?.email||'',role:'member',joinedAt:serverTimestamp()},{merge:true});
+  await writeUserTeamProfile({accountMode:'team',teamId:id,teamRole:'member',teamName:name});setTeamState({accountMode:'team',teamId:id,teamRole:'member',teamName:name});
+}
+async function completeJoinTeam(id){try{showTeamSetupMessage('Joining team…');await joinTeamById(id);hideTeamOnboarding();await startCloud(currentUser,{profileReady:true})}catch(err){console.error(err);showTeamSetupMessage(err.message||'Could not join that team.')}}
+async function searchTeams(){
+  const term=$('#teamSearchInput').value.trim().toLowerCase(),results=$('#teamSearchResults');results.innerHTML='<div class="team-search-empty">Searching…</div>';
+  try{const snap=await getDocs(collection(db,'teamDirectory'));const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.joinEnabled!==false&&(!term||String(x.name||'').toLowerCase().includes(term))).slice(0,20);results.innerHTML=rows.length?rows.map(x=>`<button class="team-search-result" type="button" data-join-team="${escapeHtml(x.id)}"><span>${escapeHtml(x.name||'Team')}</span><small>Join team</small></button>`).join(''):'<div class="team-search-empty">No matching teams found.</div>'}catch(err){console.error(err);results.innerHTML='<div class="team-search-empty">Team search is unavailable.</div>'}
+}
+async function joinTeamWithCode(){
+  const code=normaliseTeamCode($('#teamCodeInput').value);if(!code){showTeamSetupMessage('Enter your team code.');return}
+  try{const snap=await getDoc(doc(db,'teamCodes',code));if(!snap.exists())throw new Error('Team code not found.');await completeJoinTeam(String(snap.data().teamId||''))}catch(err){console.error(err);showTeamSetupMessage(err.message||'Team code not found.')}
+}
+function renderTeamSettings(){
+  const card=$('#teamAccountCard');if(!card)return;const mode=$('#teamAccountMode'),name=$('#teamAccountName'),role=$('#teamAccountRole'),code=$('#teamAccountCode');
+  if(!cloud){mode.textContent='Device only';name.textContent='No cloud team';role.textContent='';code.textContent='';return}
+  if(accountMode!=='team'||!teamId){mode.textContent='Solo';name.textContent='Solo experience';role.textContent='Your accountability data stays private to your account.';code.textContent='';return}
+  mode.textContent='Team';name.textContent=teamName||'Team';role.textContent=teamRole==='owner'?'Team owner':'Team member';code.textContent=teamRole==='owner'&&teamJoinCode?`Join code: ${teamJoinCode}`:'';
+}
+
+async function startCloud(user,{newAccount=false,profileReady=false}={}){
+  unsubDays?.();unsubProfile?.();unsubLeaderboard?.();unsubProspecting?.();currentUser=user;uid=user.uid;loadBuyerSession();cloud=true;loadLocal(uid);await finaliseExpiredTimers();
+  if(!profileReady){const profileSnap=await getDoc(doc(db,'users',uid));const profile=profileSnap.exists()?profileSnap.data():{};if(newAccount||profile.onboardingPending===true){showTeamOnboarding();return}if(profile.accountMode==='team'&&profile.teamId)setTeamState(profile);else if(profile.accountMode==='solo')setTeamState(profile);else await ensureLegacyTeamPana(profile);await loadTeamMeta()}
   syncHasError=false;pendingSyncOperations=0;setSync('','Connecting');clearTimeout(syncTimer);syncTimer=setTimeout(()=>{if($('#syncBadge').dataset.label==='Connecting')refreshSyncStatus()},3500);
   unsubDays=onSnapshot(collection(db,'users',uid,'days'),{includeMetadataChanges:true},snap=>{
     let dataChanged=false;
@@ -2467,9 +2527,9 @@ async function startCloud(user){
     if(dataChanged){saveLocal();renderDayViews();ensureTick()}else saveDirtyDays();
     clearTimeout(syncTimer);if(!snap.metadata.hasPendingWrites&&!snap.metadata.fromCache)syncHasError=false;refreshSyncStatus();
   },err=>{console.error(err);syncHasError=true;refreshSyncStatus();toast('Firestore access failed. Check rules and login.');showAuthMessage(err.message)});
-  unsubProfile=onSnapshot(doc(db,'users',uid),snap=>{if(snap.exists()){const profile=snap.data();let changed=false;if(profile.targets&&JSON.stringify({...DEFAULTS,...profile.targets})!==JSON.stringify(targets)){targets={...DEFAULTS,...profile.targets};changed=true}if(Array.isArray(profile.workDays)&&profile.workDays.length&&JSON.stringify(normaliseWorkDays(profile.workDays))!==JSON.stringify(workDays)){workDays=normaliseWorkDays(profile.workDays);changed=true}if(profile.name&&profile.name!==agentName){agentName=profile.name;changed=true}if(changed){saveLocal();renderAll();scheduleLeaderboardPublish()}}},err=>console.error(err));
+  unsubProfile=onSnapshot(doc(db,'users',uid),snap=>{if(snap.exists()){const profile=snap.data();let changed=false;const previousTeam=teamId,previousMode=accountMode;setTeamState(profile);if((previousTeam!==teamId||previousMode!==accountMode)&&!teamOnboardingActive){loadTeamMeta().then(()=>{renderSettings();scheduleLeaderboardPublish()})}if(profile.targets&&JSON.stringify({...DEFAULTS,...profile.targets})!==JSON.stringify(targets)){targets={...DEFAULTS,...profile.targets};changed=true}if(Array.isArray(profile.workDays)&&profile.workDays.length&&JSON.stringify(normaliseWorkDays(profile.workDays))!==JSON.stringify(workDays)){workDays=normaliseWorkDays(profile.workDays);changed=true}if(profile.name&&profile.name!==agentName){agentName=profile.name;changed=true}if(changed){saveLocal();renderAll();scheduleLeaderboardPublish()}}},err=>console.error(err));
   unsubProspecting=onSnapshot(doc(db,'users',uid,'prospecting','state'),{includeMetadataChanges:true},snap=>{if(snap.exists()){const data=snap.data(),nextProspects=normaliseProspects(data.prospects),nextInteractions=normaliseProspectInteractions(data.interactions),hasMarketEvents=Object.prototype.hasOwnProperty.call(data,'marketPulseEvents'),cloudMarketEvents=hasMarketEvents?normaliseMarketPulseEvents(data.marketPulseEvents):[],cloudSignature=prospectingSignature(nextProspects,nextInteractions,cloudMarketEvents);if(!snap.metadata.hasPendingWrites)lastProspectingSignature=cloudSignature;const nextMarketEvents=hasMarketEvents?cloudMarketEvents:normaliseMarketPulseEvents(marketPulseEvents),nextSignature=prospectingSignature(nextProspects,nextInteractions,nextMarketEvents);if(nextSignature!==prospectingSignature()){prospects=nextProspects;prospectInteractions=nextInteractions;marketPulseEvents=nextMarketEvents;saveLocal();renderProspecting();renderMarketPulse()}if(!hasMarketEvents&&nextMarketEvents.length&&!snap.metadata.hasPendingWrites&&!snap.metadata.fromCache){queueProspectingSave().catch(err=>console.error('Hot Spotting migration failed',err))}}},err=>{console.error('Prospecting sync failed',err);toast('Prospecting data is saved locally. Cloud sync needs attention.')});
-  unsubLeaderboard=onSnapshot(collection(db,'leaderboard'),{includeMetadataChanges:true},snap=>{const next=snap.docs.map(d=>({uid:d.id,...d.data()}));if(JSON.stringify(next)!==JSON.stringify(leaderboardEntries)){leaderboardEntries=next;renderLeaderboard()}const own=next.find(entry=>entry.uid===uid);if(own)lastLeaderboardSignature=leaderboardSignature(own)},err=>{console.error('Leaderboard read failed',err);$('#leaderboardStatus').textContent='SYNC ERROR'});
+  if(accountMode==='team'&&teamId){unsubLeaderboard=onSnapshot(collection(db,'teams',teamId,'leaderboard'),{includeMetadataChanges:true},snap=>{const next=snap.docs.map(d=>({uid:d.id,...d.data()}));if(JSON.stringify(next)!==JSON.stringify(leaderboardEntries)){leaderboardEntries=next;renderLeaderboard()}const own=next.find(entry=>entry.uid===uid);if(own)lastLeaderboardSignature=leaderboardSignature(own)},err=>{console.error('Leaderboard read failed',err);$('#leaderboardStatus').textContent='SYNC ERROR'})}else{leaderboardEntries=[leaderboardPayload()];unsubLeaderboard=null}
   refreshSyncStatus();showApp();scheduleLeaderboardPublish();
 }
 
@@ -2496,7 +2556,7 @@ function bindViewport(){
   window.visualViewport?.addEventListener('scroll',updateAppViewport,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateAppViewport();finaliseExpiredTimers().then(()=>renderAll())}});
 }
-async function init(){bindViewport();loadLocal('local');await finaliseExpiredTimers();if(!configured()){showAuthMessage('Firebase is not configured. You can still use device-only mode.');return}try{const fb=initializeApp(firebaseConfig);auth=getAuth(fb);await setPersistence(auth,browserLocalPersistence);db=initializeFirestore(fb,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});onAuthStateChanged(auth,u=>{if(u){startCloud(u)}else{clearActiveSession();setAuthScreenActive(true);$('#app').classList.add('hidden');$('#authGate').classList.remove('hidden')}})}catch(err){console.error(err);showAuthMessage(err.message)}}
+async function init(){bindViewport();loadLocal('local');await finaliseExpiredTimers();if(!configured()){showAuthMessage('Firebase is not configured. You can still use device-only mode.');return}try{const fb=initializeApp(firebaseConfig);auth=getAuth(fb);await setPersistence(auth,browserLocalPersistence);db=initializeFirestore(fb,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});onAuthStateChanged(auth,u=>{if(u){if(creatingAccount||u.uid===newAccountUidPending){currentUser=u;return}startCloud(u)}else{clearActiveSession();setAuthScreenActive(true);$('#app').classList.add('hidden');$('#authGate').classList.remove('hidden')}})}catch(err){console.error(err);showAuthMessage(err.message)}}
 function showAuthMessage(msg){$('#authMessage').textContent=msg}
 function switchView(id){if(id!=='appointmentsView'&&appointmentHistoryMode)setAppointmentHistoryScreen(null);$$('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));updateTopbar(id);if(id==='scheduleView'){renderTimeline();setTodayPage(todayPage);}if(id==='appointmentsView')renderAppointments();if(id==='prospectingView')renderProspecting();if(id==='insightsView')renderInsights()}
 
@@ -2515,7 +2575,15 @@ function shiftHeaderDate(delta){
 function openCalendar(){$('#calendarModal').classList.add('open');renderCalendar()}
 
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();showAuthMessage('');try{await signInWithEmailAndPassword(auth,$('#email').value,$('#password').value)}catch(err){showAuthMessage(err.message)}});
-$('#createAccount').onclick=async()=>{try{await createUserWithEmailAndPassword(auth,$('#email').value,$('#password').value)}catch(err){showAuthMessage(err.message)}};
+$('#createAccount').onclick=async()=>{showAuthMessage('');creatingAccount=true;try{const credential=await createUserWithEmailAndPassword(auth,$('#email').value,$('#password').value);newAccountUidPending=credential.user.uid;await setDoc(doc(db,'users',credential.user.uid),{onboardingPending:true,email:credential.user.email||'',createdAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});creatingAccount=false;await startCloud(credential.user,{newAccount:true})}catch(err){creatingAccount=false;showAuthMessage(err.message)}};
+$('#teamChoiceSolo').onclick=()=>completeSoloSetup().catch(err=>showTeamSetupMessage(err.message));
+$('#teamChoiceCreate').onclick=()=>showTeamSetupPanel('create');
+$('#teamChoiceJoin').onclick=()=>{showTeamSetupPanel('join');searchTeams()};
+$$('[data-team-back]').forEach(button=>button.onclick=()=>showTeamSetupPanel('choices'));
+$('#createTeamSubmit').onclick=()=>completeCreateTeam().catch(err=>{console.error(err);showTeamSetupMessage(err.message||'Could not create team.')});
+$('#teamSearchButton').onclick=searchTeams;$('#teamSearchInput').addEventListener('input',()=>searchTeams());
+$('#teamSearchResults').onclick=e=>{const button=e.target.closest('[data-join-team]');if(button)completeJoinTeam(button.dataset.joinTeam)};
+$('#joinTeamCode').onclick=joinTeamWithCode;
 $('#startDayButton').onclick=dismissDailyWelcome;
 $('#openAgntButton').onclick=dismissOffDayReview;
 $('#localMode').onclick=()=>{clearActiveSession();uid='local';loadLocal('local');setSync('offline','This device');showApp()};
