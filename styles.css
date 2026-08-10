@@ -9435,10 +9435,12 @@ html[data-theme="dark"] #clearMarketPulseEvents{color:#a0a7b2!important}
 /* Completed session CTA: keep original position/size; centre label within the existing button only. */
 .prospecting-hero>.market-session-complete-btn,
 .prospecting-hero>.market-session-complete-btn:disabled{
-  display:grid!important;
-  place-items:center!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
   white-space:nowrap!important;
   text-align:center!important;
+  line-height:1!important;
 }
 
 /* Today > Log: dark-mode contrast parity for wins and story stack only. */
