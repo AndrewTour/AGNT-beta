@@ -1,4 +1,4 @@
-# AGNT v1.31.0 — Team Accounts
+# AGNT v1.31.1 — Team Accounts
 
 Targeted logic restoration built directly on v1.30.8.
 
@@ -21,3 +21,9 @@ Restores On Track / At Risk / Off Track colour parity in Light and Dark mode, fi
 
 ## v1.31.0
 Adds account modes (Solo / Create Team / Join Team) and team-scoped leaderboards. Existing pre-update cloud profiles are assigned to Team Pana on first sign-in. No activity-data paths were changed.
+
+
+## v1.31.1 Team Pana migration repair
+- Repairs legacy Team Pana profiles that were marked as team members before their member document was created.
+- Avoids rewriting an existing Team Pana directory entry during each legacy-user migration.
+- No activity, prospecting, appointment, target, cache, authentication, or personal Firestore data paths changed.

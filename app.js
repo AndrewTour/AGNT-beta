@@ -2462,9 +2462,17 @@ async function ensureLegacyTeamPana(profile={}){
   const next={accountMode:'team',teamId:'team_pana',teamRole:profile.teamRole||'member',teamName:'Team Pana',updatedAt:serverTimestamp()};
   await setDoc(doc(db,'users',uid),next,{merge:true});
   await setDoc(doc(db,'teams','team_pana'),{name:'Team Pana',joinEnabled:true,updatedAt:serverTimestamp()},{merge:true});
-  await setDoc(doc(db,'teamDirectory','team_pana'),{teamId:'team_pana',name:'Team Pana',joinEnabled:true,updatedAt:serverTimestamp()},{merge:true});
   await setDoc(doc(db,'teams','team_pana','members',uid),{uid,name:profile.name||displayAgentName(),email:currentUser?.email||'',role:next.teamRole,joinedAt:serverTimestamp()},{merge:true});
+  const directoryRef=doc(db,'teamDirectory','team_pana'),directorySnap=await getDoc(directoryRef);
+  if(!directorySnap.exists())await setDoc(directoryRef,{teamId:'team_pana',name:'Team Pana',joinEnabled:true,updatedAt:serverTimestamp()});
   setTeamState(next);
+}
+async function repairLegacyTeamPanaMembership(profile={}){
+  if(profile.accountMode!=='team'||profile.teamId!=='team_pana')return false;
+  const memberRef=doc(db,'teams','team_pana','members',uid),memberSnap=await getDoc(memberRef);
+  if(memberSnap.exists())return false;
+  await ensureLegacyTeamPana(profile);
+  return true;
 }
 async function loadTeamMeta(){
   if(accountMode!=='team'||!teamId){teamName='';teamJoinCode='';return}
@@ -2512,7 +2520,7 @@ function renderTeamSettings(){
 
 async function startCloud(user,{newAccount=false,profileReady=false}={}){
   unsubDays?.();unsubProfile?.();unsubLeaderboard?.();unsubProspecting?.();currentUser=user;uid=user.uid;loadBuyerSession();cloud=true;loadLocal(uid);await finaliseExpiredTimers();
-  if(!profileReady){const profileSnap=await getDoc(doc(db,'users',uid));const profile=profileSnap.exists()?profileSnap.data():{};if(newAccount||profile.onboardingPending===true){showTeamOnboarding();return}if(profile.accountMode==='team'&&profile.teamId)setTeamState(profile);else if(profile.accountMode==='solo')setTeamState(profile);else await ensureLegacyTeamPana(profile);await loadTeamMeta()}
+  if(!profileReady){const profileSnap=await getDoc(doc(db,'users',uid));const profile=profileSnap.exists()?profileSnap.data():{};if(newAccount||profile.onboardingPending===true){showTeamOnboarding();return}if(profile.accountMode==='team'&&profile.teamId){setTeamState(profile);if(profile.teamId==='team_pana')await repairLegacyTeamPanaMembership(profile)}else if(profile.accountMode==='solo')setTeamState(profile);else await ensureLegacyTeamPana(profile);await loadTeamMeta()}
   syncHasError=false;pendingSyncOperations=0;setSync('','Connecting');clearTimeout(syncTimer);syncTimer=setTimeout(()=>{if($('#syncBadge').dataset.label==='Connecting')refreshSyncStatus()},3500);
   unsubDays=onSnapshot(collection(db,'users',uid,'days'),{includeMetadataChanges:true},snap=>{
     let dataChanged=false;
