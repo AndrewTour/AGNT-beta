@@ -9422,3 +9422,79 @@ html[data-theme="dark"] .hotspot-opportunity-summary .priority-high strong{color
 html[data-theme="dark"] .hotspot-opportunity-summary .priority-medium strong{color:#d89a28!important}
 html[data-theme="dark"] .market-pulse-back,
 html[data-theme="dark"] #clearMarketPulseEvents{color:#a0a7b2!important}
+
+/* AGNT v1.30.17 — scoped Prospector contrast/subhead/completed-state polish only. */
+.app:has(#prospectingView.active) .view-subtitle{
+  width:100%!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* Completed session CTA: retain the existing green state and keep the label centred/on one line. */
+.prospecting-hero:has(>.market-session-complete-btn){
+  position:relative;
+}
+.prospecting-hero>.market-session-complete-btn,
+.prospecting-hero>.market-session-complete-btn:disabled{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  display:grid!important;
+  place-items:center!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+  background:#2fa866!important;
+  color:#fff!important;
+  border-color:#2fa866!important;
+  opacity:1!important;
+}
+html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn,
+html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn:disabled{
+  background:#3aaf78!important;
+  color:#fff!important;
+  border-color:#3aaf78!important;
+}
+
+/* Today > Log: dark-mode contrast parity for wins and story stack only. */
+html[data-theme="dark"] #scheduleView .today-wins-grid>div{
+  background:#14231e!important;
+  border:1px solid #244c3d!important;
+}
+html[data-theme="dark"] #scheduleView .today-wins-grid span{
+  background:#193d30!important;
+  color:#62d7a5!important;
+}
+html[data-theme="dark"] #scheduleView .today-wins-grid strong{
+  color:#eef7f3!important;
+}
+html[data-theme="dark"] #scheduleView .day-log-card{
+  background:#11151c!important;
+  border-color:#2b313b!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-card{
+  background:#171b22!important;
+  border-color:#303641!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-card strong{
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-card time,
+html[data-theme="dark"] #scheduleView .smart-log-card small{
+  color:#98a1b2!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-stats span{
+  background:#202938!important;
+  color:#c7d2e5!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-card.target{
+  background:#10271f!important;
+  border-color:#1c6045!important;
+}
+html[data-theme="dark"] #scheduleView .smart-log-card.target strong{
+  color:#66d6a6!important;
+}
+

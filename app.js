@@ -563,12 +563,12 @@ function pageHeaderState(id=activeViewId()){
   const label=document.querySelector(`.tabbar button[data-view="${id}"] span`)?.textContent||'AGNT';
   if(id==='prospectingView'){
     const overdue=activeProspects().filter(p=>p.nextFollowUp&&p.nextFollowUp<todayKey()).length,due=activeProspects().filter(p=>p.nextFollowUp===todayKey()).length,sellers=sellerPipelineProspects().length;
-    if(prospectSection==='contacts'){const count=prospectContactsMode==='archived'?archivedProspects().length:activeProspects().length;return{title:prospectContactsMode==='archived'?'Archived':label,subtitle:count?`${count} contact${count===1?'':'s'} ${prospectContactsMode==='archived'?'archived.':'ready to work.'}`:prospectContactsMode==='archived'?'No archived contacts.':'Build the database one useful conversation at a time.'}};
-    if(prospectSection==='pipeline')return{title:label,subtitle:sellers?`${sellers} active seller${sellers===1?'':'s'} across your pipeline.`:'Qualify the next opportunity into your pipeline.'};
-    if(prospectSection==='market')return{title:'Hot Spotting',subtitle:'Turn today’s property changes into focused calling sessions.'};if(prospectSection==='broadcast')return{title:'Broadcast',subtitle:'Build and review a personalised SMS campaign.'};if(prospectSection==='insights')return{title:label,subtitle:'See what is creating conversations and appointments.'};
+    if(prospectSection==='contacts'){const count=prospectContactsMode==='archived'?archivedProspects().length:activeProspects().length;return{title:prospectContactsMode==='archived'?'Archived':label,subtitle:count?`${count} contact${count===1?'':'s'} ${prospectContactsMode==='archived'?'archived.':'ready to work.'}`:prospectContactsMode==='archived'?'No archived contacts.':'Build the database one conversation at a time.'}};
+    if(prospectSection==='pipeline')return{title:label,subtitle:sellers?`${sellers} active seller${sellers===1?'':'s'} across your pipeline.`:'Qualify the next seller opportunity.'};
+    if(prospectSection==='market')return{title:'Hot Spotting',subtitle:'Turn today’s market changes into calls.'};if(prospectSection==='broadcast')return{title:'Broadcast',subtitle:'Build and review an SMS campaign.'};if(prospectSection==='insights')return{title:label,subtitle:'See what creates conversations and appointments.'};
     if(overdue)return{title:label,subtitle:`${overdue} overdue follow-up${overdue===1?'':'s'} need attention.`};
     if(due)return{title:label,subtitle:`${due} follow-up${due===1?'':'s'} due today.`};
-    return{title:label,subtitle:'Your follow-up list is clear — create the next opportunity.'};
+    return{title:label,subtitle:'Follow-ups clear — create the next opportunity.'};
   }
   const subtitle=id==='settingsView'?'Make AGNT work your way.':id==='insightsView'?'Set the pace. Raise the standard.':'';
   return{title:label,subtitle};
@@ -2070,7 +2070,7 @@ function renderBroadcastAudienceControls(){
 }
 function broadcastHeaderState(){
   if(prospectSection!=='broadcast')return null;
-  if(!selectedBroadcastType)return{title:'Broadcast',subtitle:'Build and review a personalised SMS campaign.'};
+  if(!selectedBroadcastType)return{title:'Broadcast',subtitle:'Build and review an SMS campaign.'};
   const states={
     1:{title:'Choose Recipients',subtitle:'Select the people who should receive this update.'},
     2:{title:'Write Your Message',subtitle:'Write once. AGNT personalises each SMS before it reaches the recipient.'},
