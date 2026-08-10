@@ -9432,30 +9432,13 @@ html[data-theme="dark"] #clearMarketPulseEvents{color:#a0a7b2!important}
   text-overflow:ellipsis!important;
 }
 
-/* Completed session CTA: retain the existing green state and keep the label centred/on one line. */
-.prospecting-hero:has(>.market-session-complete-btn){
-  position:relative;
-}
+/* Completed session CTA: keep original position/size; centre label within the existing button only. */
 .prospecting-hero>.market-session-complete-btn,
 .prospecting-hero>.market-session-complete-btn:disabled{
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  transform:translate(-50%,-50%)!important;
   display:grid!important;
   place-items:center!important;
   white-space:nowrap!important;
   text-align:center!important;
-  background:#2fa866!important;
-  color:#fff!important;
-  border-color:#2fa866!important;
-  opacity:1!important;
-}
-html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn,
-html[data-theme="dark"] .prospecting-hero>.market-session-complete-btn:disabled{
-  background:#3aaf78!important;
-  color:#fff!important;
-  border-color:#3aaf78!important;
 }
 
 /* Today > Log: dark-mode contrast parity for wins and story stack only. */
