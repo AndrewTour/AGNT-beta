@@ -9539,3 +9539,93 @@ html[data-theme="dark"] .manual-call-post-actions .secondary{
   color:#f5f6f7!important;
 }
 
+
+/* AGNT v1.30.21 — Prospector dark-mode contrast parity only.
+   Targeted visual overrides for Pipeline + Insights. No layout or logic changes. */
+html[data-theme="dark"] .pipeline-overview-head h3,
+html[data-theme="dark"] .pipeline-timeframe-head h3,
+html[data-theme="dark"] .prospect-intelligence-hero h3,
+html[data-theme="dark"] .prospect-weekly-focus h3{
+  color:#f5f6f7!important;
+}
+
+html[data-theme="dark"] .pipeline-overview-head>div>span,
+html[data-theme="dark"] .pipeline-overview-head small,
+html[data-theme="dark"] .pipeline-timeframe-head span,
+html[data-theme="dark"] .prospect-intelligence-hero span,
+html[data-theme="dark"] .prospect-weekly-focus>span,
+html[data-theme="dark"] .prospect-intelligence-card .section-label>span{
+  color:#9aa2ad!important;
+}
+
+html[data-theme="dark"] .prospect-intelligence-hero p,
+html[data-theme="dark"] .prospect-weekly-focus p,
+html[data-theme="dark"] .prospect-insight-summary,
+html[data-theme="dark"] .prospect-intelligence-card .section-label>small{
+  color:#a0a7b2!important;
+}
+
+html[data-theme="dark"] .pipeline-temperature-filter button{
+  background:#171a20!important;
+  border:1px solid #2a2e36!important;
+  color:#c8cdd5!important;
+}
+html[data-theme="dark"] .pipeline-temperature-filter button.active{
+  background:#2a2e36!important;
+  border-color:#3a404a!important;
+  color:#f7f8fa!important;
+}
+html[data-theme="dark"] .pipeline-controls label{color:#9aa2ad!important}
+html[data-theme="dark"] .pipeline-controls select{
+  background:#1a1e25!important;
+  border:1px solid #2e333c!important;
+  color:#f5f6f7!important;
+}
+
+html[data-theme="dark"] .pipeline-timeframe,
+html[data-theme="dark"] .pipeline-overview,
+html[data-theme="dark"] .pipeline-controls,
+html[data-theme="dark"] .prospect-intelligence-hero,
+html[data-theme="dark"] .prospect-intelligence-card,
+html[data-theme="dark"] .prospect-weekly-focus,
+html[data-theme="dark"] .insight-period-switch{
+  background:#11141a!important;
+  border-color:#292d35!important;
+  box-shadow:none!important;
+}
+
+html[data-theme="dark"] .pipeline-summary-card{
+  background:#101b2d!important;
+  border-color:#17375c!important;
+}
+html[data-theme="dark"] .pipeline-summary-card span{color:#9ba6b5!important}
+html[data-theme="dark"] .pipeline-summary-card strong{color:#f5f6f7!important}
+
+html[data-theme="dark"] .pipeline-seller-row{border-top-color:#252932!important;color:#f5f6f7!important}
+html[data-theme="dark"] .pipeline-seller-copy strong{color:#f5f6f7!important}
+html[data-theme="dark"] .pipeline-seller-copy small,
+html[data-theme="dark"] .pipeline-seller-copy em{color:#9aa2ad!important}
+
+html[data-theme="dark"] .insight-period-switch button{color:#969eaa!important}
+html[data-theme="dark"] .insight-period-switch button.active{
+  background:#2a2e36!important;
+  color:#f7f8fa!important;
+}
+
+html[data-theme="dark"] .prospect-intelligence-hero>strong{
+  background:#14243a!important;
+  border-color:#23486d!important;
+  color:#f5f6f7!important;
+}
+html[data-theme="dark"] .prospect-insight-grid article{
+  background:#171a20!important;
+  border:1px solid #252a31!important;
+}
+html[data-theme="dark"] .prospect-insight-grid span,
+html[data-theme="dark"] .prospect-insight-grid small{color:#9aa2ad!important}
+html[data-theme="dark"] .prospect-insight-grid strong{color:#f5f6f7!important}
+html[data-theme="dark"] .prospect-insight-link{
+  background:#182235!important;
+  border:1px solid #223654!important;
+  color:#d7e5ff!important;
+}

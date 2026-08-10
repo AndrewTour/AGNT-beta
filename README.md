@@ -1,3 +1,11 @@
+# AGNT v1.30.21 — Prospector Dark Contrast
+
+Targeted dark-mode contrast update built directly on the reverted stable AGNT LV VU26 build.
+
+## v1.30.21
+- Improved dark-mode contrast in Prospector Pipeline and Insights only.
+- No application logic, Firebase, Firestore, sync, data-path, layout or feature changes.
+
 # AGNT v1.30.20 — Track, Timeline + Appointment Priority
 
 Targeted logic restoration built directly on v1.30.8.
