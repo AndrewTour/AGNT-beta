@@ -1,27 +1,52 @@
-# AGNT v1.30.21 — Prospector Dark Contrast
+# AGNT BETA v1.35.0 — Team Rollout
 
-Targeted dark-mode contrast update built directly on the reverted stable AGNT LV VU26 build.
+Consumer-ready BETA promotion built from the confirmed AGNT Staging v1.34.8 application and the current functioning BETA Firebase environment.
 
-## v1.30.21
-- Improved dark-mode contrast in Prospector Pipeline and Insights only.
-- No application logic, Firebase, Firestore, sync, data-path, layout or feature changes.
+## Promotion model
 
-# AGNT v1.30.20 — Track, Timeline + Appointment Priority
+- Frontend/application baseline: confirmed Staging v1.34.8.
+- Firebase configuration: preserved from the current functioning BETA (`daily-accountability-be0ac`).
+- Personal data remains under the existing `users/{uid}` paths.
+- Existing Firebase Authentication accounts and UIDs are retained.
+- New Team-capable Firestore rules are included and must be deployed to the BETA Firebase project.
+- Existing legacy `/leaderboard/{uid}` documents are not migrated or deleted.
+- Once users join the new Team, the private `teams/{teamId}/leaderboard/{uid}` path becomes authoritative for team ranking.
 
-Targeted logic restoration built directly on v1.30.8.
+## Included confirmed functionality
 
-Changes are limited to overlay/session-review contrast, blur, surfaces, text colours, inner metric cards and modal action buttons in Light and Dark modes.
+- Complete Team create/join/leave/owner-management workflow.
+- Daily and current-week leaderboard sync, including the confirmed weekly freshness fix.
+- Persistent Pipeline Session refresh with a per-user/per-day served-contact exclusion list.
+- Broadcast contrast and viewport refinements.
+- Contacts navigation correction.
+- Universal nested/session navigation polish and restored light/dark button contrast.
+- Returning daily snapshot with Day Pulse, Leaderboard and Next Block intelligence.
+- Four-second returning snapshot handoff with tap-to-open immediately.
+- Consumer-ready login copy with persistent Firebase auth restore.
 
-No Firebase, authentication, Firestore, UID, sync, data, leaderboard, Today, Prospector, Appointments or Settings logic changes.
+## Firebase
 
+The frontend remains connected to the existing BETA Firebase project:
 
-## v1.30.7
-Leaderboard presentation redesign only: five metrics (Calls, Connects, Data, Knocking, Appts), larger overview stack, cleaner four-agent viewport rows, and DAY/WEEK mode label. No Firebase or data model changes.
+`daily-accountability-be0ac`
 
+No user-data migration is required.
 
-## v1.30.8
-Targeted UI pass only: rounded overlay/review surfaces, full leaderboard agent-row tap target for appointment detail, and dark-mode Weekly Review contrast parity. No Firebase or data-model changes.
+The bundled `firestore.rules` must be deployed when this BETA release is promoted so Team creation, invite lookup, membership and private Team leaderboard access work.
 
+## Protected systems
 
-## v1.30.20
-Restores On Track / At Risk / Off Track colour parity in Light and Dark mode, fixes dark projection-ring visibility, restores time-based Today timeline active highlighting, and orders appointment lists by urgency state then appointment time. No Firebase or data-model changes.
+- Existing Firebase project and Authentication accounts.
+- Existing Firebase UIDs.
+- `users/{uid}` personal data and child paths.
+- Existing days, appointments, contacts, notes and prospecting data.
+- Local UID-scoped cache/data shapes.
+- Offline Firestore persistence and sync architecture.
+- PWA manifest and icon identity.
+- Service-worker behaviour, apart from the required BETA cache-version bump.
+
+## Deployment
+
+Upload the web files in this package to the BETA GitHub Pages workspace. Deploy the bundled Firestore rules to the `daily-accountability-be0ac` Firebase project before testing the Team workflow.
+
+After the new PWA is live, create the Team from the owner account and have each existing user sign in with their existing account and join using the generated invite code.
