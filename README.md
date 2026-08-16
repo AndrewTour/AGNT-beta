@@ -1,4 +1,4 @@
-# AGNT BETA v1.35.0 — Team Rollout
+# AGNT BETA v1.35.1 — Delete Team
 
 Consumer-ready BETA promotion built from the confirmed AGNT Staging v1.34.8 application and the current functioning BETA Firebase environment.
 
@@ -50,3 +50,10 @@ The bundled `firestore.rules` must be deployed when this BETA release is promote
 Upload the web files in this package to the BETA GitHub Pages workspace. Deploy the bundled Firestore rules to the `daily-accountability-be0ac` Firebase project before testing the Team workflow.
 
 After the new PWA is live, create the Team from the owner account and have each existing user sign in with their existing account and join using the generated invite code.
+
+
+## v1.35.1 targeted update
+- Team Owners can now permanently delete their current team from Team Management.
+- A confirmation screen explains that team access is removed while all personal AGNT data remains untouched.
+- Team invite code, membership documents and team leaderboard documents are removed with the team.
+- No Firestore rules change is required; v1.35.0 rules already permit owner deletion.

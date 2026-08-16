@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=1.35.0-beta-team-rollout">
+<link rel="stylesheet" href="styles.css?v=1.35.1-beta-delete-team">
 <title>AGNT</title>
 </head>
 <body>
@@ -82,6 +82,7 @@
     <div class="team-manager-section-head"><span>MEMBERS</span><small id="teamManagerMemberCount">0 members</small></div>
     <div id="teamMemberList" class="team-member-list" role="list" aria-live="polite"></div>
     <p id="teamManagerStatus" role="status" aria-live="polite"></p>
+    <button id="deleteTeam" class="team-manager-refresh team-manager-delete" type="button"><span>Delete team</span><small>Permanently remove this team. Personal AGNT data stays with each member.</small><b aria-hidden="true">›</b></button>
   </section>
 </div>
 
@@ -93,6 +94,18 @@
     <p id="teamRemoveDescription">They will lose access to this team. Their personal AGNT data will not be deleted.</p>
     <div class="team-remove-actions"><button id="cancelTeamMemberRemoval" class="secondary" type="button">Cancel</button><button id="confirmTeamMemberRemoval" class="danger" type="button">Remove member</button></div>
     <small id="teamRemoveStatus" role="status" aria-live="polite"></small>
+  </section>
+</div>
+
+<div id="teamDeleteConfirm" class="team-leave-confirm hidden" aria-hidden="true">
+  <section class="team-leave-confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="teamDeleteTitle" aria-describedby="teamDeleteDescription">
+    <span class="team-leave-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M8 10v7M12 10v7M16 10v7M6 7l1 14h10l1-14"></path></svg></span>
+    <span class="team-leave-kicker">DELETE TEAM</span>
+    <h2 id="teamDeleteTitle">Delete this team?</h2>
+    <p id="teamDeleteDescription">The team and its shared access will be removed. Personal AGNT data will not be deleted.</p>
+    <div class="team-leave-data-note"><span aria-hidden="true">✓</span><p><strong>Personal data stays protected</strong><small>Contacts, notes, appointments and activity history remain with each member.</small></p></div>
+    <div class="team-leave-actions"><button id="cancelTeamDelete" class="secondary" type="button">Cancel</button><button id="confirmTeamDelete" class="danger" type="button">Delete team</button></div>
+    <small id="teamDeleteStatus" role="status" aria-live="polite"></small>
   </section>
 </div>
 
@@ -1004,6 +1017,6 @@ Andrew Tour | McGrath</textarea></label>
 
 
 
-<script type="module" src="app.js?v=1.35.0-beta-team-rollout"></script>
+<script type="module" src="app.js?v=1.35.1-beta-delete-team"></script>
 </body>
 </html>

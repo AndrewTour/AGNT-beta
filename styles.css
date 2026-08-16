@@ -9762,6 +9762,7 @@ body.team-manager-open,body.team-leave-open,body.team-code-refresh-open{overflow
 .team-manager-invite-actions button+button{background:var(--agnt-card,#fff);color:var(--agnt-ink,#111318);border:1px solid var(--agnt-border,#e1e3e8)}
 .team-manager-refresh{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;align-items:center;margin:-12px 0 21px;padding:11px 13px;border:1px solid var(--agnt-border,#e1e3e8);border-radius:15px;background:var(--agnt-card,#fff);color:var(--agnt-ink,#111318);text-align:left}
 .team-manager-refresh>span{font-size:11px;font-weight:760}.team-manager-refresh>small{grid-column:1;color:var(--agnt-muted,#8b909a);font-size:9px;line-height:1.35}.team-manager-refresh>b{grid-column:2;grid-row:1/3;color:var(--agnt-faint,#a4a9b1);font-size:22px;font-weight:400}
+.team-manager-delete{margin:14px 0 0;border-color:#f0ccd1;background:#fff7f8;color:#c8324b}.team-manager-delete>small{color:#a7606b}.team-manager-delete>b{color:#c8324b}
 .team-manager-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 8px}
 .team-manager-section-head small{color:var(--agnt-muted,#8b909a);font-size:10px;font-weight:650}
 .team-member-list{display:grid;border:1px solid var(--agnt-border,#e1e3e8);border-radius:19px;background:var(--agnt-field,#f4f5f7);overflow:hidden}
@@ -9799,7 +9800,7 @@ body.team-manager-open,body.team-leave-open,body.team-code-refresh-open{overflow
 .team-remove-actions .secondary,.team-leave-actions .secondary{background:var(--agnt-soft,#f5f6f7)!important;border:1px solid var(--agnt-border,#e1e3e8)!important;color:var(--agnt-ink,#111318)!important}
 .team-remove-actions .danger,.team-leave-actions .danger{border:0;background:#cf344c;color:#fff}
 .team-remove-actions button:disabled,.team-leave-actions button:disabled{opacity:.55;cursor:not-allowed}
-#teamRemoveStatus,#teamLeaveStatus{display:block;min-height:16px;margin-top:9px;color:var(--agnt-red,#d83c54);font-size:10px}
+#teamRemoveStatus,#teamLeaveStatus,#teamDeleteStatus{display:block;min-height:16px;margin-top:9px;color:var(--agnt-red,#d83c54);font-size:10px}
 .team-code-refresh-icon{width:48px;height:48px;display:grid;place-items:center;margin:0 auto 13px;border-radius:16px;background:#edf3ff;color:var(--agnt-blue,#1769ff)}
 .team-code-refresh-icon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .team-code-refresh-kicker{display:block;color:var(--agnt-blue,#1769ff);font-size:9px;font-weight:830;letter-spacing:.14em}
@@ -9840,6 +9841,7 @@ html[data-theme="dark"] .team-manager-invite,html[data-theme="dark"] .team-membe
 html[data-theme="dark"] .team-manager-invite button{background:#f5f6f7;color:#111318}
 html[data-theme="dark"] .team-manager-invite-actions button+button{background:#171a20;color:#f5f6f7;border-color:#2a2e36}
 html[data-theme="dark"] .team-manager-refresh{background:#171a20;border-color:#2a2e36;color:#f5f6f7}
+html[data-theme="dark"] .team-manager-delete{background:#21171a;border-color:#563039;color:#ff8799}html[data-theme="dark"] .team-manager-delete>small{color:#c9939c}html[data-theme="dark"] .team-manager-delete>b{color:#ff8799}
 html[data-theme="dark"] .team-member-row,html[data-theme="dark"] .team-member-empty{background:#11141a}
 html[data-theme="dark"] .team-member-row+.team-member-row{border-color:#292d35}
 html[data-theme="dark"] .team-member-avatar{background:#182235;color:#91b9ff}
