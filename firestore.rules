@@ -81,6 +81,21 @@ service cloud.firestore {
         allow delete: if isTeamOwner(teamId) || isOwner(memberId);
       }
 
+      // Team appointment assignment. Setter keeps personal appointment/stat record.
+      match /appointments/{appointmentId} {
+        allow read: if isTeamMember(teamId);
+        allow create: if isTeamMember(teamId)
+                      && request.resource.data.setterUid == request.auth.uid
+                      && request.resource.data.assignedToUid is string
+                      && request.resource.data.assignedToUid != request.auth.uid
+                      && exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.resource.data.assignedToUid));
+        allow update: if isTeamMember(teamId)
+                      && ((resource.data.setterUid == request.auth.uid && request.resource.data.setterUid == resource.data.setterUid)
+                          || (resource.data.assignedToUid == request.auth.uid
+                              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acknowledgedAt','calendarAddedAt','updatedAt'])));
+        allow delete: if isTeamOwner(teamId) || resource.data.setterUid == request.auth.uid;
+      }
+
       // Secure team-facing leaderboard. This is additive; it does not replace
       // leaderboard/{uid} publishing during the Teams transition.
       match /leaderboard/{memberId} {

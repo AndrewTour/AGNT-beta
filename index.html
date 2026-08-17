@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=1.35.1-beta-delete-team">
+<link rel="stylesheet" href="styles.css?v=1.36.6-beta-release">
 <title>AGNT</title>
 </head>
 <body>
@@ -939,6 +939,24 @@ Andrew Tour | McGrath</textarea></label>
     <div id="calendarGrid" class="calendar-grid"></div>
   </div>
 </div>
+<div id="appointmentAssignmentModal" class="appointment-assignment-modal hidden" aria-hidden="true">
+  <section class="appointment-assignment-card glass" role="dialog" aria-modal="true" aria-labelledby="appointmentAssignmentTitle">
+    <span class="appointment-assignment-kicker">ASSIGN APPOINTMENT</span>
+    <h2 id="appointmentAssignmentTitle">Who is this appointment for?</h2>
+    <p>The person booking it keeps the appointment stat.</p>
+    <label>Assigned to<select id="appointmentAssignmentSelect"><option value="">Me</option></select></label>
+    <div class="appointment-assignment-actions"><button id="cancelAppointmentAssignment" class="secondary" type="button">Cancel</button><button id="confirmAppointmentAssignment" class="primary" type="button">Confirm booking</button></div>
+  </section>
+</div>
+
+<div id="teamAppointmentNotice" class="team-appointment-notice hidden" aria-hidden="true">
+  <section class="team-appointment-notice-card glass" role="alertdialog" aria-modal="true" aria-labelledby="teamAppointmentNoticeTitle">
+    <span class="team-appointment-notice-kicker">APPOINTMENT BOOKED FOR YOU</span><h2 id="teamAppointmentNoticeTitle">A teammate booked an appointment for you.</h2>
+    <div class="team-appointment-notice-detail"><span id="teamAppointmentNoticeType">MAP</span><strong id="teamAppointmentNoticeContact">Contact</strong><small id="teamAppointmentNoticeAddress">Address</small><em id="teamAppointmentNoticeWhen">Date · time</em></div>
+    <div class="team-appointment-notice-actions"><button id="teamAppointmentGotIt" class="secondary" type="button">Got it</button><button id="teamAppointmentAddCalendar" class="primary" type="button">Add to calendar</button></div>
+  </section>
+</div>
+
 <div id="followUpModal" class="modal action-sheet-modal" aria-hidden="true">
   <div class="action-sheet glass" role="dialog" aria-modal="true" aria-labelledby="followUpModalTitle">
     <div class="action-sheet-handle"></div>
@@ -1017,6 +1035,6 @@ Andrew Tour | McGrath</textarea></label>
 
 
 
-<script type="module" src="app.js?v=1.35.1-beta-delete-team"></script>
+<script type="module" src="app.js?v=1.36.6-beta-release"></script>
 </body>
 </html>
