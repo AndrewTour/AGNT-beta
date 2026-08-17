@@ -1,0 +1,193 @@
+name: Promote AGNT BETA v1.36.6
+
+on:
+  push:
+    branches:
+      - release-v1.36.6-beta
+    paths:
+      - .github/workflows/promote-v1366.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout BETA release branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch confirmed Staging v1.36.6 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/agnt-staging
+          git clone --depth 1 --branch main https://github.com/AndrewTour/AGNT-staging.git /tmp/agnt-staging
+          test "$(git hash-object /tmp/agnt-staging/app.js)" = "9ec0c363a679c203acc4cf660e6061e4b1294784"
+          test "$(git hash-object /tmp/agnt-staging/styles.css)" = "36f461113121d52df70457b511f648f4bef3c554"
+          test "$(git hash-object /tmp/agnt-staging/firestore.rules)" = "8b5feca2d7bfb0aa4f3e301cd909437966614908"
+          test "$(git hash-object /tmp/agnt-staging/manifest.json)" = "ba1065c6078d01a9008e8e567fcc29125707b122"
+
+      - name: Build BETA v1.36.6 tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/agnt-staging/app.js ./app.js
+          cp /tmp/agnt-staging/styles.css ./styles.css
+          cp /tmp/agnt-staging/firestore.rules ./firestore.rules
+          cp /tmp/agnt-staging/manifest.json ./manifest.json
+          cp /tmp/agnt-staging/index.html ./index.html
+
+          sed -i -E 's#styles\.css\?v=[^"[:space:]]+#styles.css?v=1.36.6-beta-release#g' index.html
+          sed -i -E 's#app\.js\?v=[^"[:space:]]+#app.js?v=1.36.6-beta-release#g' index.html
+
+          cat > firebase-config.js <<'EOF'
+          export const firebaseConfig = {
+            apiKey: "AIzaSyDwa_eMrRRLgQhJwGx3qrRpS-hI3CbctxQ",
+            authDomain: "daily-accountability-be0ac.firebaseapp.com",
+            projectId: "daily-accountability-be0ac",
+            storageBucket: "daily-accountability-be0ac.firebasestorage.app",
+            messagingSenderId: "948051142195",
+            appId: "1:948051142195:web:7dbe6fb935d3fc6b6d6546"
+          };
+          EOF
+          sed -i 's/^          //' firebase-config.js
+
+          cat > service-worker.js <<'EOF'
+          const CACHE='agnt-beta-v1.36.6-team-appointments-release';
+          const ASSETS=['./','./index.html','./styles.css?v=1.36.6-beta-release','./app.js?v=1.36.6-beta-release','./firebase-config.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+          self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
+          self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+          self.addEventListener('fetch',event=>{
+            if(event.request.method!=='GET')return;
+            const url=new URL(event.request.url);
+            if(url.origin!==self.location.origin)return;
+            if(event.request.mode==='navigate'){
+              event.respondWith(fetch(event.request).then(response=>{if(response.ok)caches.open(CACHE).then(cache=>cache.put('./index.html',response.clone()));return response}).catch(()=>caches.match('./index.html')));
+              return;
+            }
+            event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response.ok)caches.open(CACHE).then(cache=>cache.put(event.request,response.clone()));return response})));
+          });
+          EOF
+          sed -i 's/^          //' service-worker.js
+
+          mkdir -p icons
+          printf '%s' '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' | base64 -d > icons/icon-192.png
+          printf '%s' 'iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAXTElEQVR42u3dWYxd9X0H8HPuPXcWz4w9Hu+DDcbYxtiDAeOw2xg7SaukQk0fmlatuiVVFPUhUVQpVErURnmhaRQlD12oWpq2SVDSVKU0qCkIiMEBgoODwXjHYMAr3pfZ7nL6QEsWwMFz/vfOvfd8Pk+JkO5cn/v//77n9/+fJU7TNAIgfwoOAYAAAEAAACAAABAAAAgAAAQAAAIAAAEAgAAAQAAAIAAAEAAACAAABAAAAgAAAQCAAABAAAAgAAAQAAAIAAAEAAACAEAAACAAABAAAAgAAAQAAAIAAAEAgAAAQAAAIAAAEAAACAAABAAAAgBAAAAgAFrEA3f1+vEAFUkHAIAAAEAAACAAABAAAAgAAAEAgABoHW4FANQiHQAAAgAAAQCAAACgvQLAPjCgCukAABAAAAgAANo2AGwDAOqPDgAAAQCAAACgbQPANgCg8ugAABAAAOQhAKwCAWqODgAAAQBAHgLAKhCg2ugAABAAAOQhAKwCAeqMDgCAnAWAJgBQYXQAAAgAAPIQAFaBALVFBwBAzgJAEwCoKjoAAHIWAJoAQD3RAQCQswDQBAAqiQ4AgJwFgCYAUEN0AADkLAA0AYDqkd8OQAYA6kZOAwCA/AaAJgBQMXQAAOQsADQBgFqR3w5ABgCqRE4DAID8BoAmAFAf8tsByABAZYhyuwQkAwA1wR4AQE7lNwA0AUDOq0HBrw6oAwLAbw+oAAIAAAHgFAAw9wWAcQCY9QLAaADMdwFgTABmugAwMgBzXAAYH4DZLQCMEsC8FgDGCmBGCwAjBjCXBYBxA5jFAsDoAcxfAWAMAWauADCSAHNWABhPgNkqAIwqwDwVAMYWYIZerDhNU0dhAu68+5yDAEq/DsBoA8xHAWDMAWZii7AEFIDlIFD6dQBGIWDeCQBjETDjmpsloMAsB4HSrwMwOgHzSwegFQCUfgEgBgClv0lYAjJ2wQzSAaAVAKVfACAGQOkXAIgBUPoFAGIAlH4BgBgApV8AIAlA3RcAiAFQ+gUAkgDUfQGAJEDdRwAgCVD3EQAIAxR9BADCAEUfAYA8QMVHACAYUOgRAACE530AAAIAAAEAgAAAQAAAIAAAEAAACAAABAAAAgAAAQCAAABAAAAgAAAQAAAIAAAEAAACAAABAIAAAEAAACAAABAAAAgAAAEAgAAAQAAAIAAAEAAACAAABAAAAgAAAQCAAABAAAAgAAAQAAAIAAAEAAACAAABAIAAAEAAACAAABAAAAgAAAQAgABwCAAEAAACAAABAIAAAEAAACAAABAAAAgAAAQAAAIAAAEAwKT6XwpF/uF1X4oiAAAAAElFTkSuQmCC' | base64 -d > icons/icon-512.png
+
+          cat > README.md <<'EOF'
+          # AGNT BETA v1.36.6 — Team Appointment Assignment Release
+
+          Consumer-ready BETA promotion of the confirmed working AGNT Staging v1.36.6 application into the existing functioning BETA environment.
+
+          ## Release baseline
+          - Application/UI source: confirmed working `AGNT Staging v1.36.6 — Targeted Appointment Contrast`.
+          - Firebase environment: existing BETA project `daily-accountability-be0ac`.
+          - Existing Firebase Authentication accounts and UIDs are retained.
+          - Existing personal data remains under the current `users/{uid}` paths.
+          - Existing Team membership, invite-code and Team leaderboard paths are retained.
+          - No user-data migration is required.
+
+          ## Included functionality
+          - Complete Team create/join/leave/owner-management workflow, including Team deletion.
+          - Daily and current-week Team leaderboard sync.
+          - Persistent Pipeline Session refresh with per-user/per-day served-contact exclusion.
+          - Broadcast contrast and viewport refinements.
+          - Universal nested/session navigation polish.
+          - Returning Daily Snapshot for four seconds on every second returning app open.
+          - Consumer-ready login with persistent Firebase authentication restore.
+          - Team appointment assignment after Book Appointment, defaulting to Me.
+          - Assignment choices use the live Team leaderboard display name and show first name only.
+          - The original setter keeps the appointment statistic and personal source appointment.
+          - The assigned teammate receives a Team-owned appointment mirror without another user writing into their private `users/{uid}` records.
+          - Recipient sees the appointment in their appointment/timeline surfaces without receiving the setter's appointment statistic.
+          - Live/next-open appointment notification with Got it and Add to Calendar.
+          - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
+          - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
+
+          ## Firebase
+          The frontend is connected to the existing BETA Firebase project `daily-accountability-be0ac`.
+          The bundled `firestore.rules` retains the current Team/private-data permission model and adds `teams/{teamId}/appointments/{appointmentId}`.
+          Deploy the bundled rules to the BETA Firebase project as part of this release. No data migration is required.
+
+          ## Protected systems retained
+          Existing Firebase/Auth UIDs, `users/{uid}` personal data, days, contacts, prospecting, appointments, notes/history, Team membership/leaderboard data, UID-scoped local cache shapes, offline Firestore sync, manifest/icon identity and service-worker behaviour remain preserved. Only release cache identifiers were bumped.
+          EOF
+          sed -i 's/^          //' README.md
+
+          cat > BETA-ROLLOUT.md <<'EOF'
+          # AGNT BETA v1.36.6 — Rollout Check
+
+          ## Before release verification
+          1. Deploy the bundled `firestore.rules` to Firebase project `daily-accountability-be0ac`.
+          2. Confirm the complete BETA web package is live, including `icons/`.
+          3. Reopen the installed PWA and allow the new service worker/cache to activate.
+          4. Confirm an existing account loads historical Today, Contacts/Prospecting, Appointments and Insights data.
+          5. Confirm the existing Team and current members are still present.
+
+          ## Core acceptance
+          1. Change Calls/Connects/Data for one member and confirm Daily leaderboard updates for another member.
+          2. Confirm current Weekly leaderboard data updates for another member.
+          3. Confirm personal Contacts/Prospecting data remains private to each UID.
+          4. Confirm existing appointments/history remain present.
+          5. Confirm Team owner management and ordinary member leave workflow still work.
+
+          ## Team appointment acceptance
+          1. Member A books a LAP, MAP or BAP and assigns it to Member B.
+          2. Confirm the assignment popup uses the same first-name display as the Team leaderboard.
+          3. Confirm Member A receives the appointment statistic and sees `Booked for [Member B]` context.
+          4. Confirm Member B receives the appointment notification live or on next open.
+          5. Confirm Member B's appointment statistic does not increase.
+          6. Confirm Member B sees the assigned appointment in the relevant appointment/timeline surfaces.
+          7. Confirm Got it closes the notification cleanly.
+          8. Confirm Add to Calendar performs the calendar handoff and the notification does not reopen immediately.
+          9. Edit/delete the appointment as Member A and confirm the shared Team appointment updates/disappears for Member B.
+          EOF
+          sed -i 's/^          //' BETA-ROLLOUT.md
+
+          cat > BETA-TEAM-APPOINTMENTS-VALIDATION.md <<'EOF'
+          # BETA Team Appointment Validation
+
+          Deploy the bundled Firestore rules before testing cross-team assignment.
+          - A books for B: A's appointment statistic increments; B's does not.
+          - Assignment dropdown uses the Team leaderboard name, first name only.
+          - B receives the live/next-open notification and assigned appointment display.
+          - Got it dismisses the notification without changing the underlying AGNT screen.
+          - Add to Calendar completes the existing calendar handoff and does not immediately reopen the same notification.
+          - A's record shows `Booked for B` context.
+          - A's edit/delete keeps the Team appointment mirror in sync.
+          - Personal `users/{uid}` records remain UID-private.
+          EOF
+          sed -i 's/^          //' BETA-TEAM-APPOINTMENTS-VALIDATION.md
+
+          rm -f .github/workflows/promote-v1366.yml
+
+      - name: Validate release tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check app.js
+          test "$(git hash-object app.js)" = "9ec0c363a679c203acc4cf660e6061e4b1294784"
+          test "$(git hash-object styles.css)" = "36f461113121d52df70457b511f648f4bef3c554"
+          test "$(git hash-object firestore.rules)" = "8b5feca2d7bfb0aa4f3e301cd909437966614908"
+          test "$(git hash-object manifest.json)" = "ba1065c6078d01a9008e8e567fcc29125707b122"
+          grep -q 'projectId: "daily-accountability-be0ac"' firebase-config.js
+          grep -q 'styles.css?v=1.36.6-beta-release' index.html
+          grep -q 'app.js?v=1.36.6-beta-release' index.html
+          grep -q "agnt-beta-v1.36.6-team-appointments-release" service-worker.js
+          test -s icons/icon-192.png
+          test -s icons/icon-512.png
+          ! grep -R -n 'agnt-staging-cb6ce' app.js index.html styles.css firebase-config.js service-worker.js firestore.rules
+          git diff --check
+
+      - name: Commit completed BETA release to release branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "AGNT Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Promote AGNT BETA v1.36.6"
+          git push origin HEAD:release-v1.36.6-beta
