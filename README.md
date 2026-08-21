@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.6 — Team Appointment Assignment Release
+# AGNT BETA v1.36.13 — Buyer Follow-Up Modal + Alignment
 
-Consumer-ready BETA promotion of the confirmed working AGNT Staging v1.36.6 application into the existing functioning BETA environment.
+Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.11 Buyer Context + Follow-Ups package supplied on 21 August 2026.
 
 ## Release baseline
-- Application/UI source: confirmed working `AGNT Staging v1.36.6 — Targeted Appointment Contrast`.
+- Application/UI source: confirmed working `AGNT-beta-v1.36.11-Buyer-Context-Follow-Ups.zip` (v1.36.11 baseline).
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -27,10 +27,86 @@ Consumer-ready BETA promotion of the confirmed working AGNT Staging v1.36.6 appl
 - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
 - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
 
+## Buyer journey added in v1.36.7
+- Dedicated Buyers tab inside Prospector, separate from Contacts.
+- Add as buyer from the quick-call/buyer-list call outcome flow.
+- Fast buyer brief capture: budget, configuration, suburbs, property type and requirement tags.
+- Buyer cards show requirement snapshots with one-tap Call and SMS actions.
+- Quick and advanced buyer filtering by budget, suburb, configuration, property type, stage, temperature and requirements.
+- Buyer journey stages: Looking, Inspecting and Negotiating, followed by Purchased/Owner conversion.
+- Mark as Purchased converts the same record into an Owner contact while retaining buyer history and purchase details.
+- Buyer records use the existing UID-scoped Prospector sync document; no new Firestore collection or rule is introduced.
+
+## Buyer UI refinement added in v1.36.8
+- Fixed Buyers-tab horizontal overflow and clipped content on iPhone-width viewports.
+- Simplified the buyer database controls to All / Hot / Warm plus the existing advanced Filters control.
+- Removed the duplicate in-panel + Buyer action; the existing Prospector + button remains the single add action.
+- Shortened the buyer search placeholder so it remains readable beside the keypad and add controls.
+- Buyer cards now use a containment-safe grid with compact Call/SMS actions beside the buyer name.
+- Last-contact text now sits on its own contained line instead of competing with stage/temperature pills.
+- Buyer overview, list and filter surfaces now use the same rounded nested-card geometry as the rest of AGNT.
+- Buyer logic, data shape, filtering capability and Buyer → Owner conversion are unchanged.
+
+## Buyer simplicity refinement added in v1.36.9
+- Buyer database rows are now intentionally single-line: buyer name, maximum budget, Call and SMS.
+- Buyers are sorted A–Z by name for fast scanning.
+- Budget capture is now one maximum-budget slider; the previous minimum/maximum range UI is removed.
+- Existing buyer records remain compatible; legacy minimum-budget data is only used as a fallback display value when no maximum was previously stored.
+- New/edited buyer records save `buyerBudgetMin` as `0` and store the selected maximum in the existing `buyerBudgetMax` field, so no Firebase schema or migration is introduced.
+- Buyer filtering now uses one `Buyer budget at least` slider, designed to find buyers whose maximum budget can meet a property price.
+- The buyer suburb field now includes a preloaded searchable Sydney suburb list while still allowing manual suburb entry when required.
+- Quick filters are reduced to All / Hot / Filters; stage, temperature, configuration, property type and requirements remain in advanced Filters.
+- Buyer detail, call/SMS actions, call-result logging and Buyer → Owner conversion remain unchanged.
+
+## Buyer UI balance refinement added in v1.36.10
+- All / Hot / Warm / Filters now share the same width, height, font weight, border treatment and sit on one row.
+- Warm is restored as a working quick filter while deeper stage, temperature and property matching remain in Filters.
+- Buyer rows are shorter and more balanced: name and maximum budget share one clear hierarchy with smaller equal Call/SMS actions.
+- Buyer list metadata and card spacing are tightened to reduce visual weight without removing information.
+- Buyer suburb capture now reads `Add suburb`; its type size, weight and control height match the surrounding buyer form.
+- The Sydney suburb autocomplete dataset and manual suburb fallback remain unchanged.
+- No buyer data shape, Firebase path, rules, sync or Buyer → Owner behaviour changed.
+
+## Buyer context + follow-ups added in v1.36.11
+- Buyer list rows now surface maximum budget and the saved bedroom / bathroom / car configuration without using `+` suffixes.
+- Buyer rows retain compact Call and SMS actions and add a third equal-weight `Follow Up` action.
+- `Buyer Seller` is an optional buyer attribute indicating that the buyer has a property to sell if they purchase; it is editable on the buyer brief and displayed as a compact tag.
+- Buyer follow-ups use the existing Prospector `nextFollowUp` and interaction sync channel rather than a new task collection or Firestore path.
+- Follow-up creation captures a date and notes. Buyer follow-ups then appear on the existing Today timeline alongside Pipeline/appointment follow-ups.
+- Completing a buyer follow-up from the Today timeline uses the existing Prospector follow-up completion pattern and clears the due task.
+- No new Firebase collection, Firestore rule, local-storage key or backend service is introduced.
+
+## Buyer context + contrast refinement added in v1.36.12
+- Buyer maximum budgets now display as full dollar amounts, for example `$1,300,000`, instead of abbreviated `$1.3m` values.
+- Buyer list context now keeps configuration and location on one compact line. The first-entered suburb is treated as the priority suburb and additional selections display as `+ X suburb(s)`.
+- Buyer list, action buttons, search/filter controls and Buyer Seller tag receive explicit light- and dark-mode contrast treatment.
+- Buyer follow-up overlay, sheet, fields, labels, close button and primary/secondary actions receive explicit opaque light/dark surfaces so the sheet remains clearly separated from the dimmed background.
+- Buyer data shape, suburb ordering, follow-up task behaviour and Firebase architecture are unchanged.
+
 ## Firebase
 The frontend is connected to the existing BETA Firebase project `daily-accountability-be0ac`.
-The bundled `firestore.rules` retains the current Team/private-data permission model and adds `teams/{teamId}/appointments/{appointmentId}`.
-Deploy the bundled rules to the BETA Firebase project as part of this release. No data migration is required.
+The bundled `firestore.rules` is unchanged from the supplied v1.36.6 baseline, including its existing Team/private-data and Team appointment permissions.
+No Firebase Console, Firestore rule or data migration change is required for this release. The bundled rules are retained unchanged from the supplied baseline.
 
 ## Protected systems retained
 Existing Firebase/Auth UIDs, `users/{uid}` personal data, days, contacts, prospecting, appointments, notes/history, Team membership/leaderboard data, UID-scoped local cache shapes, offline Firestore sync, manifest/icon identity and service-worker behaviour remain preserved. Only release cache identifiers were bumped.
+
+
+## Buyer follow-up modal + alignment refinement added in v1.36.13
+
+- Buyer follow-up overlay now mounts at document level so it covers the full installed-PWA viewport consistently.
+- Removed the heavy backdrop blur from the buyer follow-up overlay; uses the same restrained dimmed backdrop language as AGNT confirmation overlays.
+- Follow-up card now uses contained AGNT rounded geometry with full light/dark mode surfaces.
+- Follow-up date and note controls are explicitly constrained to the modal width, including iOS date input sizing.
+- Buyer configuration/suburb context is left aligned directly beneath the buyer name while the full maximum budget remains right aligned.
+- Buyer/follow-up data, Today timeline logic, Firebase, Firestore paths/rules, UID separation and sync remain unchanged.
+
+
+## Buyer follow-up control + hierarchy refinement added in v1.36.14
+
+- Restored the Buyer Follow Up modal to a broader mobile card footprint while retaining full viewport containment and AGNT rounded geometry.
+- Rebalanced follow-up kicker, buyer name, labels, fields and actions so the modal hierarchy matches the surrounding AGNT UI.
+- Added direct document-level modal controls so the close `×`, Cancel, backdrop tap and Escape key reliably dismiss the modal and return focus to the exact buyer screen/action that opened it.
+- Buyer follow-up form submission is now handled directly by the document-level modal, preventing the body-mounted overlay from falling outside the Prospector form event scope.
+- iOS date input sizing now uses explicit inline containment and native-safe sizing so it cannot extend beyond the modal card.
+- Buyer/follow-up data, Today timeline behaviour, Firebase, Firestore paths/rules, UID separation and sync remain unchanged.
