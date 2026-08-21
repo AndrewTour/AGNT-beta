@@ -1,4 +1,4 @@
-# AGNT BETA v1.36.18 — Rollout Check
+# AGNT BETA v1.36.19 — Rollout Check
 
 ## Before release verification
 1. Deploy the bundled `firestore.rules` to Firebase project `daily-accountability-be0ac`.
@@ -31,6 +31,10 @@
 14. Open the buyer follow-up sheet in light and dark mode; confirm the sheet is fully opaque, the background is dimmed without blur and no underlying text competes with the form.
 15. Open a buyer with a saved current address and confirm the mobile and address appear as equal-weight rows below the buyer's name.
 16. Edit a buyer and confirm Stage, Temperature and Buyer notes use the same form-value weight in both themes.
+17. Schedule a future buyer follow-up and confirm its card text appears blue; confirm due-today remains amber, overdue remains red and an unset follow-up remains neutral.
+18. Confirm each buyer card shows configuration/budget and location on separate lines without clipping at iPhone width.
+19. Confirm buyer-list budgets use compact notation while buyer detail retains the full currency amount.
+20. Scroll Buyers and the buyer editor beneath the sticky Prospector toolbar in light and dark mode; confirm underlying controls and text do not show through.
 
 ## Team appointment acceptance
 1. Member A books a LAP, MAP or BAP and assigns it to Member B.

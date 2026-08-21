@@ -11385,3 +11385,66 @@ html[data-theme="dark"] .buyer-followup-head>button,html[data-theme="dark"] .buy
   color:#f6f7f8!important;
 }
 html[data-theme="dark"] .buyer-followup-actions .primary{background:#397dff!important;border-color:#397dff!important;color:#fff!important}
+
+/* AGNT BETA v1.36.19 — Buyer card hierarchy and calmer editor typography. */
+#prospectingView .prospecting-toolbar{
+  isolation:isolate;
+  padding-block:6px!important;
+  background:#fff!important;
+  border-bottom:1px solid #edf0f3!important;
+  box-shadow:0 8px 18px rgba(22,28,45,.06)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#prospectingView .prospecting-search-wrap{background:#f2f4f7!important}
+.buyer-row-profile{gap:4px!important;padding-bottom:9px!important}
+.buyer-row-brief{
+  color:#424b57!important;
+  font-size:11.5px!important;
+  font-weight:650!important;
+  line-height:1.35!important;
+  text-transform:none!important;
+}
+.buyer-row-location{
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  color:#6f7782;
+  font-size:10.75px;
+  font-weight:550;
+  line-height:1.35;
+  text-overflow:ellipsis;
+  text-transform:none!important;
+  white-space:nowrap;
+}
+.buyer-row-next{margin-top:1px;font-weight:650!important}
+.buyer-next-scheduled>span:first-child{color:#1769cf!important;font-weight:720!important}
+.buyer-position-tag{font-weight:720!important}
+.buyer-card-actions button,.buyer-card-actions a{
+  background:#f4f8fd!important;
+  border-color:#d3e2f8!important;
+  font-weight:720!important;
+}
+.buyer-card-actions.buyer-card-restore button{background:#f6f7f9!important;border-color:#dfe3e8!important;color:#111318!important}
+.buyer-editor select,.buyer-editor textarea{
+  font-size:15px!important;
+  font-weight:500!important;
+  letter-spacing:normal!important;
+}
+.buyer-editor select option{font-size:15px;font-weight:500}
+.buyer-editor textarea::placeholder{font-size:15px!important;font-weight:500!important}
+html[data-theme="dark"] #prospectingView .prospecting-toolbar{
+  background:#0b0d11!important;
+  border-bottom-color:#20242b!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.28)!important;
+}
+html[data-theme="dark"] #prospectingView .prospecting-search-wrap{background:#171a20!important}
+html[data-theme="dark"] .buyer-row-brief{color:#d2d6dc!important}
+html[data-theme="dark"] .buyer-row-location{color:#949ca7!important}
+html[data-theme="dark"] .buyer-next-scheduled>span:first-child{color:#82bdff!important}
+html[data-theme="dark"] .buyer-card-actions button,html[data-theme="dark"] .buyer-card-actions a{
+  background:rgba(57,125,255,.11)!important;
+  border-color:rgba(112,182,255,.26)!important;
+  color:#82bdff!important;
+}
+html[data-theme="dark"] .buyer-card-actions.buyer-card-restore button{background:#1a1e25!important;border-color:#343a44!important;color:#f6f7f8!important}

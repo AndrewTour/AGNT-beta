@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.18 — Buyer Visual Refinement
+# AGNT BETA v1.36.19 — Buyer Card Hierarchy
 
-Incremental BETA update built directly on the verified AGNT BETA v1.36.17 Buyer UI Cohesion package.
+Incremental BETA update built directly on the verified AGNT BETA v1.36.18 Buyer Visual Refinement package.
 
 ## Release baseline
-- Application/UI source: verified `AGNT-BETA-v1.36.17-Buyer-UI-Cohesion-FULL-GITHUB-READY.zip`.
+- Application/UI source: verified `AGNT-BETA-v1.36.18-Buyer-Visual-Refinement-FULL-GITHUB-READY.zip`.
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -26,6 +26,15 @@ Incremental BETA update built directly on the verified AGNT BETA v1.36.17 Buyer 
 - Live/next-open appointment notification with Got it and Add to Calendar.
 - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
 - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
+
+## Buyer card hierarchy added in v1.36.19
+- Scheduled buyer follow-ups use AGNT blue, while due-today, overdue and unset states retain distinct amber, red and neutral treatments.
+- Buyer cards separate configuration and budget from the primary suburb, preventing long requirement summaries from competing on one line.
+- Buyer-list budgets use compact values such as `$1.6m` and `$950k`; the full amount remains available in buyer detail and editing views.
+- Card metadata and action controls use a calmer weight while retaining iPhone-safe 44px tap targets.
+- Stage, Temperature and Buyer notes values use 15px medium-weight form text in both themes.
+- The sticky Prospector toolbar and search field use fully opaque light and dark surfaces so scrolled content cannot show through.
+- Firebase configuration, Authentication, Firestore paths/rules, UID separation, Team, appointments and leaderboard behaviour remain unchanged.
 
 ## Buyer visual refinement added in v1.36.18
 - Buyer follow-up now uses an explicitly opaque, non-glass sheet with no backdrop blur in both light and dark mode.
