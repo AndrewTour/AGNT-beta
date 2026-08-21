@@ -2220,9 +2220,14 @@ async function upsertBuyer(data,id='',context=null){
   const existing=id?prospectById(id):null,createdAt=existing?.createdAt||Date.now(),dataCreditedAt=existing?.dataCreditedAt||(!existing?createdAt:0),record=normaliseProspect({...existing,...data,id:id||prospectId(),recordType:'buyer',stage:'Nurture',sellingTimeframe:'',temperatureManual:true,dataCreditedAt,createdAt,updatedAt:Date.now(),lastContact:context?.outcome&&context.outcome!=='Cancelled'?todayKey():(existing?.lastContact||'')});
   if(existing)prospects=prospects.map(item=>item.id===id?record:item);else prospects.unshift(record);
   if(context?.outcome&&context.outcome!=='Cancelled'&&context.interactionId&&!prospectInteractions.some(item=>item.id===context.interactionId))prospectInteractions.push({id:context.interactionId,prospectId:record.id,date:todayKey(),at:Number(context.at)||Date.now(),type:'Call',outcome:cleanText(context.outcome,80),note:'Added to buyer database from call outcome.',nextFollowUp:''});
-  activeProspectId=record.id;saveProspectingLocal();
-  if(!existing){try{await creditNewProspectData(record)}catch(err){console.error('Buyer Data credit is saved locally and pending sync',err)}}
-  await saveProspecting({render:false});
+  activeProspectId=record.id;
+  if(existing){
+    await saveProspecting({render:false,awaitCloud:false});
+  }else{
+    saveProspectingLocal();
+    try{await creditNewProspectData(record)}catch(err){console.error('Buyer Data credit is saved locally and pending sync',err)}
+    await saveProspecting({render:false});
+  }
   const returnToBuyerSession=Boolean(context?.returnToBuyerSession&&buyerSession.active);pendingBuyerEditorContext=null;
   if(returnToBuyerSession){activeProspectId=null;setProspectorSection('today');renderProspecting();showBuyerSession()}else{setProspectorSection('buyers');renderProspecting();$('#prospectingDashboard').classList.add('hidden');$('#prospectDetail').classList.remove('hidden');renderBuyerDetail(record.id)}
   return record

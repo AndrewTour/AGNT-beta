@@ -1,4 +1,4 @@
-# AGNT BETA v1.36.19 — Rollout Check
+# AGNT BETA v1.36.20 — Rollout Check
 
 ## Before release verification
 1. Deploy the bundled `firestore.rules` to Firebase project `daily-accountability-be0ac`.
@@ -35,6 +35,9 @@
 18. Confirm each buyer card shows configuration/budget and location on separate lines without clipping at iPhone width.
 19. Confirm buyer-list budgets use compact notation while buyer detail retains the full currency amount.
 20. Scroll Buyers and the buyer editor beneath the sticky Prospector toolbar in light and dark mode; confirm underlying controls and text do not show through.
+21. Edit an existing buyer while online and confirm the updated profile appears immediately without waiting for the cloud sync indicator to clear.
+22. Edit an existing buyer with a slow or unavailable connection; confirm the change remains available locally and the existing cloud-sync warning appears if required.
+23. Add a new buyer and confirm the Data metric is still credited before the buyer cloud write, with no duplicate Data event.
 
 ## Team appointment acceptance
 1. Member A books a LAP, MAP or BAP and assigns it to Member B.

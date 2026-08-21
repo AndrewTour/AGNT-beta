@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.19 — Buyer Card Hierarchy
+# AGNT BETA v1.36.20 — Buyer Save Performance
 
-Incremental BETA update built directly on the verified AGNT BETA v1.36.18 Buyer Visual Refinement package.
+Incremental BETA update built directly on the verified AGNT BETA v1.36.19 Buyer Card Hierarchy package.
 
 ## Release baseline
-- Application/UI source: verified `AGNT-BETA-v1.36.18-Buyer-Visual-Refinement-FULL-GITHUB-READY.zip`.
+- Application/UI source: verified `AGNT-BETA-v1.36.19-Buyer-Card-Hierarchy-FULL-GITHUB-READY.zip`.
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -26,6 +26,14 @@ Incremental BETA update built directly on the verified AGNT BETA v1.36.18 Buyer 
 - Live/next-open appointment notification with Got it and Add to Calendar.
 - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
 - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
+
+## Buyer save performance added in v1.36.20
+- Editing an existing buyer now saves to the device once, returns to the updated buyer profile immediately and completes Firestore sync in the background.
+- The visible save no longer waits for the 160ms prospecting debounce or the full cloud round trip.
+- Existing background-sync error handling remains active, including the local-save fallback and cloud-sync warning.
+- New-buyer creation retains the existing Data-credit-first ordering before the buyer cloud write.
+- Buyer records remain inside the current UID-scoped Prospector state document; no Firebase migration or rule change is required.
+- Firebase configuration, Authentication, Firestore paths/rules, UID separation, Team, appointments and leaderboard behaviour remain unchanged.
 
 ## Buyer card hierarchy added in v1.36.19
 - Scheduled buyer follow-ups use AGNT blue, while due-today, overdue and unset states retain distinct amber, red and neutral treatments.
