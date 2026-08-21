@@ -10734,7 +10734,7 @@ html[data-theme="dark"] .buyer-suburb-entry input::placeholder{color:#969ca7!imp
   font-size:10.5px!important;
   font-weight:670!important;
 }
-.buyer-seller-tag{
+.buyer-seller-tag,.buyer-position-tag{
   display:inline-flex!important;
   align-items:center!important;
   min-height:21px!important;
@@ -10814,7 +10814,7 @@ html[data-theme="dark"] .buyer-suburb-entry input::placeholder{color:#969ca7!imp
 html[data-theme="dark"] .buyer-row-head strong{color:#f5f6f7!important}
 html[data-theme="dark"] .buyer-row-head b{color:#d2d5da!important}
 html[data-theme="dark"] .buyer-row-meta>span{color:#959ca7!important}
-html[data-theme="dark"] .buyer-seller-tag{background:rgba(79,140,255,.15)!important;color:#79adff!important}
+html[data-theme="dark"] .buyer-seller-tag,html[data-theme="dark"] .buyer-position-tag{background:rgba(79,140,255,.15)!important;color:#79adff!important}
 html[data-theme="dark"] .buyer-followup-sheet{background:#13161b!important;border-color:#2b3038!important;box-shadow:0 24px 70px rgba(0,0,0,.48)!important}
 html[data-theme="dark"] .buyer-followup-head h2{color:#f5f6f7!important}
 html[data-theme="dark"] .buyer-followup-head>button,html[data-theme="dark"] .buyer-followup-sheet input,html[data-theme="dark"] .buyer-followup-sheet textarea{background:#171a20!important;border-color:#2a2e36!important;color:#f5f6f7!important}
@@ -10846,7 +10846,7 @@ html[data-theme="dark"] .buyer-detail-position strong{color:#79adff!important}
   color:#757d88!important;
   line-height:1.25!important;
 }
-.buyer-seller-tag{flex:0 0 auto!important}
+.buyer-seller-tag,.buyer-position-tag{flex:0 0 auto!important}
 
 /* Light mode: make buyer controls feel like one opaque AGNT system. */
 html:not([data-theme="dark"]) .buyer-list-shell,
@@ -10876,7 +10876,7 @@ html:not([data-theme="dark"]) .buyer-card-actions a{
 }
 html:not([data-theme="dark"]) .buyer-card-actions :is(button,a):disabled,
 html:not([data-theme="dark"]) .buyer-card-actions a.disabled{opacity:.42!important}
-html:not([data-theme="dark"]) .buyer-seller-tag{
+html:not([data-theme="dark"]) .buyer-seller-tag,html:not([data-theme="dark"]) .buyer-position-tag{
   background:#eaf3ff!important;
   color:#1263c6!important;
 }
@@ -10946,7 +10946,7 @@ html[data-theme="dark"] .buyer-card-actions a{
   border-color:rgba(112,182,255,.30)!important;
   color:#82bdff!important;
 }
-html[data-theme="dark"] .buyer-seller-tag{
+html[data-theme="dark"] .buyer-seller-tag,html[data-theme="dark"] .buyer-position-tag{
   background:rgba(57,125,255,.17)!important;
   color:#91c5ff!important;
 }
@@ -11103,3 +11103,12 @@ html[data-theme="dark"] .buyer-followup-sheet{
 html:not([data-theme="dark"]) .buyer-followup-overlay{background:rgba(20,24,32,.38)!important}
 html[data-theme="dark"] .buyer-followup-overlay{background:rgba(0,0,0,.66)!important}
 @media(max-width:390px){.buyer-followup-overlay{padding-inline:16px!important}.buyer-followup-sheet{width:calc(100vw - 32px)!important;padding:20px 18px 18px!important;border-radius:26px!important}.buyer-followup-head h2{font-size:22px!important}.buyer-followup-actions button{font-size:13.5px!important}}
+
+
+/* AGNT BETA v1.36.16 — expanded buyer position/context tags. */
+.buyer-position-tag{
+  display:inline-flex!important;align-items:center!important;min-height:21px!important;padding:0 7px!important;border-radius:999px!important;
+  background:rgba(10,132,255,.10)!important;color:#0a69d8!important;font-size:9px!important;font-style:normal!important;font-weight:800!important;white-space:nowrap!important;
+}
+html:not([data-theme="dark"]) .buyer-position-tag{background:#eaf3ff!important;color:#1263c6!important}
+html[data-theme="dark"] .buyer-position-tag{background:rgba(57,125,255,.17)!important;color:#91c5ff!important}

@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.13 — Buyer Follow-Up Modal + Alignment
+# AGNT BETA v1.36.16 — Buyer Position Tags
 
-Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.11 Buyer Context + Follow-Ups package supplied on 21 August 2026.
+Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.15 full GitHub-ready package supplied on 21 August 2026.
 
 ## Release baseline
-- Application/UI source: confirmed working `AGNT-beta-v1.36.11-Buyer-Context-Follow-Ups.zip` (v1.36.11 baseline).
+- Application/UI source: confirmed working `AGNT-beta-v1.36.15-Buyer-Leaderboard-Detail-FULL-GITHUB-READY.zip` (v1.36.15 baseline).
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -110,3 +110,20 @@ Existing Firebase/Auth UIDs, `users/{uid}` personal data, days, contacts, prospe
 - Buyer follow-up form submission is now handled directly by the document-level modal, preventing the body-mounted overlay from falling outside the Prospector form event scope.
 - iOS date input sizing now uses explicit inline containment and native-safe sizing so it cannot extend beyond the modal card.
 - Buyer/follow-up data, Today timeline behaviour, Firebase, Firestore paths/rules, UID separation and sync remain unchanged.
+
+
+## Buyer leaderboard detail refinement added in v1.36.15
+
+- Creating a new buyer continues to credit the existing Data metric and leaderboard score exactly as before.
+- In the leaderboard agent-detail list only, buyer-sourced data entries are now labelled `Buyer` instead of `Data`.
+- Buyer detail rows show the saved bedroom / bathroom / car configuration plus the full maximum budget where the address line normally appears, for example `3 Bed · 2 Bath · 1 Car · $1,300,000`.
+- Normal contact data remains labelled `Data` and continues to show its existing address context.
+- No leaderboard scoring, target, Firebase, Firestore, UID separation, local cache or sync behaviour changed.
+
+
+## Buyer position/context tags added in v1.36.16
+- Expanded the existing Buyer Seller position control into a lightweight multi-select buyer context set.
+- Available tags: Buyer Seller, Upsizing, Downsizing, Builder, Investor, First Home Buyer.
+- Tags are saved on the existing buyer record as `buyerPositionTags`; the existing `buyerSeller` boolean remains maintained for backwards compatibility.
+- Selected tags are visible on buyer list cards and in the buyer detail view, and are searchable from the Buyers search field.
+- No new Firestore collection/path, rule change, migration, leaderboard scoring change or Firebase configuration change is required.
