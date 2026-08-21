@@ -1,4 +1,4 @@
-# AGNT BETA v1.36.17 — Rollout Check
+# AGNT BETA v1.36.18 — Rollout Check
 
 ## Before release verification
 1. Deploy the bundled `firestore.rules` to Firebase project `daily-accountability-be0ac`.
@@ -28,6 +28,9 @@
 11. Sign out and into a different account on the same device; confirm buyer-list session state does not carry between UIDs.
 12. Go offline with no imported call list and confirm the PDF import action explains that a connection is required; confirm an existing local list can still be continued.
 13. Add a new buyer while simulating a prospecting cloud-write failure and confirm the buyer plus the Data credit remain local and show pending-sync feedback.
+14. Open the buyer follow-up sheet in light and dark mode; confirm the sheet is fully opaque, the background is dimmed without blur and no underlying text competes with the form.
+15. Open a buyer with a saved current address and confirm the mobile and address appear as equal-weight rows below the buyer's name.
+16. Edit a buyer and confirm Stage, Temperature and Buyer notes use the same form-value weight in both themes.
 
 ## Team appointment acceptance
 1. Member A books a LAP, MAP or BAP and assigns it to Member B.

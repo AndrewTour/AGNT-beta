@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.17 — Buyer UI Cohesion
+# AGNT BETA v1.36.18 — Buyer Visual Refinement
 
-Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.16 Buyer Support package supplied on 21 August 2026.
+Incremental BETA update built directly on the verified AGNT BETA v1.36.17 Buyer UI Cohesion package.
 
 ## Release baseline
-- Application/UI source: confirmed working `AGNT Beta - 21:8 - Buyer Support 3.zip` (v1.36.16 baseline).
+- Application/UI source: verified `AGNT-BETA-v1.36.17-Buyer-UI-Cohesion-FULL-GITHUB-READY.zip`.
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -26,6 +26,14 @@ Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.
 - Live/next-open appointment notification with Got it and Add to Calendar.
 - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
 - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
+
+## Buyer visual refinement added in v1.36.18
+- Buyer follow-up now uses an explicitly opaque, non-glass sheet with no backdrop blur in both light and dark mode.
+- The sheet, fields, close control and actions have explicit theme surfaces so underlying buyer content cannot bleed through.
+- A saved current address is shown directly under the buyer's mobile in the detail header using the same size, weight and colour.
+- Journey select values and Buyer notes use the standard AGNT form-text weight instead of inheriting the heavier field-label weight.
+- The Prospector search field's native inner outline is removed while retaining the existing outer control shape and focus behaviour.
+- Firebase configuration, Authentication, Firestore paths/rules, UID separation, Team, appointments and leaderboard behaviour remain unchanged.
 
 ## Buyer UI cohesion and trust fixes added in v1.36.17
 - Buyer cards now use the same AGNT hierarchy throughout: name and temperature, concise search criteria, visible next action, then equal Call / SMS / Follow up controls.
