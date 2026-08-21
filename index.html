@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=1.36.16-beta-buyer-position-tags">
+<link rel="stylesheet" href="styles.css?v=1.36.17-beta-buyer-cohesion">
 <title>AGNT</title>
 </head>
 <body>
@@ -648,11 +648,13 @@
               <label>Property type<select id="buyerFilterPropertyType"><option value="">Any</option><option>House</option><option>Duplex</option><option>Townhouse</option><option>Unit</option><option>Land</option></select></label>
               <label>Stage<select id="buyerFilterStage"><option value="">Any</option><option>Looking</option><option>Inspecting</option><option>Negotiating</option></select></label>
               <label>Temperature<select id="buyerFilterTemperature"><option value="">Any</option><option>Hot</option><option>Warm</option><option>Cold</option></select></label>
+              <label>Position<select id="buyerFilterPosition"><option value="">Any</option><option>Buyer Seller</option><option>Upsizing</option><option>Downsizing</option><option>Builder</option><option>Investor</option><option>First Home Buyer</option></select></label>
+              <label>Follow-up<select id="buyerFilterFollowUp"><option value="">Any</option><option value="overdue">Overdue</option><option value="today">Due today</option><option value="scheduled">Scheduled</option><option value="none">Not set</option></select></label>
             </div>
             <div class="buyer-filter-features"><span>Requirements</span><div><button type="button" data-buyer-filter-feature="Granny Flat">Granny Flat</button><button type="button" data-buyer-filter-feature="Pool">Pool</button><button type="button" data-buyer-filter-feature="Ensuite">Ensuite</button><button type="button" data-buyer-filter-feature="Study">Study</button><button type="button" data-buyer-filter-feature="Single Level">Single Level</button><button type="button" data-buyer-filter-feature="Renovated">Renovated</button><button type="button" data-buyer-filter-feature="Development">Development</button><button type="button" data-buyer-filter-feature="Large Yard">Large Yard</button></div></div>
           </section>
           <section class="buyer-list-shell glass">
-            <div class="buyer-results-head"><span id="buyerListMeta">0 buyers · A–Z</span></div>
+            <div class="buyer-results-head"><span id="buyerListMeta">0 buyers · A–Z</span><button id="toggleArchivedBuyers" class="text-btn" type="button" aria-pressed="false">Archived</button></div>
             <div id="buyerProfileList" class="buyer-profile-list"></div>
           </section>
           <datalist id="buyerSydneySuburbs"></datalist>
@@ -1070,6 +1072,6 @@ Andrew Tour | McGrath</textarea></label>
 
 
 
-<script type="module" src="app.js?v=1.36.16-beta-buyer-position-tags"></script>
+<script type="module" src="app.js?v=1.36.17-beta-buyer-cohesion"></script>
 </body>
 </html>

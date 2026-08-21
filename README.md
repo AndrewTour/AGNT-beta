@@ -1,9 +1,9 @@
-# AGNT BETA v1.36.16 — Buyer Position Tags
+# AGNT BETA v1.36.17 — Buyer UI Cohesion
 
-Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.15 full GitHub-ready package supplied on 21 August 2026.
+Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.16 Buyer Support package supplied on 21 August 2026.
 
 ## Release baseline
-- Application/UI source: confirmed working `AGNT-beta-v1.36.15-Buyer-Leaderboard-Detail-FULL-GITHUB-READY.zip` (v1.36.15 baseline).
+- Application/UI source: confirmed working `AGNT Beta - 21:8 - Buyer Support 3.zip` (v1.36.16 baseline).
 - Firebase environment: existing BETA project `daily-accountability-be0ac`.
 - Existing Firebase Authentication accounts and UIDs are retained.
 - Existing personal data remains under the current `users/{uid}` paths.
@@ -26,6 +26,26 @@ Incremental BETA update built directly on the confirmed working AGNT BETA v1.36.
 - Live/next-open appointment notification with Got it and Add to Calendar.
 - Setter-facing appointment/log/leaderboard context shows `Booked for [First name]` where applicable.
 - Targeted dark-mode contrast fixes for appointment contact suggestions and Editing Appointment.
+
+## Buyer UI cohesion and trust fixes added in v1.36.17
+- Buyer cards now use the same AGNT hierarchy throughout: name and temperature, concise search criteria, visible next action, then equal Call / SMS / Follow up controls.
+- Buyer position tags are contained to one visible tag plus `+N` in the list, with the full set retained in buyer detail.
+- Buyer follow-up dates and overdue state are visible on cards, in buyer detail and in activity history.
+- Buyer detail is organised into Next Action, Buyer Brief and Activity sections using the existing AGNT visual language.
+- Advanced filters now include Position and Follow-up state, alongside the existing property-matching filters.
+- Buyer actions, quick filters, configuration choices, suburb chips and modal close controls use iPhone-safe tap targets.
+- Light-mode buyer metadata contrast is strengthened while existing dark-mode separation is retained.
+- The buyer suburb editor now uses one custom suggestion system instead of competing native and custom autocomplete lists.
+- Editing a buyer and opening a follow-up no longer force the iPhone keyboard open; the follow-up dialog also contains keyboard focus.
+- Empty, filtered, archived and offline PDF-import states now provide clear context and next actions.
+- Buyers can be archived and restored without deleting their interaction history.
+- Permanent deletion is available only from Archived, keeping Archive as the safe default lifecycle action for active buyers.
+- Matching an existing buyer mobile now reuses the existing buyer record instead of creating a duplicate.
+- Cancelling a buyer-list call leaves that buyer outstanding and does not advance the session.
+- Buyer-list session state is reset before loading the current UID, preventing stale device/account state carrying into another user session.
+- New-buyer Data credit is persisted before the buyer cloud write, so a prospecting sync failure cannot silently lose leaderboard credit.
+- Buyer CSS from v1.36.7–v1.36.16 is consolidated into one scoped v1.36.17 section to reduce cascade conflicts.
+- Firebase configuration, Authentication, Firestore paths/rules, UID data separation, Team, Today, appointments, leaderboards and unrelated workflows are unchanged.
 
 ## Buyer journey added in v1.36.7
 - Dedicated Buyers tab inside Prospector, separate from Contacts.
