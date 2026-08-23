@@ -1,4 +1,20 @@
-# AGNT BETA v1.36.20 — Rollout Check
+# AGNT BETA v1.37.0 — UI System Rollout Check
+
+## v1.37.0 staging focus
+
+This release is presentation-only and retains the deployed v1.36.20 data and workflow logic.
+
+Validate the following in both Light and Dark appearance:
+
+1. Home score, focus card, metric rows and bottom navigation.
+2. Today tabs, timeline, Insights cards and Log states.
+3. Appointment create, edit, history, outcome and assignment flows.
+4. Prospector Contacts, Buyers, Pipeline, Hot Spotting, Broadcast and Insights.
+5. Leaderboard daily/weekly states and agent detail overlays.
+6. Settings, Team management, confirmation sheets and destructive actions.
+7. iPhone safe areas, keyboard entry, scrolling and 44px minimum touch targets.
+
+The Prospector map experiment is not included in this release.
 
 ## Before release verification
 1. Deploy the bundled `firestore.rules` to Firebase project `daily-accountability-be0ac`.
