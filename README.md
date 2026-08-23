@@ -1,17 +1,4 @@
-# AGNT BETA v1.37.0 — UI System Consolidation
-
-## Whole-app visual unification added in v1.37.0
-
-- Added a dedicated presentation-only UI system layer (`ui-system.css`) over the deployed v1.36.20 beta.
-- Preserved all Firebase, team, appointment, prospecting, buyer and save-performance logic.
-- Replaced remaining translucent/glass treatments with opaque light and dark surfaces.
-- Standardised page headers, section headings, typography, forms, buttons, segmented controls and navigation states.
-- Unified Home, Today, Appointments, Prospector, Leaderboard and Settings around the newer Buyer hierarchy.
-- Standardised modal and confirmation overlays with opaque sheets, consistent actions and no backdrop blur.
-- Added common colour semantics, spacing, radii, focus treatment and reduced-motion support.
-- Updated the service-worker cache so the new visual layer loads immediately after deployment.
-
-This build intentionally excludes the proposed Prospector map feature.
+# AGNT BETA v1.36.20 — Buyer Save Performance
 
 Incremental BETA update built directly on the verified AGNT BETA v1.36.19 Buyer Card Hierarchy package.
 
