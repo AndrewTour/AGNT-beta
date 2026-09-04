@@ -1,30 +1,31 @@
 /*
- * AGNT BETA v1.37.0 — UI System Consolidation
+ * AGNT v1.36.52 — BEX-inspired Visual System
  * Presentation-only layer. No workflow, persistence or Firebase behaviour changes.
  */
 
 :root{
-  --ui-page:#ffffff;
+  --ui-page:#f7f6f2;
   --ui-surface:#ffffff;
-  --ui-surface-soft:#f5f6f8;
-  --ui-surface-blue:#eef5ff;
-  --ui-field:#f4f6f8;
-  --ui-border:#dfe3e8;
-  --ui-rule:#eceef1;
-  --ui-text:#141820;
-  --ui-text-soft:#424b57;
-  --ui-muted:#6d7581;
-  --ui-label:#69717d;
-  --ui-faint:#9ba1aa;
+  --ui-surface-soft:#f0efeb;
+  --ui-surface-blue:#f5f2ed;
+  --ui-field:#f0efeb;
+  --ui-border:#dedcd6;
+  --ui-rule:#e6e4df;
+  --ui-text:#111214;
+  --ui-text-soft:#3f403f;
+  --ui-muted:#777671;
+  --ui-label:#8b8983;
+  --ui-faint:#aaa8a2;
+  --ui-accent:var(--agnt-orange,#ff9500);
   --ui-blue:#1769d2;
   --ui-blue-strong:#0a69d8;
   --ui-green:#16845b;
   --ui-amber:#946000;
   --ui-red:#c13b50;
-  --ui-radius-control:14px;
-  --ui-radius-card:18px;
+  --ui-radius-control:16px;
+  --ui-radius-card:20px;
   --ui-radius-sheet:28px;
-  --ui-shadow-card:0 8px 24px rgba(22,28,45,.045);
+  --ui-shadow-card:0 1px 0 rgba(17,18,20,.025);
   --ui-shadow-sheet:0 24px 70px rgba(20,28,45,.22);
   --ui-control-height:48px;
   --ui-section-gap:18px;
@@ -32,18 +33,18 @@
 }
 
 html[data-theme="dark"]{
-  --ui-page:#0b0d11;
-  --ui-surface:#11141a;
-  --ui-surface-soft:#171a20;
-  --ui-surface-blue:#101c2d;
-  --ui-field:#191d23;
-  --ui-border:#2d323b;
-  --ui-rule:#242830;
-  --ui-text:#f5f6f7;
-  --ui-text-soft:#d3d7dd;
-  --ui-muted:#9ca3ae;
-  --ui-label:#8f97a2;
-  --ui-faint:#727a86;
+  --ui-page:#080808;
+  --ui-surface:#101010;
+  --ui-surface-soft:#171717;
+  --ui-surface-blue:#17130f;
+  --ui-field:#171717;
+  --ui-border:#292929;
+  --ui-rule:#242424;
+  --ui-text:#f5f4f1;
+  --ui-text-soft:#d4d2ce;
+  --ui-muted:#9a9893;
+  --ui-label:#85837f;
+  --ui-faint:#62615e;
   --ui-blue:#82bdff;
   --ui-blue-strong:#69a9ff;
   --ui-green:#65d6a8;
@@ -60,6 +61,8 @@ html,body,.app{
 }
 
 body{background-image:none!important}
+.app{max-width:560px!important;padding-inline:18px!important}
+main,.view{overscroll-behavior:contain}
 
 /* One surface language: opaque, quiet and readable in both themes. */
 .glass{
@@ -81,14 +84,14 @@ body{background-image:none!important}
 .topbar h1{
   margin:0 0 5px;
   color:var(--ui-text)!important;
-  font-size:1.72rem;
-  font-weight:780;
+  font-size:1.86rem;
+  font-weight:790;
   line-height:1.02;
   letter-spacing:-.045em;
 }
 .view-subtitle,.date{
   color:var(--ui-muted)!important;
-  font-size:.78rem;
+  font-size:.8rem;
   font-weight:520;
   line-height:1.35;
   letter-spacing:0;
@@ -100,7 +103,7 @@ body{background-image:none!important}
   height:44px;
   padding:0 12px;
   border:1px solid var(--ui-border)!important;
-  border-radius:var(--ui-radius-control)!important;
+  border-radius:50%!important;
   background:var(--ui-surface-soft)!important;
   color:var(--ui-text)!important;
   box-shadow:none!important;
@@ -115,13 +118,16 @@ body{background-image:none!important}
   font-size:.64rem!important;
   font-weight:800!important;
   line-height:1.15;
-  letter-spacing:.14em!important;
+  letter-spacing:.16em!important;
+}
+.view-head>div>span,.leaderboard-head>div>span,.prospecting-heading>span{
+  color:var(--ui-accent)!important;
 }
 .view-head h2,.timeline-view-head h2,.leaderboard-head h2,.prospecting-heading h2{
   margin-top:5px;
   color:var(--ui-text)!important;
-  font-size:1.55rem;
-  font-weight:750;
+  font-size:1.72rem;
+  font-weight:760;
   line-height:1.08;
   letter-spacing:-.035em;
 }
@@ -145,7 +151,7 @@ body{background-image:none!important}
   line-height:1.45;
 }
 
-/* Buttons: black primary in light, blue primary in dark; blue secondary everywhere. */
+/* Actions: near-black primary, quiet secondary and semantic orange emphasis. */
 .primary,.secondary,.danger,.file-btn{
   min-height:var(--ui-control-height);
   margin-top:8px;
@@ -162,26 +168,26 @@ body{background-image:none!important}
   color:#fff!important;
 }
 .secondary,.file-btn{
-  border:1px solid #cdddf3!important;
-  background:#f3f7fd!important;
-  color:var(--ui-blue)!important;
+  border:1px solid var(--ui-border)!important;
+  background:var(--ui-surface)!important;
+  color:var(--ui-text)!important;
 }
 .danger{
   border:1px solid rgba(193,59,80,.18)!important;
   background:rgba(193,59,80,.07)!important;
   color:var(--ui-red)!important;
 }
-.text-btn{color:var(--ui-blue)!important;font-size:.74rem;font-weight:720}
+.text-btn{color:var(--ui-accent)!important;font-size:.74rem;font-weight:720}
 html[data-theme="dark"] .primary{
-  border-color:#397dff!important;
-  background:#397dff!important;
-  color:#fff!important;
+  border-color:#f1f0ed!important;
+  background:#f1f0ed!important;
+  color:#111!important;
 }
 html[data-theme="dark"] .secondary,
 html[data-theme="dark"] .file-btn{
-  border-color:rgba(112,182,255,.28)!important;
-  background:rgba(57,125,255,.11)!important;
-  color:var(--ui-blue)!important;
+  border-color:var(--ui-border)!important;
+  background:var(--ui-surface-soft)!important;
+  color:var(--ui-text)!important;
 }
 
 /* Form controls share one height, radius and text weight. */
@@ -200,9 +206,9 @@ html[data-theme="dark"] .file-btn{
 textarea{padding:13px 14px!important;line-height:1.45}
 input::placeholder,textarea::placeholder{color:var(--ui-faint)!important;opacity:1}
 :is(input,select,textarea):focus{
-  border-color:#91bdf8!important;
+  border-color:var(--ui-accent)!important;
   outline:0!important;
-  box-shadow:0 0 0 3px rgba(23,105,210,.11)!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ui-accent) 15%,transparent)!important;
 }
 :is(.appointment-form,.settings,.prospect-editor,.campaign-builder,.pipeline-controls,.buyer-editor) label{
   color:var(--ui-label)!important;
@@ -210,42 +216,48 @@ input::placeholder,textarea::placeholder{color:var(--ui-faint)!important;opacity
   font-weight:680;
 }
 
-/* One segmented-control language. */
+/* Flat text tabs with an orange location marker. */
 :is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,.insight-period-switch,
      .appointment-filter,.broadcast-review-switch,.appearance-options){
-  gap:4px!important;
-  padding:4px!important;
-  border:1px solid var(--ui-border)!important;
-  border-radius:16px!important;
-  background:var(--ui-surface-soft)!important;
+  gap:0!important;
+  padding:0!important;
+  border:0!important;
+  border-bottom:1px solid var(--ui-rule)!important;
+  border-radius:0!important;
+  background:transparent!important;
   box-shadow:none!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
 :is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,.insight-period-switch,
      .appointment-filter,.broadcast-review-switch) button{
-  min-height:40px;
+  position:relative;
+  min-height:44px;
   border:0!important;
-  border-radius:12px!important;
+  border-radius:0!important;
   background:transparent!important;
   color:var(--ui-muted)!important;
   box-shadow:none!important;
-  font-size:.71rem;
+  font-size:.72rem;
   font-weight:720;
 }
 :is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,.insight-period-switch,
      .appointment-filter,.broadcast-review-switch) button.active{
-  background:var(--ui-text)!important;
-  color:var(--ui-page)!important;
+  background:transparent!important;
+  color:var(--ui-text)!important;
   box-shadow:none!important;
 }
-html[data-theme="dark"] :is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,
-     .insight-period-switch,.appointment-filter,.broadcast-review-switch) button.active{
-  background:#f4f5f7!important;
-  color:#111318!important;
+:is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,.insight-period-switch,
+     .appointment-filter,.broadcast-review-switch) button.active::after{
+  content:"";
+  position:absolute;
+  right:18%;bottom:-1px;left:18%;
+  height:3px;
+  border-radius:3px 3px 0 0;
+  background:var(--ui-accent);
 }
 
-/* Bottom navigation remains familiar but gains a consistent selected capsule. */
+/* Bottom navigation keeps its exact footprint and adopts BEX-like orange selection. */
 .tabbar{
   border-top:1px solid var(--ui-rule)!important;
   background:var(--ui-surface)!important;
@@ -254,19 +266,27 @@ html[data-theme="dark"] :is(.today-page-tabs,.prospector-sections,.leaderboard-m
   -webkit-backdrop-filter:none!important;
 }
 .tabbar button{
+  position:relative;
   min-height:54px;
-  border-radius:18px!important;
+  border-radius:0!important;
   color:var(--ui-faint)!important;
 }
 .tabbar button.active{
-  background:var(--ui-surface-soft)!important;
-  color:var(--ui-text)!important;
+  background:transparent!important;
+  color:var(--ui-accent)!important;
 }
 html[data-theme="dark"] .tabbar button.active{
-  background:var(--ui-surface-soft)!important;
-  color:var(--ui-text)!important;
+  background:transparent!important;
+  color:var(--ui-accent)!important;
 }
-.tabbar button.active::before{display:none!important}
+.tabbar button.active::before{
+  display:block!important;
+  top:0!important;
+  width:34px!important;
+  height:3px!important;
+  border-radius:0 0 3px 3px!important;
+  background:var(--ui-accent)!important;
+}
 .tabbar .tab-icon,.tabbar .tab-icon svg{width:21px;height:21px}
 .tabbar span{font-size:.5rem;font-weight:620}
 
@@ -279,16 +299,17 @@ html[data-theme="dark"] .tabbar button.active{
   background:transparent!important;
   box-shadow:none!important;
 }
+.bar i,#scoreBar{background:var(--ui-accent)!important}
 .score-copy strong{color:var(--ui-text)!important;font-weight:700}
 .score-copy .momentum-whisper,.leaderboard-position small{color:var(--ui-muted)!important}
 .leaderboard-position{border-bottom-color:var(--ui-rule)!important}
 .now-card{
-  border:1px solid #d8e6f9!important;
+  border:1px solid color-mix(in srgb,var(--ui-accent) 24%,var(--ui-border))!important;
   border-radius:var(--ui-radius-card)!important;
   background:var(--ui-surface-blue)!important;
   box-shadow:none!important;
 }
-.now-card-label,.now-card svg{color:var(--ui-blue)!important;stroke:var(--ui-blue)!important}
+.now-card-label,.now-card svg{color:var(--ui-accent)!important;stroke:var(--ui-accent)!important}
 .now-card-copy strong{color:var(--ui-text)!important}
 .now-card-copy small{color:var(--ui-muted)!important}
 .dashboard .metrics{
@@ -321,15 +342,21 @@ html[data-theme="dark"] .tabbar button.active{
 .scorecard-hero,.scorecard-metrics,.scorecard-focus,.scorecard-trends,
 .scorecard-productivity,.scorecard-momentum,.scorecard-personal-bests,
 .scorecard-recommendations,.scorecard-achievements{
-  border:1px solid var(--ui-border)!important;
+  border:0!important;
   border-radius:var(--ui-radius-card)!important;
-  background:var(--ui-surface)!important;
+  background:transparent!important;
   box-shadow:none!important;
 }
-.timeline-overview{padding:16px!important}
-.daily-timeline{padding:4px 14px!important}
+.timeline-overview{padding:16px 2px!important;border-bottom:1px solid var(--ui-rule)!important}
+.daily-timeline{padding:4px 2px!important}
 .timeline-item{border-bottom-color:var(--ui-rule)!important}
-.timeline-item.current{background:var(--ui-surface-blue)!important}
+.timeline-item.current{background:var(--ui-surface-blue)!important;box-shadow:inset 3px 0 var(--ui-accent)!important}
+.timeline-command-action:not(.timeline-command-bulk-sms),
+.timeline-item.current .timeline-plan-action{
+  border-color:var(--ui-text)!important;
+  background:var(--ui-text)!important;
+  color:var(--ui-page)!important;
+}
 .day-log-summary{padding:12px!important}
 .day-log-card,.today-wins{padding:16px!important}
 .scorecard-hero,.scorecard-metrics,.scorecard-focus,
@@ -377,7 +404,7 @@ html[data-theme="dark"] .tabbar button.active{
 .prospecting-toolbar{
   padding:6px 0 10px!important;
   border-bottom:1px solid var(--ui-rule)!important;
-  background:var(--ui-surface)!important;
+  background:var(--ui-page)!important;
   box-shadow:none!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
@@ -393,21 +420,26 @@ html[data-theme="dark"] .tabbar button.active{
   color:var(--ui-text)!important;
   box-shadow:none!important;
 }
-.prospecting-add{background:#347ff2!important;color:#fff!important;box-shadow:none!important}
+.prospecting-add{background:var(--ui-accent)!important;color:#fff!important;box-shadow:none!important}
 .prospecting-hero,.prospecting-section,.pipeline-overview,.pipeline-timeframe,
 .market-pulse-hero,.market-pulse-results,.market-pulse-import,.campaign-hero,
 .prospect-intelligence-hero,.prospect-intelligence-card,.prospect-weekly-focus,
 .broadcast-step-surface,#broadcastMenu .broadcast-type-list{
-  border:1px solid var(--ui-border)!important;
-  border-radius:var(--ui-radius-card)!important;
-  background:var(--ui-surface)!important;
+  border:0!important;
+  border-bottom:1px solid var(--ui-rule)!important;
+  border-radius:0!important;
+  background:transparent!important;
   box-shadow:none!important;
 }
-.prospecting-hero,.campaign-hero,.market-pulse-hero{padding:17px!important}
+.prospecting-hero,.campaign-hero,.market-pulse-hero{padding:22px 4px!important}
 .prospecting-section,.pipeline-overview,.pipeline-timeframe,
 .market-pulse-results,.market-pulse-import,.prospect-intelligence-card,
 .prospect-weekly-focus,.broadcast-step-surface{padding:15px!important}
 .prospect-card,.buyer-card,.pipeline-seller-card{border-color:var(--ui-rule)!important}
+.prospect-card,.buyer-card,.pipeline-seller-card,.appointment-card,
+.market-pulse-card,.leaderboard-row{
+  box-shadow:none!important;
+}
 .prospect-card-copy strong,.pipeline-seller-card strong{color:var(--ui-text)!important}
 .prospect-card-copy small,.prospect-card-copy em,.pipeline-seller-card small{color:var(--ui-muted)!important}
 .prospect-tags span,.prospect-background,.buyer-position-tag{
@@ -416,18 +448,18 @@ html[data-theme="dark"] .tabbar button.active{
 }
 .prospect-quick-actions a,.prospect-quick-actions button,
 .prospect-card-actions a,.prospect-card-actions button{
-  border:1px solid #d3e2f8!important;
+  border:1px solid var(--ui-border)!important;
   border-radius:var(--ui-radius-control)!important;
-  background:#f4f8fd!important;
-  color:var(--ui-blue)!important;
+  background:var(--ui-surface)!important;
+  color:var(--ui-text)!important;
   box-shadow:none!important;
 }
 html[data-theme="dark"] .prospect-quick-actions a,
 html[data-theme="dark"] .prospect-quick-actions button,
 html[data-theme="dark"] .prospect-card-actions a,
 html[data-theme="dark"] .prospect-card-actions button{
-  border-color:rgba(112,182,255,.26)!important;
-  background:rgba(57,125,255,.11)!important;
+  border-color:var(--ui-border)!important;
+  background:var(--ui-surface-soft)!important;
 }
 
 /* Leaderboard: open data presentation with one contained overview. */
@@ -502,13 +534,13 @@ html[data-theme="dark"] .prospect-card-actions button{
 }
 #signOut{margin-top:18px}
 
-/* One modal/sheet system: opaque surface, no background blur, predictable actions. */
+/* One inset sheet system: solid surface over an intentionally retained app. */
 .modal,.action-sheet-modal,.team-appointment-notice,.appointment-assignment-modal,
 .pipeline-refresh-overlay,.buyer-followup-overlay,
 .knocking-capture-overlay,.manual-dialler-overlay{
-  background:rgba(20,24,32,.42)!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
+  background:rgba(8,8,8,.48)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
 }
 .modal .glass,.action-sheet.glass,.manual-dialler.glass,.calendar-shell.glass,
 .day-review-card,.team-appointment-notice-card,.appointment-assignment-card,
@@ -525,12 +557,18 @@ html[data-theme="dark"] .prospect-card-actions button{
   min-width:44px;
   min-height:44px;
   border:1px solid var(--ui-border)!important;
-  border-radius:var(--ui-radius-control)!important;
+  border-radius:50%!important;
   background:var(--ui-surface-soft)!important;
   color:var(--ui-muted)!important;
 }
 .action-sheet-actions,.team-appointment-notice-actions,.pipeline-refresh-actions,
 .buyer-followup-actions{gap:10px}
+
+/* Status and compact selection keep colour semantic and restrained. */
+:is(.sync-badge,.leaderboard-live,[data-state="live"],[data-state="saved"])::before{
+  box-shadow:none!important;
+}
+.market-bulk-sms-btn{color:var(--ui-accent)!important}
 
 /* Universal secondary-screen navigation. */
 :is(.prospect-session-head,.prospect-detail-nav,.knocking-history-head)>button:first-child,
@@ -543,7 +581,7 @@ html[data-theme="dark"] .prospect-card-actions button{
 
 /* Accessible feedback without adding visual noise. */
 :is(button,a,input,select,textarea):focus-visible{
-  outline:3px solid rgba(23,105,210,.2)!important;
+  outline:3px solid color-mix(in srgb,var(--ui-accent) 24%,transparent)!important;
   outline-offset:2px;
 }
 button:active:not(:disabled){transform:scale(.985)}
@@ -569,5 +607,7 @@ button:active:not(:disabled){transform:scale(.985)}
   .view-subtitle,.date{font-size:.72rem}
   :is(.today-page-tabs,.prospector-sections,.leaderboard-mode-tabs,.insight-period-switch,
        .appointment-filter,.broadcast-review-switch) button{font-size:.66rem;padding-inline:3px!important}
+  .prospector-sections{overflow:visible!important}
+  .prospector-sections button{min-width:0!important}
   .tabbar span{font-size:.46rem}
 }
