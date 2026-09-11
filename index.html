@@ -9,8 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AGNT">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=1.41.4-team-sync-restoration">
-<link rel="stylesheet" href="cleanup.css?v=1.41.4-team-sync-restoration">
+<link rel="stylesheet" href="styles.css?v=1.37.5-micro-stability">
 <title>AGNT</title>
 </head>
 <body>
@@ -284,16 +283,13 @@
 
 <div id="dayReviewOverlay" class="day-review-overlay hidden" aria-hidden="true">
   <section class="day-review-card" role="dialog" aria-modal="true" aria-labelledby="dayReviewTitle">
-    <div class="day-review-head"><span>REVIEW DAY AND SEND STATS</span><strong id="dayReviewScore">0%</strong></div>
+    <div class="day-review-head"><span>DAY IN REVIEW</span><strong id="dayReviewScore">0%</strong></div>
     <h2 id="dayReviewTitle">Day reviewed. Tomorrow is clearer.</h2>
     <p>The plan you started with, measured against what you completed.</p>
     <div id="dayReviewMetrics" class="day-review-metrics"></div>
     <div id="dayReviewPlan" class="day-review-plan"></div>
     <section class="day-review-coach"><span>TOMORROW'S FOCUS</span><p id="dayReviewCoach"></p></section>
-    <div class="day-review-actions">
-      <button id="sendDayReviewStats" class="day-review-send-stats" type="button">Send Stats</button>
-      <button id="closeDayReview" class="primary day-review-close" type="button">Finish My Day</button>
-    </div>
+    <button id="closeDayReview" class="primary day-review-close" type="button">Finish My Day</button>
   </section>
 </div>
 
@@ -323,6 +319,7 @@
         <button id="nextDay" class="icon-btn topbar-nav-icon" type="button" aria-label="Next day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6.5 5.5 5.5-5.5 5.5"/></svg></button>
       </div>
       <button id="leaderboardModeShortcut" class="icon-btn leaderboard-mode-shortcut hidden" type="button" aria-label="Switch leaderboard to weekly view" title="Daily leaderboard">DAY</button>
+      <button id="homeShortcut" class="icon-btn home-shortcut-icon hidden" type="button" aria-label="Return to Today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 10 8-6 8 6"/><path d="M6.5 9.5V20h11V9.5"/><path d="M10 20v-6h4v6"/></svg></button>
     </div>
   </header>
 
@@ -385,6 +382,7 @@
       <div id="todayOverviewPanel" class="today-page-panel today-overview-panel active">
         <div class="view-head timeline-view-head">
           <div><span>TODAY</span><h2 id="timelineDateLabel"></h2></div>
+          <small id="timelineSummary">Your day at a glance</small>
         </div>
         <section class="timeline-overview glass">
           <div class="timeline-command-head">
@@ -393,15 +391,13 @@
           </div>
           <strong id="timelineCurrentTitle">Loading today…</strong>
           <small id="timelineCurrentMeta">Your schedule will appear below.</small>
-          <div id="timelineCurrentActions" class="timeline-command-actions">
+          <div id="timelineCurrentActions" class="timeline-command-actions" hidden>
             <button id="timelineCurrentAction" class="timeline-command-action" type="button" hidden>Open AGNT</button>
-            <button id="timelineDeferSeller" class="timeline-command-action seller-priority-defer" type="button" hidden>Not now</button>
             <button id="timelineCurrentBulkSms" class="timeline-command-action timeline-command-bulk-sms" type="button" aria-label="Open Bulk SMS" title="Bulk SMS" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></button>
-            <button id="openTaskComposer" class="timeline-task-add" type="button" aria-label="Add task" title="Add task">+</button>
           </div>
         </section>
         <section id="dailyTimeline" class="daily-timeline glass" aria-live="polite"></section>
-        <button id="openDayReview" class="open-day-review hidden" type="button"><span>DAY IN REVIEW</span><strong>Review Day and Send Stats</strong><b aria-hidden="true">›</b></button>
+        <button id="openDayReview" class="open-day-review hidden" type="button"><span>DAY IN REVIEW</span><strong>Review today and prepare tomorrow</strong><b aria-hidden="true">›</b></button>
       </div>
       <div id="todayInsightsPanel" class="today-page-panel today-insights-panel" aria-hidden="true">
         <div id="personalInsights" class="insights-page active">
@@ -468,10 +464,6 @@
         </div>
       </div>
       <div id="todayLogPanel" class="today-page-panel today-log-panel" aria-hidden="true">
-        <div class="day-log-toolbar">
-          <div><span>DAILY ACTIVITY</span><h2 id="dayLogDateLabel">Today Log</h2></div>
-          <button id="sendTodayStats" class="send-today-stats" type="button">Send Stats</button>
-        </div>
         <section class="day-log-summary glass" aria-label="Daily log summary">
           <div><strong id="dayLogSessionTotal">0</strong><span>Sessions</span></div>
           <div><strong id="dayLogContactTotal">0</strong><span>Contacts</span></div>
@@ -635,9 +627,8 @@
         </div>
         <button id="openManualDialler" class="prospecting-call-button" type="button" aria-label="Open call keypad" title="Call a number">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.9 9.8 3c.7-.2 1.5.2 1.8.9l1.2 3.1c.2.6.1 1.2-.4 1.6l-1.7 1.5a14 14 0 0 0 3.2 3.2l1.5-1.7c.4-.5 1.1-.6 1.6-.4l3.1 1.2c.7.3 1.1 1.1.9 1.8l-.9 2.6c-.3.9-1.1 1.5-2.1 1.5C10.8 18.3 5.7 13.2 5.7 6c0-1 .6-1.8 1.5-2.1Z"/></svg>
-          <b>Call</b>
         </button>
-        <button id="addProspectButton" class="prospecting-add" type="button" aria-label="Add new contact"><span aria-hidden="true">+</span><b>New Contact</b></button>
+        <button id="addProspectButton" class="prospecting-add" type="button" aria-label="Add prospect">+</button>
       </div>
 
       <div id="prospectingDashboard" class="prospecting-dashboard">
@@ -1069,19 +1060,6 @@ Andrew Tour | McGrath</textarea></label>
     <div id="calendarGrid" class="calendar-grid"></div>
   </div>
 </div>
-<div id="taskComposerModal" class="task-composer-modal hidden" aria-hidden="true">
-  <section class="task-composer-card glass" role="dialog" aria-modal="true" aria-labelledby="taskComposerTitle">
-    <div class="task-composer-head"><div><span>NEW TASK</span><h2 id="taskComposerTitle">Add a task</h2></div><button id="closeTaskComposer" type="button" aria-label="Close task">×</button></div>
-    <form id="taskForm">
-      <label>Task<input id="taskTitle" name="title" type="text" maxlength="160" autocomplete="off" placeholder="What needs to happen?" required></label>
-      <label>Context<textarea name="note" rows="3" maxlength="1000" placeholder="Optional note"></textarea></label>
-      <div class="task-schedule-grid"><label>Date<input id="taskDate" name="date" type="date" required></label><label>Time<input id="taskTime" name="time" type="time" required></label></div>
-      <label id="taskAssigneeField">Assigned to<select id="taskAssignee" name="assignedToUid"><option value="">Me</option></select></label>
-      <div id="taskFormError" class="form-error hidden" role="alert"></div>
-      <button class="primary" type="submit">Add task</button>
-    </form>
-  </section>
-</div>
 <div id="appointmentAssignmentModal" class="appointment-assignment-modal hidden" aria-hidden="true">
   <section class="appointment-assignment-card glass" role="dialog" aria-modal="true" aria-labelledby="appointmentAssignmentTitle">
     <span class="appointment-assignment-kicker">ASSIGN APPOINTMENT</span>
@@ -1097,20 +1075,6 @@ Andrew Tour | McGrath</textarea></label>
     <span class="team-appointment-notice-kicker">APPOINTMENT BOOKED FOR YOU</span><h2 id="teamAppointmentNoticeTitle">A teammate booked an appointment for you.</h2>
     <div class="team-appointment-notice-detail"><span id="teamAppointmentNoticeType">MAP</span><strong id="teamAppointmentNoticeContact">Contact</strong><small id="teamAppointmentNoticeAddress">Address</small><em id="teamAppointmentNoticeWhen">Date · time</em></div>
     <div class="team-appointment-notice-actions"><button id="teamAppointmentGotIt" class="secondary" type="button">Got it</button><button id="teamAppointmentAddCalendar" class="primary" type="button">Add to calendar</button></div>
-  </section>
-</div>
-
-<div id="sellerPriorityDeferralModal" class="modal action-sheet-modal seller-priority-deferral-modal" aria-hidden="true">
-  <section class="action-sheet glass seller-priority-deferral-sheet" role="dialog" aria-modal="true" aria-labelledby="sellerPriorityDeferralTitle">
-    <div class="action-sheet-handle"></div>
-    <div class="action-sheet-head"><div><small>SELLER PRIORITY</small><h2 id="sellerPriorityDeferralTitle">Move to the next action?</h2></div><button id="closeSellerPriorityDeferral" type="button" class="action-sheet-close" aria-label="Close">×</button></div>
-    <p><strong id="sellerPriorityDeferralName">This seller</strong> will be temporarily removed from Today. Their contact record and follow-up date will not change.</p>
-    <div class="seller-priority-deferral-options">
-      <button type="button" data-seller-deferral-hours="2" data-seller-deferral-reason="Later today"><span>Later today</span><small>Bring this seller back in 2 hours</small></button>
-      <button type="button" data-seller-deferral-hours="today" data-seller-deferral-reason="Not a priority today"><span>Not today</span><small>Move to another seller for the rest of today</small></button>
-      <button type="button" data-seller-deferral-hours="workday" data-seller-deferral-reason="Next workday"><span>Next workday</span><small>Bring this seller back at the next scheduled start</small></button>
-    </div>
-    <button id="cancelSellerPriorityDeferral" class="secondary seller-priority-deferral-cancel" type="button">Cancel</button>
   </section>
 </div>
 
@@ -1198,6 +1162,6 @@ Andrew Tour | McGrath</textarea></label>
 
 
 
-<script type="module" src="app.js?v=1.41.4-team-sync-restoration"></script>
+<script type="module" src="app.js?v=1.37.5-micro-stability"></script>
 </body>
 </html>
