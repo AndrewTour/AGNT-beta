@@ -1,4 +1,426 @@
-# AGNT v1.37.5 — Micro Stability
+# AGNT v1.41.26 — Weekly Appointments and Seller Actions
+
+## v1.41.26 changes
+
+- Changes the Home Calendar quick action into a scrollable view of upcoming appointments remaining in the current calendar week.
+- Reuses AGNT's existing Upcoming Appointments screen, cards, call actions and calendar actions.
+- Returns to Home from the weekly view while preserving the normal Appointments-tab back route.
+- Reorders both Home quick menus to Call, Add Appointment, Add Task, This Week and Bulk SMS.
+- Centres the Right Now content and MarketPulse action on the same visual line.
+- Adds Contacted and Not Required actions to the existing seller-priority sheet. Contacted clears a due follow-up and records contact; Not Required removes the follow-up date.
+- Uses the existing prospect and interaction save path with non-blocking cloud sync. No new Firebase path, storage key, query or listener is added.
+
+## Previous release — v1.41.25
+
+# AGNT v1.41.25 — Calendar Quick Action
+
+## v1.41.25 changes
+
+- Removes Search Contacts from both scheduled and non-scheduled Home quick menus after confirming a repeat-launch WebKit crash.
+- Retains Search Contacts in its established Prospector → Contacts location.
+- Replaces the shortcut with View Calendar using AGNT's existing calendar modal and `openCalendar()` function.
+- Keeps five equal Home actions: Call, Add Task, Book Appointment, View Calendar and Bulk SMS.
+- Keeps all five actions on the shared scheduled/non-scheduled handler introduced in v1.41.24.
+- Adds no Firebase path, storage key, query, save operation or background process.
+
+## Previous release — v1.41.24
+
+# AGNT v1.41.24 — Quick Actions Stability
+
+## v1.41.24 changes
+
+- Gives scheduled and non-scheduled Home quick actions one shared event route and identical workflow behaviour.
+- Fixes all five scheduled-day quick buttons: Call, Add Task, Book Appointment, Search Contacts and Bulk SMS.
+- Removes the unnecessary forced keyboard focus from Search Contacts to avoid an extra iPhone PWA focus/render transition.
+- Keeps Home-return behaviour limited to workflows opened from a Home quick button.
+- Adds no Firebase path, storage key, query, save operation or background process.
+
+## Previous release — v1.41.23
+
+# AGNT v1.41.23 — Scheduled-Day Visual Balance
+
+## v1.41.23 changes
+
+- Vertically centres the scheduled-day quick actions between their upper and lower divider lines.
+- Reflows the compact leaderboard into a clear label, rank and `position • agents logged` hierarchy.
+- Aligns the Home MarketPulse button visually with the focus chevron.
+- Returns quick-action Broadcast Back and quick-search contact Back navigation to Home.
+- Keeps the focus stack, metrics, Firebase paths, saves and sync unchanged.
+
+## Previous release — v1.41.22
+
+# AGNT v1.41.22 — Scheduled-Day Quick Actions
+
+## v1.41.22 changes
+
+- Replaces the scheduled-day Day-on-Day graph with the existing live leaderboard position and ranking context.
+- Replaces the former full-width leaderboard strip with the five proven quick actions: Call, Add Task, Book Appointment, Search and Bulk SMS.
+- Retains the complete focus stack, including its sizing, layout, MarketPulse control and behaviour.
+- Retains all four daily metric rows without changing their markup, sizing rules, controls or behaviour.
+- Adds no Firebase path, storage key, query, save operation or background process.
+
+## Previous release — v1.41.21
+
+# AGNT v1.41.21 — Viewport Containment
+
+## v1.41.21 changes
+
+- Locks the Next Workday summary, quick actions and Next Conversations heading in place on an unscheduled day; only the conversation list scrolls.
+- Reduces all Next Conversations text by 20% while retaining the established Buyers-list structure and 44px-plus action targets.
+- Corrects the Home greeting line box so descenders and punctuation are not clipped.
+- Constrains appointment forms, contact results, type controls, destination cards, history headings and appointment action rows to the safe viewport.
+- Adds no Firebase path, storage key, query, save operation or background process.
+
+## Previous release — v1.41.20
+
+# AGNT v1.41.20 — Day-Off Quick Actions
+
+## v1.41.20 changes
+
+- Adds a five-button quick menu between Next Workday and Next Conversations.
+- Reuses AGNT's existing manual dialler, task composer, appointment form, contact search and Broadcast/Bulk SMS workflows.
+- Keeps all five actions equally sized in one viewport-safe row.
+- Gives the Next Workday summary, quick menu, heading and conversation rows a more balanced vertical rhythm.
+- Adds no Firebase path, storage key, query, save operation or background process.
+
+## Previous release — v1.41.19
+
+# AGNT v1.41.19 — Day-Off Home
+
+## v1.41.19 changes
+
+- Replaces the inactive score, graph, leaderboard and focus stack on the current unscheduled day with a concise Next Workday summary.
+- Shows the first timed commitment and existing appointment, follow-up and task counts for the next scheduled workday.
+- Relocates the existing MarketPulse shortcut and shows a count only when today’s import contains genuinely new events.
+- Keeps Next Conversations in the proven Buyers-list layout with equal Call, SMS and Move actions.
+- Move uses the existing prospect follow-up field or appointment editor and immediately clears a contact moved to a future date.
+- Adds no Firebase path, storage key, query, startup request or background process.
+
+## Previous release — v1.41.18
+
+# AGNT v1.41.18 — Buyer Pattern on Home
+
+## v1.41.18 changes
+
+- Replaces the custom Home conversation rows with the proven Buyers-list hierarchy already used inside AGNT.
+- Uses the same full-width divider, name hierarchy, supporting lines and established blue action treatment.
+- Keeps one `NEXT CONVERSATIONS` heading with concise last-contact and next-contact information.
+- Retains the existing ranking, profile navigation and Call outcome workflows.
+- Adds no Firebase path, save key, query, startup request or background task.
+
+## Previous release — v1.41.17
+
+# AGNT v1.41.17 — Off-Day Conversation Cleanup
+
+## v1.41.17 changes
+
+- Keeps only the `NEXT CONVERSATIONS` heading on an unscheduled day.
+- Removes the secondary title, explanatory paragraph, client initials and table-like boxed treatment.
+- Presents each person as a brief full-width divider row with role, name, last contact and next contact.
+- Keeps the existing profile and Call behaviour unchanged.
+- Adds no Firebase path, save key, query, startup request or background task.
+
+## Previous release — v1.41.16
+
+# AGNT v1.41.16 — Off-Day Conversations
+
+## v1.41.16 changes
+
+- Moves the unscheduled-day status beneath the calendar date so it remains legible without competing for the fixed header controls.
+- Replaces locked activity metrics on the current unscheduled day with a full-viewport Next Conversations list.
+- Ranks up to three useful conversations from existing appointments, property matches, due follow-ups, sellers, buyers and pipeline contacts.
+- Uses AGNT's existing profile and call workflows, and clears contacts already attempted today or marked Do Not Contact.
+- Adds no Firebase collection, Firestore query, local-storage key, startup request or background task.
+
+## Previous release — v1.41.15
+
+# AGNT v1.41.15 — Home Viewport Balance
+
+## v1.41.15 changes
+
+- Keeps the personalised Good morning, afternoon or evening heading on one line on the Home screen.
+- Uses the recovered header height to rebalance the existing metric stack automatically.
+- Adds a small eight-pixel cushion beneath Knocking before the fixed navigation.
+- Contains no application-logic, Firebase, Firestore, save, sync, MarketPulse or loading changes.
+
+# AGNT v1.41.14 — Stability & Trust
+
+## v1.41.14 changes
+
+- Prepares the correct outcome workflow for every in-app Call link before iPhone leaves AGNT.
+- Adds a seven-second startup watchdog so Firebase authentication can never leave the loading gate covering the app indefinitely.
+- Makes the Settings sync description reflect offline, saving, error and live states accurately.
+- Expands Export Backup to include contacts, buyers, interaction history, MarketPulse data, campaigns and the imported Buyer List session, with confirmation before restore.
+- Improves the touch area of frequently used call, timeline, buyer filter and appointment controls without changing the established layout.
+- Corrects the lowest-contrast orange labels and key blue action states in light and dark appearance.
+- Preserves every v1.41.13 intelligence, data path, UID boundary, local-first queue, Firebase and PWA behaviour.
+
+## Previous release — v1.41.13
+
+# AGNT v1.41.13 — Balanced Right Now
+
+## v1.41.13 changes
+
+- Balances the existing Right Now decision across sellers, buyers, overdue follow-ups, pipeline work, MarketPulse activity, appointments and time-sensitive actions.
+- Keeps live appointments, near appointments and active calling sessions protected before flexible work is ranked.
+- Adds a `Contacted` action to each individual property match so attempted outreach clears that property without forcing an outcome.
+- Centres the completed-task tick in the Today checklist.
+- Keeps previous/next calendar controls inside the safe viewport and reserves a fixed Today-button slot, so Today, yesterday and tomorrow retain identical header geometry.
+- Preserves all v1.41.12 Buyer Call Return, contact-draft, imported Buyer List, local-first sync, Firebase and PWA behaviour.
+
+## Previous release — v1.41.12
+
+# AGNT v1.41.12 — Buyer Call Return
+
+## v1.41.12 changes
+
+- Makes Buyer List call return use the same active PWA session mechanism proven in Pipeline, with a device-local fallback if iOS rebuilds the app process.
+- Opens the prepared outcome before daily maintenance, rendering or cloud work runs when the PWA returns.
+- Keeps the call outcome prepared before handing the call to iPhone and restores it without Firebase or cloud verification.
+- Prevents a deferred seller priority from being immediately rebuilt from stale in-memory ranking data.
+- Keeps the previous/next date buttons fully inside the iPhone viewport.
+- Hides the top Today button on the current calendar day and shows it only when the active Today, Schedule or Appointments date is different.
+- Firebase, Firestore, Team sync, leaderboard publishing, MarketPulse and valuation behaviour are unchanged.
+
+## Previous release — v1.41.11
+
+## v1.41.11 changes
+
+- Prepares the call-outcome screen at the moment a Buyer List, Buyer Profile, Buyer Match or manual Call button is pressed, before AGNT hands the call to iPhone.
+- Removes delayed lifecycle and timing checks from those call paths; the prepared outcome screen is already waiting when AGNT returns.
+- Keeps the existing Pipeline call-outcome workflow unchanged because it already prepares and restores correctly.
+- Makes Today seller-priority rescheduling remove the current client immediately.
+- `Not today` and `Next workday` now update the client follow-up date to the next scheduled workday and save in the background.
+- `Later today` removes the current client for two hours without changing their follow-up date.
+- Firebase, Firestore, Team sync, leaderboard publishing, MarketPulse, Buyer List retention and valuation behaviour are unchanged.
+
+## Previous release — v1.41.10
+
+## v1.41.10 changes
+
+- Removes the global workspace restoration introduced after the beta, including saved tabs, dates, profiles and scroll positions.
+- Every fresh launch opens on the current calendar day, and an app left open across midnight automatically rolls forward to the new day.
+- Keeps the beta contact-draft save and restoration behaviour for unfinished contact entry.
+- Keeps an imported Buyer List as an isolated local session until it is deliberately finished and cleared.
+- Uses one fixed device-local pending-call key so the Call button can trigger the existing outcome screen without Firebase, authentication or cloud readiness deciding whether it appears.
+- Firebase, Firestore, Team sync, leaderboard publishing, MarketPulse and valuation behaviour are unchanged.
+
+## Previous release — v1.41.9
+
+## v1.41.9 changes
+
+- Restores an imported Buyer List after the installed PWA is fully closed and reopened.
+- Preserves the session's intentional visible/hidden state instead of recalculating it during iOS suspension.
+- Adds a verified UID-scoped backup for the imported Buyer List and recovers from it if the primary copy is unavailable.
+- Rechecks pending imported-buyer calls after authentication restores the correct UID, then opens the existing call-outcome screen.
+- Keeps Firebase, Firestore, Team sync, leaderboard publishing, MarketPulse and all logging behaviour unchanged.
+
+## Previous release — v1.41.8
+
+## v1.41.8 changes
+
+- Restores the Contact/Pipeline Call → return to AGNT → Log Contact workflow to the exact session-based implementation from the supplied working beta.
+- Removes the v1.41.7 persistent call-return override and its startup interception.
+- Keeps all v1.41.6 functionality, including Team sync recovery, buyer/contact profile refinements, background property-detail saving and MarketPulse valuation guardrails.
+- Firebase, Firestore, Team sync, leaderboard publishing, MarketPulse automation and data structures are unchanged.
+
+## Previous release — v1.41.6
+
+## v1.41.6 changes
+
+- Requires the same suburb, property type and bedroom count before a MarketPulse sale can contribute to a seller estimate.
+- Allows bathroom and parking differences of no more than one where those details are available.
+- Shows one matching result as `MarketPulse Sold Evidence` instead of manufacturing a price range from a single sale.
+- Shows two matching results as a low-confidence provisional range.
+- Shows a MarketPulse estimate only when at least three matching sold results are available.
+- Preserves MarketPulse street matching, seller priority, import automation and all confirmed-working v1.41.5 Firebase and Team sync behaviour.
+
+## Previous release — v1.41.5
+
+# AGNT v1.41.5 — Profile Flow Refinement
+
+## v1.41.5 changes
+
+- Gives individual Buyer profiles the same flat, full-viewport hierarchy as individual Contact profiles.
+- Retains established action buttons and status badges while removing high-level stacked card surfaces.
+- Consolidates configured seller property details into one tappable row with a blue chevron.
+- Returns immediately to the Contact profile after property details are saved while cloud sync continues in the background.
+- Preserves the confirmed-working v1.41.4 Team sync implementation unchanged.
+
+## Previous release — v1.41.4
+
+## v1.41.4 sync correction
+
+- Restores the proven beta Team leaderboard scheduling, write and listener flow.
+- Removes the additional Team leaderboard retry wrapper introduced during the recovery work.
+- Keeps the memory-only Firestore cache correction so the reported iPhone persistent-cache quota failure cannot block Team writes.
+- Replays locally queued daily records through the proven direct day-save path, then republishes the Team leaderboard.
+- Makes no Firebase path, rules, Authentication, MarketPulse, buyer, navigation or feature change.
+
+## Previous release — v1.41.3
+
+## v1.41.3 sync correction
+
+- Removes Firebase's multi-tab persistent browser cache from AGNT's write path while retaining AGNT's own UID-scoped local-first records.
+- Adds a durable retry marker for buyer, contact, interaction and MarketPulse changes until Firestore confirms the payload.
+- Merges locally newer profiles and interactions forward instead of allowing an older cloud snapshot to overwrite them.
+- Protects unsynced daily activity from older cloud snapshots and automatically retries its existing dirty-day queue.
+- Queues and republishes the latest Solo or Team leaderboard totals after a failed write or reconnect.
+- Compacts empty/default fields in the cloud payload without changing the data available after normalisation.
+- Retries failed prospecting writes with controlled backoff and clears the failure state after a confirmed save.
+- Replaces raw Firebase stack traces with a concise reconnecting message.
+
+## v1.41.2 startup correction
+
+- The app shell now becomes visible before restored-view and MarketPulse rendering begins.
+- Expired knocking timers are closed locally first and their Firestore writes are deferred.
+- A slow cloud write can no longer hold the app behind “Loading your day”.
+- Post-startup rendering errors fail open and leave the app accessible.
+
+## v1.41.1 seller-priority correction
+
+- Removes seller-priority calculation from AGNT's critical startup and render path.
+- Opens the app immediately using the existing Today orchestration while seller intelligence prepares during idle time.
+- Replaces repeated contact-by-event matching with one indexed, linear data pass.
+- Processes seller candidates in small cooperative chunks so the iPhone interface stays responsive.
+- Limits a single background pass to the highest-potential 2,500 candidates.
+- Falls back to existing Today guidance if the background calculation is unavailable, interrupted or still preparing.
+- Invalidates and rebuilds the recommendation after seller, interaction or MarketPulse changes without blocking the current screen.
+
+## Previous release — v1.41.0
+
+## v1.41.0 changes
+
+- Gives Today a seller-first Next Best Action using existing contact, pipeline, follow-up, appointment and MarketPulse data.
+- Scores urgency, temperature, motivation, selling timeframe, stage, contact freshness and relevant property activity.
+- Explains the recommendation in plain language and opens the exact seller profile in one tap.
+- Recalculates immediately after an existing seller outcome changes the record.
+- Adds a quiet `Not now` action in Today with Later today, Not today and Next workday choices.
+- Keeps deferral history UID-scoped on-device; no Firebase, Firestore or client-record changes are required.
+- Preserves appointments, active sessions, scheduled knocking and the 6:30pm day-close command above seller recommendations.
+
+## Previous release — v1.40.0
+
+## v1.40.0 changes
+
+- Restores the last safe, UID-scoped workspace across refresh, backgrounding and app re-entry.
+- Retains the active tab, supported subpage and list modes, selected date, stable scroll position and read-only Contact or Buyer profile.
+- Keeps temporary overlays, confirmations and unsafe editors out of automatic restoration.
+- Makes Home `Right Now` open its existing priority action directly when one is available.
+
+## Previous release — v1.39.3
+
+# AGNT v1.39.3 — Contact Profile Full Viewport
+
+## v1.39.3 changes
+
+- Corrected the target of the full-viewport update: individual Contact profiles now use the flat presentation.
+- Removed the pill/card containers around device contact export, property details, contact role, property estimate and selling timeframe.
+- Replaced stacked containers with clean spacing and row dividers while preserving every action and data point.
+- Retained the v1.39.2 property-detail persistence protection and flat Contacts list.
+
+## Previous release — v1.39.2
+
+# AGNT v1.39.2 — Contacts Full Viewport
+
+## v1.39.2 changes
+
+- Restyled Contacts as a flat, full-viewport list matching the Buyers tab, with simple row dividers and no enclosing card stack.
+- Preserved the existing contact identity, status, actions, filters and navigation.
+- Made saved property configurations wait for cloud confirmation when available.
+- Prevented a newer locally saved property configuration from being replaced by an older cloud snapshot after refresh or app re-entry.
+
+## Previous release — v1.39.1
+
+# AGNT v1.39.1 — Contact Property Details
+
+## v1.39.1 changes
+
+- Moved property configuration out of the general Edit Contact form.
+- Added Add Property Details directly below Add to Phone Contacts on every contact profile.
+- Opens a dedicated property-details editor attached to the same contact record.
+- Existing configuration-aware MarketPulse priority and sold estimate logic remains connected.
+
+## Previous release — v1.39.0
+
+# AGNT v1.39.0 — Seller Intelligence
+
+## v1.39.0 changes
+
+- Added optional property configuration to existing and new seller pipeline contacts.
+- Added configuration-aware MarketPulse priority and a Close match marker.
+- Added same-suburb, sold-only MarketPulse price ranges with confidence levels.
+- Preserved the v1.38.3 full-viewport Buyers presentation and all protected systems.
+
+## Previous release — v1.38.3
+
+# AGNT v1.38.3 — Buyer Full Viewport
+
+## v1.38.3 changes
+
+- Returned the Buyers list to the original flat, full-width viewport presentation.
+- Removed the individual buyer card/pill containers and restored simple row dividers.
+- Retained the improved typography, contrast, MarketPulse hierarchy and primary Call action from v1.38.2.
+- No buyer logic, data, matching, actions or other screens changed.
+
+## Previous release — v1.38.2
+
+# AGNT v1.38.2 — Buyer Legibility
+
+## v1.38.2 changes
+
+- Updated only the Buyers list presentation.
+- Added clearer visual containment and stronger buyer-name, criteria and suburb hierarchy.
+- Condensed MarketPulse opportunity presentation and aligned status information.
+- Made Call the primary card action while retaining SMS and Follow Up unchanged.
+- Improved light and dark mode contrast without changing buyer data, matching or behaviour.
+
+## Previous release — v1.38.1
+
+# AGNT v1.38.1 — Review Stats
+
+## v1.38.1 changes
+
+- Restored the confirmed-working v1.37.9 Add to Phone Contacts flow: native vCard sharing where supported, with the working `.vcf` download fallback.
+- Removed the Open Today Log shortcut beside the Today date heading.
+- Retained the existing Send Stats action in the Today Log area.
+- Added Send Stats to the end-of-day review using the same non-zero WhatsApp activity summary.
+- Renamed the end-of-day entry and review heading to **Review Day and Send Stats**.
+- No Firestore, authentication, data-model, metric, appointment, MarketPulse or team logic changed.
+
+## Previous release — v1.38.0
+
+## v1.38.0 changes
+
+- Opens generated AGNT contact cards directly into the iOS contact-import preview instead of starting with the share sheet or saving a download.
+- Reworked the Add a task sheet for consistent contrast, control sizing and spacing in light and dark mode.
+- Makes the completed Knocking status green, matching the other completed daily metrics.
+- Reworked only the Prospector Today quick actions into balanced Call and New Contact buttons; the workflow cards beneath them are unchanged.
+- Added an always-visible Open Today Log shortcut beside the Today date heading.
+- Added Send Stats to Today Log. It opens WhatsApp with calls, knocked doors, connects, data and each non-zero LAP/MAP/BAP count prefilled; zero-value lines are omitted.
+- Preserves existing AGNT data, Firestore, authentication, team, manager, metric, MarketPulse and navigation behaviour.
+
+## Previous release — v1.37.9
+
+## v1.37.9 changes
+
+- Added **Add to Phone Contacts** to unified Contact, Buyer and Buyer + Seller profiles.
+- Exports a native `.vcf` contact card through the device share flow, with a direct-download fallback.
+- Maps name, mobile, email, organisation and Australian address fields into their corresponding contact fields.
+- Places AGNT-only context such as stage, temperature, motivation, source, tags, follow-up, buyer requirements and background notes into the contact Notes field.
+- Does not alter the AGNT record, request background Contacts access or automatically overwrite an existing phone contact.
+
+## Previous release — v1.37.8
+
+## v1.37.8 changes
+
+- Removed the Today workload summary beneath the page heading.
+- Moved the task `+` into the Today priority card, aligned opposite its primary action and matched to the compact MarketPulse shortcut size.
+- Locked the Today and Leaderboard page subtitles to one line.
+- Removed the Today shortcut from Settings.
+- No data, Firebase, Firestore, authentication, metric, task, appointment, MarketPulse or navigation logic was changed.
+
+## Previous release — v1.37.5
 
 ## v1.37.5 changes
 
