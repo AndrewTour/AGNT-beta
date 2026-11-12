@@ -2280,3 +2280,7 @@ html body #app .scheduled-day-quick-menu .voice-entry {border-radius:50%!importa
 .voice-conversation .voice-confirm {background:var(--ds-ink);color:var(--ds-canvas);width:100%;font-weight:500}
 .voice-secondary {display:flex;justify-content:space-between;gap:12px}.voice-secondary button {background:transparent;border:0;color:var(--ds-muted);font-size:12px}
 .voice-conversation button:disabled {opacity:.5}
+
+/* Scope iOS hold suppression to voice controls, preserving editable text. */
+.voice-entry,.voice-entry *,[data-hold],[data-hold] *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none}
+.voice-conversation input,.voice-conversation textarea{-webkit-user-select:text;user-select:text}

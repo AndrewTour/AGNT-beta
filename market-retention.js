@@ -1,4 +1,4 @@
-// AGNT v1.46.46
+// AGNT v1.46.47
 // Permanent summaries contain only an irreversible event fingerprint and small
 // reporting dimensions. Addresses, prices, agents and descriptions expire.
 import {digest} from './prospecting-storage.js';
