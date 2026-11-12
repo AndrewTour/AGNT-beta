@@ -20,39 +20,66 @@ export function interpretVoice(text,today){
  else if(/\btoday\b/.test(s)){date=today;dateText='today'}
  else {const m=s.match(/\b(next\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/);if(m){let offset=(days.indexOf(m[2])-new Date(today+'T12:00:00Z').getUTCDay()+7)%7;if(!offset)offset=7;date=plus(today,offset);dateText=m[0]}}
  if(/\b(midday|noon)\b/.test(s))time='12:00';else if(/\bmidnight\b/.test(s))time='00:00';else {const m=s.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/);if(m){const h=+m[1],min=+(m[2]||0);if(h<1||h>12||min>59)return {error:'Choose a valid time.'};time=String(h%12+(m[3]==='pm'?12:0)).padStart(2,'0')+':'+String(min).padStart(2,'0')}}
- const person=kind==='appointment'?raw.match(/^(?:book|schedule)\s+(.+?)\s+(?:in\s+)?for\b/i)?.[1]:raw.match(/^assign\s+(.+?)\s+(?:a|an|the)\s+/i)?.[1];
+ const person=kind==='appointment'?(raw.match(/^(?:book|schedule)\s+(.+?)\s+(?:in\s+)?for\b/i)?.[1]||raw.match(/^(?:book|schedule)\s+(.+?)\s+(?:an?|the)\s+(?:appraisal|inspection|appointment)\b/i)?.[1]):raw.match(/^assign\s+(.+?)\s+(?:a|an|the)\s+/i)?.[1];
  const address=kind==='appointment'?(raw.match(/\bat\s+(\d[^]+?)(?=\s+(?:next\s+)?(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|\s+at\s+(?:\d|midday|noon|midnight)|,?\s+(?:on|today|tomorrow)\b|$)/i)?.[1]||'').replace(/[,\s]+$/,''):'';
  const type=/\bappraisal\b/i.test(raw)?'MAP':/\bsecond inspection\b|\bbuyer appointment\b/i.test(raw)?'BAP':'';
  return {kind,raw,person:person?.trim()||'',date,time,dateText,address,type,title:kind==='task'?raw.replace(/^(?:add|create)(?: a)? task(?: to)?\s*|^assign\s+.+?\s+(?:a|an|the)\s+/i,'').replace(dateText,'').replace(/\s+(?:for|on|at)\s*$/i,'').trim():''};
 }
 export function createVoiceControl(env){
- let panel=null,recognition=null,epoch=0,busy=false,returnFocus=null;
- const stop=()=>{epoch++;const r=recognition;recognition=null;try{r?.abort()}catch{};if(panel){panel.dataset.listening='false';panel.querySelector('[data-status]').textContent='Listening stopped. Edit your command or type below.'}};
- const close=()=>{stop();panel?.remove();panel=null;busy=false;returnFocus?.isConnected&&returnFocus.focus({preventScroll:true})};
- function listen(){
-  stop();const API=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!API){panel.querySelector('[data-status]').textContent='Voice capture is unavailable in this browser. Type your command below.';return}
-  const token=epoch,r=new API();recognition=r;r.lang='en-AU';r.continuous=false;r.interimResults=false;
-  panel.dataset.listening='true';panel.querySelector('[data-status]').textContent='Listening… Tap Stop when finished.';
-  r.onresult=e=>{if(token!==epoch||!panel)return;panel.querySelector('textarea').value=[...e.results].map(x=>x[0].transcript).join(' ');panel.querySelector('[data-status]').textContent='Check the transcript, then open the existing editor.'};
-  r.onerror=e=>{if(token===epoch&&panel){panel.dataset.listening='false';panel.querySelector('[data-status]').textContent=({ 'not-allowed':'Microphone access was denied. Type below or enable access in device settings.','no-speech':'No speech detected. Try again or type below.','network':'Voice recognition needs a connection. You can type instead.','audio-capture':'Microphone unavailable. You can type instead.'}[e.error]||'Listening interrupted. Try again or type below.')}};
-  r.onend=()=>{if(token===epoch&&panel){recognition=null;panel.dataset.listening='false';const status=panel.querySelector('[data-status]');if(status.textContent.startsWith('Listening…'))status.textContent='No command received. Try again or type below.'}};
-  try{r.start()}catch{recognition=null;panel.dataset.listening='false';panel.querySelector('[data-status]').textContent='Could not start listening. Type your command instead.'}
+ let panel=null,recognition=null,epoch=0,held=false,finishing=false,processed=false,busy=false,draft=null,timer=null,returnFocus=null,suppressClickUntil=0;
+ const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const status=text=>{if(panel)panel.querySelector('[data-status]').textContent=text};
+ const close=({keepDraft=false}={})=>{if(draft&&!keepDraft)draft.cancel?.();epoch++;held=false;finishing=false;clearTimeout(timer);try{recognition?.abort()}catch{}recognition=null;panel?.remove();panel=null;draft=null;busy=false;returnFocus?.isConnected&&returnFocus.focus({preventScroll:true})};
+ function shell(){
+  if(panel)return;returnFocus=document.activeElement;panel=document.createElement('div');panel.className='voice-overlay voice-conversation';
+  panel.innerHTML='<section class="voice-sheet" role="dialog" aria-modal="true" aria-labelledby="voiceTitle"><header><div><small>AGNT ASSISTANT</small><h2 id="voiceTitle">What needs doing?</h2></div><button type="button" data-close aria-label="Close">×</button></header><p data-status role="status">Hold to speak. Release when finished.</p><div data-review></div><div class="voice-capture"><button type="button" data-hold aria-label="Hold to speak"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg></button><span>Hold to speak · release to finish</span></div><details data-transcript><summary>Type or edit command</summary><label>Command<textarea rows="3" maxlength="1500" placeholder="Book Ray an appraisal next Tuesday at midday"></textarea></label><button type="button" data-use>Use command</button></details><div class="voice-secondary"><button type="button" data-task>Add task manually</button><button type="button" data-close>Cancel</button></div></section>';
+  document.body.append(panel);
+  panel.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close();else if(e.target.closest('[data-use]')){processed=false;process()}else if(e.target.closest('[data-task]')){close();env.manualTask()}else if(e.target.closest('[data-edit]')){const edit=draft?.edit;close({keepDraft:true});edit?.()}else if(e.target.closest('[data-confirm]'))confirm();else if(e.target.closest('[data-member]'))process(e.target.closest('[data-member]').dataset.member)});
+  panel.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const nodes=[...panel.querySelectorAll('button,textarea,summary,input,select')].filter(n=>n.getClientRects().length&&!n.disabled),first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
  }
- async function openEditor(){
-  if(busy||!panel)return;stop();const command=interpretVoice(panel.querySelector('textarea').value,env.today());
-  if(command.error){panel.querySelector('[data-status]').textContent=command.error;return}
+ function begin(){
+  if(held||busy)return;if(draft){status('Confirm this draft or choose Edit details before starting another command.');return}
+  shell();epoch++;clearTimeout(timer);try{recognition?.abort()}catch{}recognition=null;held=true;finishing=false;processed=false;
+  panel.querySelector('textarea').value='';panel.querySelector('[data-review]').replaceChildren();
+  const API=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!API){held=false;status('Voice is unavailable here. Type your command instead.');panel.querySelector('details').open=true;return}
+  const token=epoch,r=new API();recognition=r;r.lang='en-AU';r.continuous=true;r.interimResults=true;panel.dataset.listening='true';status('Listening. Release when you’re finished.');
+  r.onresult=e=>{if(token!==epoch||!panel||processed)return;panel.querySelector('textarea').value=Array.from(e.results).map(result=>result[0].transcript).join(' ')};
+  r.onerror=e=>{if(token!==epoch||!panel)return;held=false;finishing=false;recognition=null;clearTimeout(timer);panel.dataset.listening='false';status(e.error==='not-allowed'?'Microphone access is denied. Type below or update device permissions.':e.error==='network'?'Voice recognition needs a connection. Type below to continue.':'No usable speech received. Hold to retry or type below.');panel.querySelector('details').open=true;epoch++};
+  r.onend=()=>{if(token!==epoch||!panel)return;recognition=null;panel.dataset.listening='false';if(finishing)process();else status('Listening ended. Release to prepare the command or hold to retry.')};
+  try{r.start()}catch{held=false;recognition=null;panel.dataset.listening='false';status('Voice could not start. Type below to continue.');panel.querySelector('details').open=true}
+ }
+ function finish(){
+  if(!held||!panel)return;held=false;finishing=true;panel.dataset.listening='false';status('Preparing your request…');
+  if(recognition){try{recognition.stop()}catch{process()};timer=setTimeout(()=>{try{recognition?.abort()}catch{}process()},1800)}else process();
+ }
+ function process(memberId=''){
+  if(!panel||busy||(processed&&!memberId))return;clearTimeout(timer);finishing=false;
+  const command=interpretVoice(panel.querySelector('textarea').value,env.today());
+  if(command.error){status(command.error);panel.querySelector('details').open=true;return}
   let member=null;
-  if(command.person){const needle=command.person.toLowerCase();const matches=env.members().filter(m=>(m.name||'').toLowerCase()===needle||(m.name||'').toLowerCase().split(' ')[0]===needle);if(matches.length!==1){panel.querySelector('[data-status]').textContent=matches.length?'More than one team member matches. Use their full name.':'Team member not found. Use a permitted team member’s full name.';return}member=matches[0]}
-  busy=true;try{env.execute(command,member);close()}catch(error){busy=false;if(panel)panel.querySelector('[data-status]').textContent=error.message}
+  if(command.person){const needle=command.person.toLowerCase(),matches=env.members().filter(m=>(m.name||'').toLowerCase()===needle||(m.name||'').toLowerCase().split(' ')[0]===needle);member=memberId?matches.find(m=>m.uid===memberId):matches.length===1?matches[0]:null;
+   if(!member){status(matches.length?'Which team member?':'I couldn’t match that team member. Edit their name below.');panel.querySelector('[data-review]').innerHTML=matches.map(m=>`<button type="button" data-member="${escape(m.uid)}">${escape(m.name)}</button>`).join('');if(!matches.length)panel.querySelector('details').open=true;return}}
+  busy=true;processed=true;epoch++;
+  try{draft=env.prepare(command,member);if(!draft){close();return}renderReview()}catch(error){processed=false;status(error.message);panel.querySelector('details').open=true}finally{busy=false}
  }
- function open(){
-  if(panel)return;returnFocus=document.activeElement;panel=document.createElement('div');panel.className='voice-overlay';
-  panel.innerHTML='<section class="voice-sheet" role="dialog" aria-modal="true" aria-labelledby="voiceTitle"><header><h2 id="voiceTitle">AGNT voice</h2><button type="button" data-close aria-label="Close voice control">×</button></header><p data-status role="status">Type a command or tap Listen.</p><label>Command<textarea rows="4" maxlength="1500" placeholder="Book Ray for an appraisal at 12 Smith Street, Dural, next Tuesday at midday"></textarea></label><p>Commands open existing forms. Review the details and use the normal Save button. Dates use Sydney time. For a specific date, type YYYY-MM-DD.</p><div class="voice-buttons"><button type="button" data-listen>Listen</button><button type="button" data-stop>Stop</button><button type="button" data-open>Open editor / destination</button><button type="button" data-task>Add task manually</button><button type="button" data-close>Cancel</button></div></section>';
-  document.body.append(panel);panel.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close();else if(e.target.closest('[data-listen]'))listen();else if(e.target.closest('[data-stop]'))stop();else if(e.target.closest('[data-open]'))openEditor();else if(e.target.closest('[data-task]')){close();env.manualTask()}});
-  panel.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const nodes=[...panel.querySelectorAll('button,textarea')],first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
-  listen();
+ function renderReview(){
+  panel.querySelector('.voice-capture').hidden=true;panel.querySelector('details').open=false;panel.querySelector('[data-use]').hidden=true;panel.querySelector('textarea').readOnly=true;panel.querySelector('summary').textContent='What I heard';panel.querySelector('[data-task]').hidden=true;
+  const missing=draft.fields.filter(f=>f.required&&!f.get());
+  status(missing.length?'Just add the missing details below.':'Ready when you are.');
+  panel.querySelector('[data-review]').innerHTML=`<p class="voice-assignee">${escape(draft.assignee)}</p><dl>${draft.fields.filter(f=>f.get()).map(f=>{const value=f.get();const shown=f.label==='Appointment type'?({MAP:'Market appraisal',LAP:'Listing appointment',BAP:'Buyer appointment',OFI:'Open home'}[value]||value):f.type==='date'?new Date(value+'T12:00:00Z').toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Australia/Sydney'}):value;return `<div><dt>${escape(f.label)}</dt><dd>${escape(shown)}</dd></div>`}).join('')}</dl>${missing.map(f=>`<label>${escape(f.label)}${f.type==='select'?`<select data-field="${draft.fields.indexOf(f)}"><option value="">Choose type</option>${f.options.map(v=>`<option>${v}</option>`).join('')}</select>`:`<input data-field="${draft.fields.indexOf(f)}" type="${escape(f.type)}" required>`}</label>`).join('')}<button type="button" data-confirm class="voice-confirm">${escape(draft.label)}</button><button type="button" data-edit>Edit details</button>`;
  }
- document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});window.addEventListener('pagehide',close);
- return {open,close};
+ function confirm(){
+  if(!draft||busy)return;
+  for(const input of panel.querySelectorAll('[data-field]')){if(!input.value||!input.checkValidity()){input.reportValidity();return}draft.fields[+input.dataset.field].set(input.value)}
+  if(draft.fields.some(f=>f.required&&!f.get())){renderReview();return}
+  busy=true;try{if(draft.commit()){draft=null;close()}else{status('Check the highlighted details in the editor.');const edit=draft.edit;close({keepDraft:true});edit?.()}}catch(error){busy=false;status(error.message)}
+ }
+ document.addEventListener('pointerdown',e=>{if(e.button!==0)return;const button=e.target.closest('.voice-entry,[data-hold]');if(!button)return;e.preventDefault();suppressClickUntil=Date.now()+1000;try{button.setPointerCapture(e.pointerId)}catch{}begin()},true);
+ document.addEventListener('pointerup',()=>{if(held)suppressClickUntil=Date.now()+1000;finish()},true);document.addEventListener('pointercancel',()=>{if(held)close()},true);
+ document.addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='Enter')&&e.target.closest('.voice-entry,[data-hold]')){e.preventDefault();if(!e.repeat)begin()}},true);
+ document.addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='Enter')finish()},true);
+ document.addEventListener('click',e=>{if(e.target.closest('.voice-entry')){e.preventDefault();if(Date.now()>=suppressClickUntil&&!panel)shell()}},true);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&panel)close({keepDraft:true})});window.addEventListener('pagehide',()=>close({keepDraft:true}));
+ return {open:shell,close};
 }

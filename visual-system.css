@@ -2263,3 +2263,20 @@ html body #app .scheduled-day-quick-menu .voice-entry {border-radius:50%!importa
 .voice-overlay[data-listening="true"] [data-status] {color:var(--ds-accent)}.voice-draft-summary {font-size:13px;line-height:1.5;color:var(--ds-muted);border-left:2px solid var(--ds-accent);padding-left:12px}
 
 .voice-overlay {height:var(--sheet-height,100dvh);top:var(--sheet-top,0px);min-height:0}
+
+/* Hold-to-speak and a focused action review, using the existing AGNT tokens. */
+.voice-entry,[data-hold] {touch-action:none!important;-webkit-touch-callout:none!important;user-select:none!important}
+.voice-conversation .voice-sheet {min-height:calc(var(--sheet-height,100dvh) - 80px);align-content:start;gap:20px}
+.voice-conversation header small {font-size:10px;letter-spacing:.12em;color:var(--ds-muted)}
+.voice-conversation h2 {margin-top:6px}.voice-conversation [data-status] {font-size:16px;color:var(--ds-secondary);min-height:24px;margin:0}
+.voice-capture {display:grid;justify-items:center;gap:14px;padding:36px 0 24px}.voice-capture[hidden]{display:none}
+.voice-capture button {width:80px;height:80px;border-radius:50%;background:var(--ds-soft);color:var(--ds-ink);border:1px solid var(--ds-rule)}
+.voice-capture svg {width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.voice-capture span {color:var(--ds-muted);font-size:12px}.voice-overlay[data-listening="true"] [data-hold] {background:var(--ds-accent);color:var(--ds-canvas);border-color:var(--ds-accent)}
+.voice-conversation details {border-top:1px solid var(--ds-rule);padding-top:16px}.voice-conversation summary {min-height:44px;font-size:13px;color:var(--ds-muted);cursor:pointer}
+.voice-conversation dl {margin:0}.voice-conversation dl>div {display:grid;grid-template-columns:95px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--ds-rule)}
+.voice-conversation dt {font-size:12px;color:var(--ds-muted)}.voice-conversation dd {margin:0;font-size:14px;overflow-wrap:anywhere}
+.voice-conversation [data-review] {display:grid;gap:14px}.voice-conversation input,.voice-conversation select {min-height:46px;font:inherit;font-size:16px;border:1px solid var(--ds-rule);border-radius:8px;padding:10px;background:var(--ds-canvas);color:var(--ds-ink);width:100%;box-sizing:border-box}
+.voice-conversation .voice-confirm {background:var(--ds-ink);color:var(--ds-canvas);width:100%;font-weight:500}
+.voice-secondary {display:flex;justify-content:space-between;gap:12px}.voice-secondary button {background:transparent;border:0;color:var(--ds-muted);font-size:12px}
+.voice-conversation button:disabled {opacity:.5}

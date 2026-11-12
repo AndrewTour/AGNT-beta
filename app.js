@@ -61,12 +61,14 @@ let teamDeleteBusy=false,teamDeleteReturnFocus=null;
 let pendingSyncOperations=0, syncHasError=false, lastLeaderboardSignature='', lastTeamLeaderboardSignature='', lastProspectingSignature='';
 let subscribedTeamId='',teamLeaderboardDataSignature='',teamInitialisationToken=0;
 let leaderboardListRenderMarkup='';
-const voiceControl=createVoiceControl({today:sydneyDateKey,members:()=>appointmentAssignees,manualTask:()=>openTaskComposer(),execute:(command,member)=>{
+let voiceBookingApproval=null;
+const voiceControl=createVoiceControl({today:sydneyDateKey,members:()=>appointmentAssignees,manualTask:()=>openTaskComposer(),prepare:(command,member)=>{
   if(command.kind==='buyers'){switchView('prospectingView');setProspectorSection('buyers');return}
   if(command.kind==='appointments'){openWeeklyAppointmentsQuickView();return}
   if(command.kind==='contact'){
     if(readContactDraft())throw Error('Finish or discard your existing contact draft first.');
-    switchView('prospectingView');setProspectorSection('contacts');openProspectEditor('',{prefill:{name:command.name,phone:command.phone,address:command.address}});return;
+    switchView('prospectingView');setProspectorSection('contacts');openProspectEditor('',{prefill:{name:command.name,phone:command.phone,address:command.address}});
+    return voiceReview($('#prospectEditor'),command,member);
   }
   if(command.kind==='task'){
     openTaskComposer();$('#taskTitle').value=command.title;$('#taskDate').value=command.date||'';$('#taskTime').value=command.time||'';
@@ -78,12 +80,35 @@ const voiceControl=createVoiceControl({today:sydneyDateKey,members:()=>appointme
     if(member){renderAppointmentAssigneePicker(member.uid);if($('#appointmentAssignee').value!==member.uid)throw Error('This team member is not available for booking.')}
     $('#appointmentContext').value='Voice draft: '+command.raw;
   }
-  const form=$(command.kind==='task'?'#taskForm':'#appointmentForm');form?.querySelector('[data-voice-summary]')?.remove();
-  const summary=document.createElement('p');summary.dataset.voiceSummary='';summary.className='voice-draft-summary';
-  const date=command.date?new Date(command.date+'T12:00:00Z').toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Australia/Sydney'}):'Choose a date';
-  summary.textContent='Review draft: '+(member?.name||'Choose/check the assignee')+' · '+(command.address||command.title||'')+' · '+date+' · '+(command.time||'Choose a time')+' · '+(command.kind==='task'?'Check task details':command.type||'Check appointment type and required fields')+'. Save using the normal form button.';
-  form?.prepend(summary);form?.addEventListener('reset',()=>summary.remove(),{once:true});
+  return voiceReview($(command.kind==='task'?'#taskForm':'#appointmentForm'),command,member);
 }});
+function memberUidInvalid(memberUid){return memberUid!==uid&&!(accountMode==='team'&&appointmentAssignees.some(member=>member.uid===memberUid))}
+function voiceReview(form,command,member){
+  const field=(label,selector,type='text',required=true)=>{const node=form.querySelector(selector);return {label,type,required,get:()=>node?.value||'',set:value=>{if(node){node.value=value;node.dispatchEvent(new Event('input',{bubbles:true}));node.dispatchEvent(new Event('change',{bubbles:true}))}}}};
+  let fields;
+  if(command.kind==='contact')fields=[field('Name','[name="name"]'),field('Mobile','[name="phone"]','tel'),field('Address','[name="address"]','text',false)];
+  else if(command.kind==='task')fields=[field('Task','#taskTitle'),field('Date','#taskDate','date'),field('Time','#taskTime','time')];
+  else{
+    const normal=value=>String(value||'').toLowerCase().replace(/\bstreet\b/g,'st').replace(/\broad\b/g,'rd').replace(/\bavenue\b/g,'ave').replace(/\bdrive\b/g,'dr').replace(/[^a-z0-9]/g,'');
+    const matches=prospects.filter(p=>normal(formatProspectAddress(p.address,p.suburb))===normal(command.address)||normal(p.address)===normal(command.address));
+    if(command.address&&matches.length===1){const p=matches[0];$('#appointmentContactName').value=p.name||'';$('#appointmentContactNumber').value=primaryProspectPhone(p)||'';appointmentLinkedProspectId=p.id;}
+    fields=[field('Contact','#appointmentContactName'),field('Mobile','#appointmentContactNumber','tel'),field('Address','#appointmentAddress'),field('Date','#appointmentDatePicker','date'),field('Time','#appointmentTime','time'),{label:'Appointment type',type:'select',options:['MAP','LAP','BAP','OFI'],required:true,get:()=>$('.appointment-types input:checked')?.value||'',set:value=>{$$('[name=appointmentType]').forEach(n=>n.checked=n.value===value);updateOfiFormState()}}];
+  }
+  const owner=uid,epoch=accountStateEpoch,voiceDraftId=command.kind==='contact'?readContactDraft()?.draftId:null;
+  return {fields,assignee:member?.name||displayAgentName(),label:command.kind==='appointment'?'Book appointment':command.kind==='task'?'Add task':'Add contact',
+    commit:()=>{
+      if(uid!==owner||accountStateEpoch!==epoch)throw Error('Your account changed. Start again.');
+      if(!form.checkValidity()){form.reportValidity();return false}
+      if(command.kind==='appointment')voiceBookingApproval={uid,epoch,assignee:member?.uid||uid};
+      form.requestSubmit();return true;
+    },cancel:()=>{
+      if(uid!==owner||accountStateEpoch!==epoch)return;
+      if(command.kind==='contact'){if(voiceDraftId&&readContactDraft()?.draftId===voiceDraftId)clearContactDraft();closeProspectDetail()}
+      else if(command.kind==='task')closeTaskComposer();
+      else{form.reset();appointmentLinkedProspectId='';}
+      switchView('todayView');
+    },edit:()=>form.querySelector('input')?.focus({preventScroll:true})};
+}
 const associateProfiles=createAssociateProfiles({
   context:()=>({uid,teamId,role:teamRole,mode:accountMode}),
   db:()=>db,members:()=>appointmentAssignees,
@@ -2062,7 +2087,7 @@ function openOffDayQuickAppointment(){rememberWorkflowEntry('booking');
 function openWeeklyAppointmentsQuickView(){appointmentQuickReturnHome=true;appointmentHistoryMode='week';switchView('appointmentsView');setAppointmentHistoryScreen('week')}
 function openOffDayBroadcast(){rememberWorkflowEntry('broadcast');homeQuickProspectorReturn=true;selectedBroadcastType='';setProspectorSection('broadcast');switchView('prospectingView')}
 function runOffDayQuickAction(action=''){
-  if(action==='voice'){voiceControl.open();return}if(action==='call'){openManualDialler();return}if(action==='appointment'){openOffDayQuickAppointment();return}if(action==='task'){openTaskComposer();return}if(action==='calendar'){openWeeklyAppointmentsQuickView();return}if(action==='broadcast')openOffDayBroadcast()
+  if(action==='voice')return;if(action==='call'){openManualDialler();return}if(action==='appointment'){openOffDayQuickAppointment();return}if(action==='task'){openTaskComposer();return}if(action==='calendar'){openWeeklyAppointmentsQuickView();return}if(action==='broadcast')openOffDayBroadcast()
 }
 function openOffDayContactMove(id){
   const prospect=prospectById(id);if(!prospect)return toast('Contact could not be found');const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);const minimum=dateKey(tomorrow),returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;closeBuyerFollowUp({restoreFocus:false});buyerFollowUpReturnFocus=returnFocus;
@@ -6542,6 +6567,7 @@ async function finishAppointmentFormSubmission(context,assignedToUid=uid){
 }
 $('#appointmentForm').onsubmit=async e=>{
   e.preventDefault();
+  const voiceApproval=voiceBookingApproval;voiceBookingApproval=null;
   if(e.target.dataset.submitting==='1'||pendingAppointmentAssignment)return;
   const viewedDate=appointmentDate,returnState=appointmentEditReturnState;
   const contactName=$('#appointmentContactName').value.trim(),contactNumber=$('#appointmentContactNumber').value.trim(),address=$('#appointmentAddress').value.trim(),appointmentContext=cleanText($('#appointmentContext').value,1000),date=$('#appointmentDatePicker').value,time=$('#appointmentTime').value,type=$('.appointment-types input:checked')?.value||'',auction=type==='OFI'&&$('#appointmentAuction').checked,error=$('#appointmentFormError');
@@ -6551,6 +6577,7 @@ $('#appointmentForm').onsubmit=async e=>{
   const wasEditing=Boolean(editingAppointment),wasProspectFlow=Boolean(pendingProspectAppointmentFlow);
   const existingAssignedToUid=wasEditing?String(dayData(editingAppointment.sourceDate).appointments.find(a=>String(a.id)===String(editingAppointment.id))?.assignedToUid||uid):uid;
   const context={form:e.target,viewedDate,returnState,contactName,contactNumber,address,appointmentContext,date,time,type,auction,wasEditing,wasProspectFlow,navigationOwner:uid,accountEpoch:accountStateEpoch,navigationEpoch:workflowEpoch,prospectFlow:pendingProspectAppointmentFlow};
+  if(!wasEditing&&voiceApproval?.uid===uid&&voiceApproval.epoch===accountStateEpoch&&(!memberUidInvalid(voiceApproval.assignee))){await finishAppointmentFormSubmission(context,voiceApproval.assignee);return;}
   if(!wasEditing&&cloud&&accountMode==='team'&&teamId&&appointmentAssignees.length>1){
     pendingAppointmentAssignment=context;showAppointmentAssignmentPopup();return;
   }
@@ -6841,7 +6868,7 @@ $('#settingsView').addEventListener('change',event=>{const field=event.target;if
 $('#saveSettings').onclick=async()=>{const fields=['callsTarget','connectsTarget','dataTarget','weeklyKnockTarget'];const invalid=fields.find(id=>{const value=Number($('#'+id).value);return !Number.isSafeInteger(value)||value<=0});if(invalid){toast('Enter a whole number greater than zero for every target.');$('#'+invalid).focus();return}const savingOwner=uid,savingEpoch=accountStateEpoch;const selectedWorkDays=normaliseWorkDays($$('[name=workDay]:checked').map(el=>Number(el.value)));if(!selectedWorkDays.length)return toast('Choose at least one tracking day');agentName=$('#agentName').value.trim()||displayAgentName();agentMobile=cleanText($('#agentMobile').value,50);targets={calls:+$('#callsTarget').value||50,connects:+$('#connectsTarget').value||25,data:+$('#dataTarget').value||10,weeklyKnock:+$('#weeklyKnockTarget').value||240};workDays=selectedWorkDays;calendarPreference=$('[name=calendarPreference]:checked')?.value==='apple'?'apple':'outlook';appearancePreference=normaliseAppearance($('[name=appearancePreference]:checked')?.value);applyAppearance(appearancePreference);settingsDraftFields.clear();await saveTargets();if(uid!==savingOwner||accountStateEpoch!==savingEpoch)return;if(cloud&&accountMode==='team'&&teamId&&uid){try{await setDoc(doc(db,'teams',teamId,'members',uid),{name:agentName,updatedAt:serverTimestamp()},{merge:true})}catch(err){console.error('Team profile name sync failed',err)}}renderAll();toast('Settings saved')};
 $('#signOut').onclick=async()=>{clearActiveSession();if(auth?.currentUser)await firebaseSignOut(auth);location.reload()};
 function mergeBackupRecords(current=[],incoming=[]){const byId=new Map();[...(Array.isArray(current)?current:[]),...(Array.isArray(incoming)?incoming:[])].forEach((item,index)=>{if(!item||typeof item!=='object')return;const id=cleanText(item.id,180)||`backup-record-${index}`;byId.set(id,item)});return[...byId.values()]}
-function completeBackupPayload(){return{schemaVersion:2,appVersion:'1.46.45',exportedAt:new Date().toISOString(),targets,workDays,agentName,agentMobile,calendarPreference,appearancePreference,days:normaliseDaysMap(days),prospects:normaliseProspects(prospects),prospectInteractions:normaliseProspectInteractions(prospectInteractions),marketPulseEvents:normaliseMarketPulseEvents(marketPulseEvents),marketPulseHistory:normaliseMarketPulseHistory(marketPulseHistory),marketPulseLedger:normaliseLedger(marketPulseLedger),campaignHistory:[...campaignHistory],bulkSmsTestLaunches:[...bulkSmsTestLaunches],buyerSession:{...buyerSession,contacts:[...(buyerSession.contacts||[])]}}}
+function completeBackupPayload(){return{schemaVersion:2,appVersion:'1.46.46',exportedAt:new Date().toISOString(),targets,workDays,agentName,agentMobile,calendarPreference,appearancePreference,days:normaliseDaysMap(days),prospects:normaliseProspects(prospects),prospectInteractions:normaliseProspectInteractions(prospectInteractions),marketPulseEvents:normaliseMarketPulseEvents(marketPulseEvents),marketPulseHistory:normaliseMarketPulseHistory(marketPulseHistory),marketPulseLedger:normaliseLedger(marketPulseLedger),campaignHistory:[...campaignHistory],bulkSmsTestLaunches:[...bulkSmsTestLaunches],buyerSession:{...buyerSession,contacts:[...(buyerSession.contacts||[])]}}}
 function restoreBuyerSessionBackup(value){if(!value||!Array.isArray(value.contacts))return false;buyerSession={contacts:value.contacts.map((contact,index)=>({id:cleanText(contact.id,80)||`buyer_${index}`,name:cleanText(contact.name,120)||'Unknown buyer',phone:normaliseDialNumber(contact.phone),address:cleanText(contact.address,240),doNotSms:Boolean(contact.doNotSms),status:cleanText(contact.status,40)})).filter(contact=>contact.phone),index:Math.max(0,Number(value.index)||0),active:Boolean(value.active),visible:false,fileName:cleanText(value.fileName,160),importedAt:Number(value.importedAt)||0};buyerSession.index=Math.min(buyerSession.index,buyerSession.contacts.length);return saveBuyerSession()}
 function syncImportedBackup(dayKeys=[],prospectingIncluded=false){if(!cloud)return;saveTargets().catch(err=>console.error('Imported settings sync failed',err));dayKeys.forEach(key=>saveDay(key,{quiet:true,awaitCloud:false,render:false}).catch?.(err=>console.error('Imported day sync failed',err)));if(prospectingIncluded)saveProspecting({render:false,awaitCloud:false}).catch(err=>console.error('Imported prospecting sync failed',err))}
 function missingMarketRecoveryRows(rows){
@@ -6958,7 +6985,7 @@ async function checkCloudSync(){
 $('#checkCloudSync')?.addEventListener('click',checkCloudSync);
 $('#exportDiagnostics')?.addEventListener('click',()=>{
   let runtimeEvents=[];try{runtimeEvents=JSON.parse(window.agntRuntime?.export?.()||'[]')}catch{}
-  const data=JSON.stringify({schemaVersion:2,appVersion:'1.46.45',exportedAt:new Date().toISOString(),runtimeEvents,deviceStorage:deviceStorageDiagnostics(),sync:syncHealth.snapshot(syncDiagnosticContext())},null,2),blob=new Blob([data],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='AGNT-runtime-diagnostics.json';link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)
+  const data=JSON.stringify({schemaVersion:2,appVersion:'1.46.46',exportedAt:new Date().toISOString(),runtimeEvents,deviceStorage:deviceStorageDiagnostics(),sync:syncHealth.snapshot(syncDiagnosticContext())},null,2),blob=new Blob([data],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='AGNT-runtime-diagnostics.json';link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)
 });
 $('#exportData').onclick=()=>{const blob=new Blob([JSON.stringify(completeBackupPayload(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`agnt-complete-backup-${todayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),0)};
 $('#importData').onchange=async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{const raw=JSON.parse(await file.text());if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('Invalid backup');if(!confirm('Import this AGNT backup?\n\nExisting records with the same date or ID may be updated.'))return;const importedDays=normaliseDaysMap(raw.days||{}),dayKeys=Object.keys(importedDays),prospectingIncluded=Array.isArray(raw.prospects)||Array.isArray(raw.prospectInteractions)||Array.isArray(raw.marketPulseEvents)||Array.isArray(raw.marketPulseHistory)||Array.isArray(raw.marketPulseLedger);if(raw.targets&&typeof raw.targets==='object')targets=normaliseTargets(raw.targets);if(Array.isArray(raw.workDays)&&raw.workDays.length)workDays=normaliseWorkDays(raw.workDays);if(typeof raw.agentName==='string'&&raw.agentName.trim())agentName=cleanText(raw.agentName,120);if(typeof raw.agentMobile==='string')agentMobile=cleanText(raw.agentMobile,50);if(raw.calendarPreference==='apple'||raw.calendarPreference==='outlook')calendarPreference=raw.calendarPreference;if(['system','light','dark'].includes(raw.appearancePreference))applyAppearance(raw.appearancePreference);days={...days,...importedDays};if(Array.isArray(raw.prospects))prospects=normaliseProspects(mergeBackupRecords(prospects,raw.prospects));if(Array.isArray(raw.prospectInteractions))prospectInteractions=normaliseProspectInteractions(mergeBackupRecords(prospectInteractions,raw.prospectInteractions));if(Array.isArray(raw.marketPulseEvents))marketPulseEvents=normaliseMarketPulseEvents(mergeBackupRecords(marketPulseEvents,raw.marketPulseEvents));if(Array.isArray(raw.marketPulseLedger))marketPulseLedger=normaliseLedger([...marketPulseLedger,...raw.marketPulseLedger]);if(Array.isArray(raw.marketPulseHistory))marketPulseHistory=normaliseMarketPulseHistory(mergeBackupRecords(marketPulseHistory,raw.marketPulseHistory));if(Array.isArray(raw.campaignHistory))campaignHistory=mergeBackupRecords(campaignHistory,raw.campaignHistory).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0)).slice(0,20);if(Array.isArray(raw.bulkSmsTestLaunches))bulkSmsTestLaunches=mergeBackupRecords(bulkSmsTestLaunches,raw.bulkSmsTestLaunches).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0)).slice(0,10);saveLocal();restoreBuyerSessionBackup(raw.buyerSession);renderAll();syncImportedBackup(dayKeys,prospectingIncluded);toast('Backup restored · cloud sync running')}catch(err){console.error('Backup import failed',err);toast('Backup could not be read')}};
